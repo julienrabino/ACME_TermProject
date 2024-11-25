@@ -44,47 +44,45 @@ VALUES
 DROP TABLE IF EXISTS SHOWTIME;
 CREATE TABLE SHOWTIME (
 	ShowtimeID				INT AUTO_INCREMENT,
-	MovieID					int	not null,
-	Time					TIME NOT NULL,
-    TheatreID				int not null,
+	MovieID					INT NOT NULL,
+	Showtime				DATETIME NOT NULL,
+    TheatreID				INT NOT NULL,
 
-    primary key(ShowtimeID),
-    foreign key (MovieID) references MOVIE(MovieID),
-    foreign key (TheatreID) references THEATRE(TheatreID)
+    PRIMARY KEY(ShowtimeID),
+    FOREIGN KEY (MovieID) REFERENCES MOVIE(MovieID),
+    FOREIGN KEY (TheatreID) REFERENCES THEATRE(TheatreID)
 );
 
-INSERT INTO SHOWTIME (MovieID, Time, TheatreID) VALUES
-(1, '10:00:00', 1),
-(2, '12:30:00', 1),
-(3, '14:00:00', 1),
-(4, '16:00:00', 1),
-(5, '18:30:00', 1),
-(6, '20:15:00', 1),
-(7, '11:00:00', 1),
-(8, '13:45:00', 1),
-(9, '15:30:00', 1),
-(10, '17:00:00', 1),
-(11, '19:00:00', 2),
-(11, '14:30:00', 2),
-(12, '21:15:00', 2),
-(13, '23:00:00', 2),
-(14, '08:30:00', 2),
-(1, '10:45:00', 3),
-(2, '12:00:00', 3),
-(3, '14:30:00', 3),
-(4, '16:45:00', 3),
-(5, '18:00:00', 3),
-(6, '19:30:00', 3),
-(7, '21:00:00', 3),
-(8, '23:15:00', 4),
-(9, '09:00:00', 4),
-(10, '11:30:00', 4),
-(11, '13:00:00', 4),
-(12, '15:15:00', 4),
-(13, '17:45:00', 4),
-(14, '20:00:00', 4);
-
-
+INSERT INTO SHOWTIME (MovieID, Showtime, TheatreID) VALUES
+(1, '2024-12-02 10:00:00', 1),
+(2, '2024-12-02 12:30:00', 1),
+(3, '2024-12-02 14:00:00', 1),
+(4, '2024-12-02 16:00:00', 1),
+(5, '2024-12-02 18:30:00', 1),
+(6, '2024-12-02 20:15:00', 1),
+(7, '2024-12-02 11:00:00', 1),
+(8, '2024-12-02 13:45:00', 1),
+(9, '2024-12-02 15:30:00', 1),
+(10, '2024-12-02 17:00:00', 1),
+(11, '2024-12-02 19:00:00', 2),
+(11, '2024-12-02 14:30:00', 2),
+(12, '2024-12-02 21:15:00', 2),
+(13, '2024-12-02 23:00:00', 2),
+(14, '2024-12-02 08:30:00', 2),
+(1, '2024-12-03 10:45:00', 3),
+(2, '2024-12-03 12:00:00', 3),
+(3, '2024-12-03 14:30:00', 3),
+(4, '2024-12-03 16:45:00', 3),
+(5, '2024-12-03 18:00:00', 3),
+(6, '2024-12-03 19:30:00', 3),
+(7, '2024-12-03 21:00:00', 3),
+(8, '2024-12-04 23:15:00', 4),
+(9, '2024-12-04 09:00:00', 4),
+(10, '2024-12-04 11:30:00', 4),
+(11, '2024-12-04 13:00:00', 4),
+(12, '2024-12-04 15:15:00', 4),
+(13, '2024-12-04 17:45:00', 4),
+(14, '2024-12-04 20:00:00', 4);
 
 
 DROP TABLE IF EXISTS REG_USER;
@@ -93,12 +91,52 @@ CREATE TABLE REG_USER (
 	Fname				varchar(50)	not null,
 	Lname				varchar(50)	not null,
     Email				varchar(50)	not null,
+    Username			varchar(20)	not null,
+    Password1			varchar(20) not null,
     Address				varchar(50)	not null,
     MemberShipJoinDate	DATE NOT NULL,
     MemberShipExpiry	DATE NOT NULL,
     PaymentMethod		varchar(50),
 	primary key (ID)
 );
+
+DROP TABLE IF EXISTS PAYMENT;
+CREATE TABLE PAYMENT (
+	PaymentID			INT AUTO_INCREMENT,
+    RUID				int,
+	Fname				varchar(50)	not null,
+	Lname				varchar(50)	not null,
+    CardNum				varchar(50)	not null,
+    ExpiryDate			varchar(20)	not null,
+    SecurityCode		varchar(20) not null,
+	primary key (PaymentID),
+    foreign key (RUID) references REG_USER(ID)
+);
+
+DROP TABLE IF EXISTS STORE_CREDIT;
+CREATE TABLE STORE_CREDIT (
+	CreditID			INT AUTO_INCREMENT,
+    RUID				int,
+    email				varchar(50)	not null,
+    ExpiryDate			DATETIME	not null,
+	primary key (CreditID),
+    foreign key (RUID) references REG_USER(ID)
+);
+
+
+DROP TABLE IF EXISTS TICKET;
+CREATE TABLE TICKET (
+	TicketID			INT AUTO_INCREMENT,
+	RUID				int,
+    PaymentID			int not null,
+    Cost				int not null,
+    TimePurchased		DATETIME not null,
+	primary key (PaymentID),
+    foreign key (RUID) references REG_USER(ID),
+    foreign key (PaymentID) references PAYMENT(PaymentID)
+);
+
+
 
 DROP TABLE IF EXISTS SEAT;
 CREATE TABLE SEAT (
@@ -117,6 +155,8 @@ CREATE TABLE SEAT (
     foreign key (Movie) references MOVIE(MovieID),
     foreign key (Showtime) references SHOWTIME(ShowtimeID)
 );
+
+
 
 
 

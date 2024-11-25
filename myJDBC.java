@@ -25,7 +25,7 @@ public class myJDBC {
     public myJDBC() {
         this.DBURL = "jdbc:mysql://localhost:3306/MOVIE_THEATRE";
         this.USERNAME = "root";
-        this.PASSWORD = "123";
+        this.PASSWORD = "password"; // change to your password :3
     }
 
     public void initializeConnection() {
