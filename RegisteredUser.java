@@ -15,6 +15,27 @@ public class RegisteredUser extends User{
     public RegisteredUser(int id, String Fname, String Lname, String username, String password, String email, String Address, LocalDate expiryDate, LocalDate joinDate, boolean paymentMethodSaved ){
 
         super(Fname, Lname, email); // calls ctor of base class User
+        this.ID = id;
+        this.expiryDate = expiryDate;
+        this.joinDate = joinDate;
+        this.address = Address;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.paymentMethodSaved = paymentMethodSaved;
+
+        if (paymentMethodSaved && paymentMethod != null){
+            this.paymentMethod = paymentMethod;
+        }
+        // else if paymentMethod is not saved yet for this RU, they will be requested
+        // to input their payment details when purchasing tickets/renewing Membership.
+        // their payment details will be saved to the DB after and paymentMethodSaved will == true.
+
+        registered = true;
+    }
+    public RegisteredUser(String Fname, String Lname, String username, String password, String email, String Address, LocalDate expiryDate, LocalDate joinDate, boolean paymentMethodSaved ){
+
+        super(Fname, Lname, email); // calls ctor of base class User
         this.expiryDate = expiryDate;
         this.joinDate = joinDate;
         this.address = Address;
@@ -59,7 +80,11 @@ public class RegisteredUser extends User{
     }
     public LocalDate getMembershipExpiry() {
         return expiryDate;
-    }public boolean getPaymentMethodSaved(){
+    }
+    public LocalDate getJoinDate() {
+        return joinDate;
+    }
+    public boolean getPaymentMethodSaved(){
         return paymentMethodSaved;
     }
     public String getUsername() {

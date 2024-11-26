@@ -2,11 +2,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.regex.*;
 
 public class SignupPanel extends JPanel {
+    private String username;
+    private String password;
+    private String passwordConfirm;
+    private String email;
+    private String address;
+    private String Fname;
+    private String Lname;
+    private LocalDate expiryDate;
+    private LocalDate joinDate;
+    private boolean savedPayment;
+
+    private RegisteredUser RU;
+
     private int width = 100;
     private int height = 30;
-    private RegisteredUser RU;
+
     private JTextField usrInput;
     private JPasswordField pwInput;
     private JPasswordField pwConfirmInput;
@@ -54,28 +69,28 @@ public class SignupPanel extends JPanel {
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int safe = 1;
-                String username = usrInput.getText();
-                String pw = new String(pwInput.getPassword());
-                String pwConfirm = new String(pwConfirmInput.getPassword());
-                String fname = new String(fnameInput.getText());
-                String lname = new String(lnameInput.getText());
-                String email = new String(emailInput.getText());
-                String address = new String(addressInput.getText());
+                username = usrInput.getText();
+                password = new String(pwInput.getPassword());
+                passwordConfirm = new String(pwConfirmInput.getPassword());
+                Fname = new String(fnameInput.getText());
+                Lname = new String(lnameInput.getText());
+                email = new String(emailInput.getText());
+                address = new String(addressInput.getText());
+                joinDate = LocalDate.now();
+                expiryDate = joinDate.plusYears(1);
+                savedPayment = false; // MAYBE MAKE A BUTTON SO ITS OPTIONAL TO ADD YOUR PAYMENT INFO !
 
-                if (!pw.equals(pwConfirm)) {
-                    safe = 0;
-                    JOptionPane.showMessageDialog(app, "Passwords do not match.");
+                RU = new RegisteredUser(Fname, Lname,username, password, email, address, expiryDate, joinDate, savedPayment);
+
+                if (validateSignup(userDBM)) {
+                    userDBM.insertRU(RU);
+                    // add to database
+                    app.switchToMovieList();
                 }
                 // DO A CHECK TO MAKE SURE THE USERNAME IS NOT ALREADY IN DB
                 // AFTER CHECK MAKE THE RU AND SET THEIR INFO
 
                 // ^^ can probably use UserDatabaseManager
-
-                if (safe == 1) {
-                    // set RU stuff maybe and add them to db?
-                    // switch to a diff panel
-                    app.switchToMovieList();
-                }
 
             }
         });
@@ -130,6 +145,30 @@ public class SignupPanel extends JPanel {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(component, gbc);
+    }
+
+    private boolean validateSignup(UserDatabaseManager userDBM) {
+        boolean valid = true;
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$";
+        if (!Pattern.matches(passwordRegex, password)) {
+            valid = false;
+            JOptionPane.showMessageDialog(app, "Password must contain at least one uppercase letter, one lowercase letter, and one number.");
+        }
+        if (!password.equals(passwordConfirm)) {
+            valid = false;
+            JOptionPane.showMessageDialog(app, "Passwords do not match.");
+        }
+        if(userDBM.usernameExists(RU.getUsername())) {
+            valid = false;
+            JOptionPane.showMessageDialog(app, "Username already in-use.");
+        }
+        String emailRegex = "^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}$";
+        if (!Pattern.matches(emailRegex, RU.getEmail())) {
+            valid = false;
+            JOptionPane.showMessageDialog(app, "Invalid email format. Only letters, numbers, '_', '.', and '@' are allowed.");
+        }
+        // check if username already exists
+        return valid;
     }
 
 }

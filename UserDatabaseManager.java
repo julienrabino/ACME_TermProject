@@ -12,7 +12,78 @@ public class UserDatabaseManager {
     UserDatabaseManager(myJDBC db){
         this.jdbc = db;
     }
-    //careful idk if below getPassword function works !
+
+    public void insertRU(RegisteredUser RU) {
+        String Fname = RU.getFname();
+        String Lname = RU.getFname();
+        String usr = RU.getUsername();
+        String pw = RU.getPassword();
+        String email = RU.getEmail();
+        String address = RU.getAddress();
+        LocalDate joinDate = RU.getJoinDate();
+        LocalDate expiryDate = RU.getMembershipExpiry();
+        boolean SP = RU.getPaymentMethodSaved();
+        int savedPayment;
+        if (SP) {
+            savedPayment = 1;
+        }
+        else {
+            savedPayment = 0;
+        }
+
+        try {
+            String query = "INSERT INTO REG_USER (Fname, Lname, Email, Username, Password1, Address, MemberShipJoinDate, MemberShipExpiry, SavedPayment)\n" +
+                    "VALUES\n" +
+                    "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement myStmt = jdbc.dbConnect.prepareStatement(query);
+
+            myStmt.setString(1, Fname);
+            myStmt.setString(2, Lname);
+            myStmt.setString(3, email);
+            myStmt.setString(4, usr);
+            myStmt.setString(5, pw);
+            myStmt.setString(6, address);
+            myStmt.setObject(7, joinDate);
+            myStmt.setObject(8, expiryDate);
+            myStmt.setInt(9, savedPayment);
+
+            int rowCount = myStmt.executeUpdate();
+            System.out.println("Rows affected: " + rowCount);
+
+            myStmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    boolean usernameExists(String usr) {
+        String query = null;
+        PreparedStatement statement = null;
+        int ID = -1;
+
+        try {
+            query = "select RU.ID\n" +
+                    "from REG_USER AS RU\n" +
+                    "where RU.username = ? ;";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setString(1, usr);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                ID = results.getInt("ID");
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if(ID != -1) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     String getPassword(RegisteredUser RU) {
         String query = null;
         PreparedStatement statement = null;
