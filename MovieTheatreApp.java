@@ -52,6 +52,7 @@ public class MovieTheatreApp extends JFrame {
     }
 
     public void switchToInitial() {
+        // Switch to the Movie List panel after successful login
         cardLayout.show(cards, "Initial");
     }
 

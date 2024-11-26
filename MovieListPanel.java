@@ -1,8 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 
 public class MovieListPanel extends JPanel {
     private ArrayList<Movie> movies;
@@ -19,9 +20,12 @@ public class MovieListPanel extends JPanel {
     private JButton showAllButton;
     private JLabel movieDetailsLabel;
     private JPanel detailsPanel;
+    private JPanel showtimesPanel;
+    private MovieTheatreController movieTC;
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
 
+        this.movieTC = movieTC;
         JButton backButton = new JButton("Back");
 
         backButton.addActionListener(new ActionListener() {
@@ -48,7 +52,7 @@ public class MovieListPanel extends JPanel {
                 search = false;
                 showAll = true;
                 searchInput.setText(""); // so whenever you press show all, your search bar clears
-                updateMovieList(movieTC, app);
+                updateMovieList(app);
                 showAllButton.setVisible(false);
             }
         });
@@ -62,7 +66,7 @@ public class MovieListPanel extends JPanel {
                 searchMovie = searchInput.getText();
                 search = true;
                 showAll = false;
-                updateMovieList(movieTC, app);
+                updateMovieList(app);
                 showAllButton.setVisible(true);
             }
         });
@@ -83,17 +87,19 @@ public class MovieListPanel extends JPanel {
         movieList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.add(movieListScrollPane, BorderLayout.CENTER);
-
+        showtimesPanel = new JPanel();
         // Stuff for the details panel
         locations = new ArrayList<>();
         locationComboBox = new JComboBox<>(locations.toArray(new Location[0]));
 
-        // Add ActionListener to detect when the user selects a new location
         locationComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Location selectedLocation = (Location) locationComboBox.getSelectedItem();
                 System.out.println("Selected Location: " + selectedLocation);
+                showtimesPanel.removeAll();
+                detailsPanel.add(showtimesPanel);
+                displayShowtimes(selectedLocation, lastSelectedMovie);
             }
         });
 
@@ -114,10 +120,10 @@ public class MovieListPanel extends JPanel {
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
-        updateMovieList(movieTC, app);
+        updateMovieList( app);
     }
 
-    private void updateMovieList(MovieTheatreController movieTC, MovieTheatreApp app) {
+    private void updateMovieList(MovieTheatreApp app) {
         listModel.clear();  // Clear existing list items
 
         // Fetch movies based on search state
@@ -132,14 +138,12 @@ public class MovieListPanel extends JPanel {
             return;
         }
 
-        // Add movies to the list model
         for (Movie movie : movies) {
             if (movie != null) {
                 listModel.addElement(movie); // Add the entire movie object to the list model
             }
         }
 
-        // Set up the selection listener for the JList
         addMovieSelectionListener(movieTC);
     }
 
@@ -197,4 +201,65 @@ public class MovieListPanel extends JPanel {
             }
         });
     }
+    public void displayShowtimes(Location location, Movie movie) {
+        showtimesPanel.removeAll();  // Clear old components
+        ArrayList<Showtime> showtimes = movieTC.fetchShowtimes(location, movie);
+
+        if (showtimes == null || showtimes.isEmpty()) {
+            JLabel noShowtimesLabel = new JLabel("No showtimes available for this movie at this location.");
+            showtimesPanel.add(noShowtimesLabel);
+        } else {
+            Set<String> uniqueDates = new HashSet<>();  // Collect unique dates
+            for (Showtime showtime : showtimes) {
+                uniqueDates.add(showtime.getDate());
+            }
+
+            // Group showtimes by date
+            Map<String, ArrayList<Showtime>> showtimesGroupedByDate = new HashMap<>();
+            for (String date : uniqueDates) {
+                ArrayList<Showtime> dateShowtimes = new ArrayList<>();
+                for (Showtime showtime : showtimes) {
+                    if (showtime.getDate().equals(date)) {
+                        dateShowtimes.add(showtime);
+                    }
+                }
+                showtimesGroupedByDate.put(date, dateShowtimes);
+            }
+
+            // Make sure the layout is set to BoxLayout to stack components vertically
+            showtimesPanel.setLayout(new BoxLayout(showtimesPanel, BoxLayout.Y_AXIS));
+
+            for (Map.Entry<String, ArrayList<Showtime>> entry : showtimesGroupedByDate.entrySet()) {
+                String date = entry.getKey();
+                ArrayList<Showtime> dateShowtimes = entry.getValue();
+
+                // Create a new date label and add it to the panel (this will automatically start a new row)
+                JLabel dateLabel = new JLabel("<html><b>Date:</b> " + date + "</html>");
+                dateLabel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align it to the left (optional)
+                showtimesPanel.add(dateLabel);
+
+                // Add showtimes as JButton for each showtime entry
+                for (Showtime showtime : dateShowtimes) {
+                    JButton showtimeButton = new JButton(showtime.toString());  // Using the overridden toString method
+                    showtimeButton.setAlignmentX(Component.LEFT_ALIGNMENT);  // Align it to the left
+                    showtimeButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Handle the button click, e.g., show booking options or further details
+                            System.out.println("Showtime selected: " + showtime);
+                        }
+                    });
+
+                    showtimesPanel.add(showtimeButton);  // Add the button to the details panel
+                }
+
+                showtimesPanel.add(Box.createVerticalStrut(10)); // Add space between dates
+            }
+        }
+
+        // Refresh the details panel to reflect the updated showtimes
+        showtimesPanel.revalidate();
+        showtimesPanel.repaint();
+    }
+
 }

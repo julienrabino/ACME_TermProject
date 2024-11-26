@@ -1,14 +1,14 @@
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MovieTheatreController {
 
     private myJDBC jdbc;
 
-    public MovieTheatreController(myJDBC myJDBC){
+    public MovieTheatreController(myJDBC myJDBC) {
         this.jdbc = myJDBC;
     }
-
 
 
     public void displayMovies(Location location) {
@@ -27,7 +27,6 @@ public class MovieTheatreController {
     }
 
 
-
     public void displayShowtimes(Location location) {
     }
 
@@ -36,7 +35,6 @@ public class MovieTheatreController {
 
     public void removeShowtime(Showtime showtime) {
     }
-
 
 
     public int produceMovieID() {
@@ -83,6 +81,7 @@ public class MovieTheatreController {
         }
         return locations;
     }
+
     public ArrayList<Movie> fetchMovies(int locationID) {
         String query = null;
         ArrayList<Movie> movies = new ArrayList<>();
@@ -142,5 +141,41 @@ public class MovieTheatreController {
         return movies;
     }
 
+    public ArrayList<Showtime> fetchShowtimes(Location location, Movie movie) {
+        ArrayList<Showtime> showtimes = new ArrayList<>();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm:ss");
+        String query = "SELECT * FROM SHOWTIME WHERE TheatreID = ? AND MovieID = ?";
+        try {
+            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, location.getLocationID());
+            statement.setInt(2, movie.getMovieID());
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                int showtimeID = results.getInt("ShowtimeID");
+                Date showDate = results.getDate("ShowDate");
+                Time showtime = results.getTime("Showtime");
+                int totalRUSeats = results.getInt("TotalRUSeats");
+                int totalOUSeats = results.getInt("TotalOUSeats");
+                int availableRUSeats = results.getInt("AvailableRUSeats");
+                int availableOUSeats = results.getInt("AvailableOUSeats");
+
+                System.out.println(showtimeID);
+                String showDateString = (showDate != null) ? dateFormatter.format(showDate) : "";
+                String showtimeString = (showtime != null) ? timeFormatter.format(showtime) : "";
+
+
+                Showtime toAdd = new Showtime(showtimeID, movie, showDateString, showtimeString, location,
+                        totalRUSeats, totalOUSeats, availableRUSeats, availableOUSeats);
+                showtimes.add(toAdd);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return showtimes;
+
+    }
 
 }
