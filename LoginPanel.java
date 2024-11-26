@@ -11,7 +11,7 @@ public class LoginPanel extends JPanel {
 
     private MovieTheatreApp app;
 
-    public LoginPanel(MovieTheatreApp app, myJDBC db) {
+    public LoginPanel(MovieTheatreApp app,UserDatabaseManager userDBM) {
         this.app = app;
 
         JLabel usrLabel = new JLabel("Username:");

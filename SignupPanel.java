@@ -17,7 +17,7 @@ public class SignupPanel extends JPanel {
 
     private MovieTheatreApp app;
 
-    public SignupPanel(MovieTheatreApp app) {
+    public SignupPanel(MovieTheatreApp app, UserDatabaseManager userDBM) {
         this.app = app;
 
         JLabel usrLabel = new JLabel("Username:");
