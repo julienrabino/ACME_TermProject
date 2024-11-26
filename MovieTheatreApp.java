@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,12 +16,11 @@ public class MovieTheatreApp extends JFrame {
     private MovieListPanel movieListPanel;
     private GuestPanel guestPanel;
 
-
-
     public int pickedLocationID;
     public boolean locationSpecified;
 
     private MovieTheatreController movieTC;
+
     public MovieTheatreApp() {
         super("ACMEPLEX");
         db = new myJDBC();
@@ -391,8 +391,10 @@ class SignupPanel extends JPanel {
 
 class MovieListPanel extends JPanel {
     private ArrayList<Movie> movies;
+    private ArrayList<String> locations;
     private boolean showAll = true;
-    private boolean search = true;
+    private boolean search = false;
+    JComboBox<String> locationComboBox;
 
 
     private String searchMovie;
@@ -401,6 +403,8 @@ class MovieListPanel extends JPanel {
     private DefaultListModel<Movie> listModel;
     private JButton showAllButton;
     private JLabel movieDetailsLabel;
+
+    private JPanel detailsPanel;
 
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
@@ -421,6 +425,7 @@ class MovieListPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 search = false;
                 showAll = true;
+                searchInput.setText(""); // so whenever u press show all, ur search bar clears!!
                 updateMovieList(movieTC, app);
                 showAllButton.setVisible(false);
             }
@@ -446,8 +451,6 @@ class MovieListPanel extends JPanel {
         searchPanel.add(searchButton);
         searchPanel.add(showAllButton);
 
-
-
         this.add(searchPanel, BorderLayout.NORTH);
 
         //create list model for the JList
@@ -459,13 +462,40 @@ class MovieListPanel extends JPanel {
         movieList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.add(movieListScrollPane, BorderLayout.CENTER);
-        movieDetailsLabel = new JLabel();
-        JPanel detailsPanel = new JPanel();
-        detailsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0)); // Align text to the right
+
+        // STUFF FOR DETAILS PANEL !!!!
+        // Create an ArrayList of locations
+        locations = new ArrayList<>();
+
+// Create the JComboBox and populate it with the locations from the ArrayList
+        locationComboBox = new JComboBox<>(locations.toArray(new String[0]));
+
+// Add an ActionListener to detect when the user selects a new location
+        locationComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedLocation = (String) locationComboBox.getSelectedItem();
+                // Use the selected location to update other components or details
+                System.out.println("Selected Location: " + selectedLocation);
+            }
+        });
+
+        movieDetailsLabel = new JLabel("lalalalal");
+
+        detailsPanel = new JPanel();
+        detailsPanel.setLayout(new BorderLayout());
         detailsPanel.add(movieDetailsLabel);
 
-        detailsPanel.setAlignmentY(TOP_ALIGNMENT);
+        detailsPanel.add(locationComboBox, BorderLayout.SOUTH);
+
+// Initially hide the details panel
+        detailsPanel.setVisible(false);  // Hide initially
+
+// Fixed size for the panel
+        detailsPanel.setPreferredSize(new Dimension(300, 500));
+
         this.add(detailsPanel, BorderLayout.EAST);
+
 
 
         updateMovieList(movieTC, app);
@@ -477,27 +507,68 @@ class MovieListPanel extends JPanel {
 
         if (showAll) {
             movies = movieTC.fetchMovies(-1);
-        } else if (search){
+        }
+        else if (search){
             movies = movieTC.fetchMovies(searchMovie);
         }
 
         for (Movie movie : movies) {
+            System.out.println(movie.getMovieID());
             listModel.addElement(movie); // Add the entire movie object to the list model
         }
 
         movieList.addListSelectionListener(e -> {
+            // Only update when the selection is finalized (i.e., no longer adjusting)
             if (!e.getValueIsAdjusting()) {
+                // Get the selected movie from the list
                 Movie selectedMovie = movieList.getSelectedValue();
-                String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +
-                        "<br><b>Genre:</b> " + selectedMovie.getGenre() + "</html>";
-                movieDetailsLabel.setText(movieDetails);
+                System.out.println(selectedMovie.getMovieID());
 
+                if (selectedMovie != null) {
+                    // Movie is selected, show the details panel
+                    detailsPanel.setVisible(true);  // Show the panel
 
+                    // Format movie details in HTML
+                    String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +
+                            "<br><b>Genre:</b> " + selectedMovie.getGenre() + "</html>";
+
+                    // Update the panel with the movie details
+                    movieDetailsLabel.setText(movieDetails);
+                    // use query function to return all locations the movie is available at !!!
+                    ArrayList<Location> loc = new ArrayList<>();
+                    loc = movieTC.getMovieLocations(selectedMovie);
+
+                    // Debug: Check if locations are returned
+                    // um maybe put a label where it says no current locations available ? idk,
+                    // or just only show movies that can be watched lol
+                    if (loc != null && !loc.isEmpty()) {
+                        System.out.println("Locations found for movie: " + selectedMovie.getTitle());
+                    } else {
+                        System.out.println("No locations found for movie: " + selectedMovie.getTitle());
+                    }
+
+                    locations.clear(); //clear the old locations !!!
+                    for (Location location : loc) {
+                       locations.add(location.getLocationName());
+                    }
+                    // Update the JComboBox model to reflect the new locations
+                    locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new String[0])));
+
+                    // Optionally, set a default selection (e.g., first location)
+                    if (!locations.isEmpty()) {
+                        locationComboBox.setSelectedIndex(0); // Select the first location
+                    }
+
+                } else {
+                    // No movie is selected, hide the details panel
+                    detailsPanel.setVisible(false);  // Hide the panel
+                }
             }
-
         });
+
     }
 }
+
 
 class LocationListPanel extends JPanel{
     public LocationListPanel(MovieTheatreApp app, MovieTheatreController movieTC ){

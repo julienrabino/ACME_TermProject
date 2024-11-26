@@ -53,6 +53,36 @@ public class MovieTheatreController {
         return 0;
     }
 
+    public ArrayList<Location> getMovieLocations(Movie movie) {
+        int movieID = movie.getMovieID();
+        String query = null;
+        ArrayList<Location> locations = new ArrayList<>();
+        PreparedStatement statement = null;
+
+        try {
+            query = "select DISTINCT T.TheatreID, T.TheatreName, T.Address\n" +
+                    "from THEATRE AS T, MOVIE AS M, SHOWTIME AS S\n" +
+                    "where S.TheatreID = T.TheatreID and S.MovieID = M.MovieID and M.MovieID = ? ;";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, movieID);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                int locationID = results.getInt("TheatreID");
+                String address = results.getString("Address");
+                String name = results.getString("TheatreName");
+                Location theatre = new Location(address, name, locationID);
+                locations.add(theatre);
+                //System.out.println(name);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return locations;
+    }
     public ArrayList<Movie> fetchMovies(int locationID) {
         String query = null;
         ArrayList<Movie> movies = new ArrayList<>();

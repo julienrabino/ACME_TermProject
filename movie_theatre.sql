@@ -12,8 +12,8 @@ CREATE TABLE THEATRE (
 INSERT INTO THEATRE (Address, TheatreName)
 VALUES
 ('Location A','AcmePlex: Location A'),
-('Location B','AcmePlex: Location A'),
-('Westhills','AcmePlex: Westills'),
+('Location B','AcmePlex: Location B'),
+('Westhills','AcmePlex: Westills bloop'),
 ('Candy Cane Lane, North Pole','AcmePlex: Santa Edition');
 
 DROP TABLE IF EXISTS MOVIE;
@@ -54,7 +54,7 @@ CREATE TABLE SHOWTIME (
 );
 
 INSERT INTO SHOWTIME (MovieID, Showtime, TheatreID) VALUES
-(1, '2024-12-02 10:00:00', 1),
+(1, '2024-12-02 10:00:00', 2),
 (2, '2024-12-02 12:30:00', 1),
 (3, '2024-12-02 14:00:00', 1),
 (4, '2024-12-02 16:00:00', 1),
@@ -69,6 +69,7 @@ INSERT INTO SHOWTIME (MovieID, Showtime, TheatreID) VALUES
 (12, '2024-12-02 21:15:00', 2),
 (13, '2024-12-02 23:00:00', 2),
 (14, '2024-12-02 08:30:00', 2),
+(14, '2024-12-02 010:00:00', 2),
 (1, '2024-12-03 10:45:00', 3),
 (2, '2024-12-03 12:00:00', 3),
 (3, '2024-12-03 14:30:00', 3),
@@ -131,7 +132,7 @@ CREATE TABLE TICKET (
     PaymentID			int not null,
     Cost				int not null,
     TimePurchased		DATETIME not null,
-	primary key (PaymentID),
+	primary key (TicketID),
     foreign key (RUID) references REG_USER(ID),
     foreign key (PaymentID) references PAYMENT(PaymentID)
 );

@@ -7,6 +7,7 @@ public class Movie {
     private ArrayList<Showtime> showtimes;
 
     public Movie(int id, String title, String genre){
+        this.movieID = id;
         this.title = title;
         this.genre = genre;
         this.showtimes = new ArrayList<>();
