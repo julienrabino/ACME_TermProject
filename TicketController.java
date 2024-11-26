@@ -1,7 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class TicketController {
 
@@ -17,7 +16,8 @@ public class TicketController {
         this.billingSystem = new BillingSystem();
     }
 
-    public Ticket purchaseTicket(Showtime showtime, User user, int seat) {
+    public Ticket purchaseTicket(Showtime showtime, User user, Seat seat) {
+        //  all methods used here need to be refactored to adapt to the new seat object (it used to be int)
         double ticketPrice = 13.50;
 
         Ticket ticket = null;
@@ -197,12 +197,12 @@ public class TicketController {
                                         // like maybe have a transaction/payment table in db?
                                         // if we do, can query BillingSystem to get user email even if theyre OU
                 } else{
-                    UserDatabaseManager userDBM = new UserDatabaseManager();
+                    UserDatabaseManager userDBM = new UserDatabaseManager(jdbc);
                     user = userDBM.fetchUser(userID);
                 }
                 MovieTheatreController movieTC = new MovieTheatreController(jdbc);
-                //Showtime showtime = MovieTheatreController.fetchShowtime(showtimeID);
-                //return new Ticket(id, showtime, user, -1, price, paymentMethod, isAnRUSeat);
+                Showtime showtime = MovieTheatreController.fetchShowtime(showtimeID);
+                return new Ticket(id, showtime, user, -1, price, paymentMethod, isAnRUSeat);
 
             }
 

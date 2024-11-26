@@ -1,6 +1,6 @@
 public class UserDatabaseManager {
 
-    UserDatabaseManager(){}
+    UserDatabaseManager(myJDBC db){}
 
     public RegisteredUser fetchUser(int id){
         // TO DO:

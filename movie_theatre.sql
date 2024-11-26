@@ -136,9 +136,11 @@ CREATE TABLE TICKET (
     PaymentID			int not null,
     Cost				int not null,
     TimePurchased		DATETIME not null,
+    SeatID              int not null,
 	primary key (TicketID),
     foreign key (RUID) references REG_USER(ID),
     foreign key (PaymentID) references PAYMENT(PaymentID)
+    foreign key (SeatID) references SEAT(SeatID);
 );
 
 
@@ -151,8 +153,8 @@ CREATE TABLE SEAT (
     Movie				int not null,
 	SeatRow				char(1)	not null,
 	SeatColumn			int	not null,
-    Available			int not null,
-    RegUser				int,
+    Available			boolean not null,
+    RUReserved			boolean,
 
 	primary key (seatID),
     foreign key (RegUser) references REG_USER(ID),

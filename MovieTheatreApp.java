@@ -26,7 +26,7 @@ public class MovieTheatreApp extends JFrame {
         db = new myJDBC();
         db.initializeConnection();
         movieTC = new MovieTheatreController(db);
-        userDBM = new UserDatabaseManager();
+        userDBM = new UserDatabaseManager(db);
 
         // set up the main container with CardLayout
         cards = new JPanel(cardLayout);
