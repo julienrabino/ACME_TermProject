@@ -109,6 +109,7 @@ CREATE TABLE REG_USER (
 INSERT INTO REG_USER (Fname, Lname, Email, Username, Password1, Address, MemberShipJoinDate, MemberShipExpiry, SavedPayment)
 VALUES
 ('Jerry', 'Dingle', 'JerryDingle@gmail.com', 'JerryDingle1', 'DingleDongle2', '124 Shrub Street, SE, Calgary', '2024-08-04', '2025-08-04', 0),
+('Lucy', 'Lee', 'lucy.lee@yahoo.com', 'peanut', '1loVepeanuts', '312 Maple Dr, Calgary', '2024-05-25', '2025-05-25', 0),
 ('Alice', 'Johnson', 'alice.johnson@example.com', 'alicejohnson', 'SecurePass123', '456 Maple Ave, Toronto', '2024-10-15', '2025-10-15', 1),
 ('Bob', 'Smith', 'bob.smith@outlook.com', 'bobby_smith23', 'Bob123456', '789 Oak Road, Vancouver', '2024-09-22', '2025-09-22', 1),
 ('Emma', 'Williams', 'emma.williams@email.com', 'emma_w', 'EmmaPassword456', '321 Birch Lane, Ottawa', '2024-07-30', '2025-07-30', 0),
@@ -181,7 +182,8 @@ CREATE TABLE TICKET (
 	primary key (TicketID),
     foreign key (RUID) references REG_USER(ID),
     foreign key (PaymentID) references PAYMENT(PaymentID),
-    foreign key (SeatID) references SEAT(SeatID);
+    foreign key (SeatID) references SEAT(SeatID)
+    );
 
 
 

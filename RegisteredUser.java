@@ -1,18 +1,41 @@
 import java.util.Date;
+import java.time.LocalDate;
 
 public class RegisteredUser extends User{
     private int ID;
     private String address;
     private boolean paymentMethodSaved;
-    private Date membershipExpiry;
+    private LocalDate expiryDate;
     // for their login purposes
     private String username;
     private String password;
+    private String email;
+    private LocalDate joinDate;
 
-    public RegisteredUser(int id, String Fname, String Lname, String username, String password, String email, Location theatreLocation, Date membershipExpiry, String Address, boolean paymentMethodSaved, String paymentMethod ){
+    public RegisteredUser(int id, String Fname, String Lname, String username, String password, String email, String Address, LocalDate expiryDate, LocalDate joinDate, boolean paymentMethodSaved ){
+
+        super(Fname, Lname, email); // calls ctor of base class User
+        this.expiryDate = expiryDate;
+        this.joinDate = joinDate;
+        this.address = Address;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.paymentMethodSaved = paymentMethodSaved;
+
+        if (paymentMethodSaved && paymentMethod != null){
+            this.paymentMethod = paymentMethod;
+        }
+        // else if paymentMethod is not saved yet for this RU, they will be requested
+        // to input their payment details when purchasing tickets/renewing Membership.
+        // their payment details will be saved to the DB after and paymentMethodSaved will == true.
+
+        registered = true;
+    }
+    public RegisteredUser(int id, String Fname, String Lname, String username, String password, String email, Location theatreLocation, LocalDate membershipExpiry, String Address, boolean paymentMethodSaved, String paymentMethod ){
 
         super(Fname, Lname, email, theatreLocation); // calls ctor of base class User
-        this.membershipExpiry = membershipExpiry;
+        this.expiryDate = membershipExpiry;
         this.address = Address;
         this.username = username;
         this.password = password;
@@ -25,16 +48,17 @@ public class RegisteredUser extends User{
         // their payment details will be saved to the DB after and paymentMethodSaved will == true.
 
         registered = true;
-
     }
 
     //getters
     public int getID() {
         return ID;
-    }public String getAddress() {
+    }
+    public String getAddress() {
         return address;
-    }public Date getMembershipExpiry() {
-        return membershipExpiry;
+    }
+    public LocalDate getMembershipExpiry() {
+        return expiryDate;
     }public boolean getPaymentMethodSaved(){
         return paymentMethodSaved;
     }
@@ -52,8 +76,8 @@ public class RegisteredUser extends User{
         this.address = address;
     }public void setPaymentMethodSaved(boolean paymentMethodSaved) {
         this.paymentMethodSaved = paymentMethodSaved;
-    }public void setMembershipExpiry(Date membershipExpiry) {
-        this.membershipExpiry = membershipExpiry;
+    }public void setMembershipExpiry(LocalDate membershipExpiry) {
+        this.expiryDate = membershipExpiry;
     }
     public void setUsername(String usr) {
         this.username = usr;

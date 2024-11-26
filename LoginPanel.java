@@ -28,14 +28,17 @@ public class LoginPanel extends JPanel {
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 username = usrInput.getText();
+                System.out.println(username);
                 password = new String(pwInput.getPassword());
+                //System.out.println("PW IN ACTION PERFORMED");
+                //System.out.println(password);
 
                 // Need to change/add to this stuff still
-                if (validateLogin()) {
+                if (validateLogin(userDBM)) {
                     JOptionPane.showMessageDialog(app, "Logged in successfully!");
+                    usrInput.setText(""); 
+                    pwInput.setText("");
                     app.switchToMovieList();  // switch to the movie list panel
-                } else {
-                    JOptionPane.showMessageDialog(app, "Invalid username or password.");
                 }
             }
         });
@@ -76,9 +79,27 @@ public class LoginPanel extends JPanel {
         panel.add(component, gbc);
     }
 
-    private boolean validateLogin() {
+    private boolean validateLogin(UserDatabaseManager userDBM) {
         boolean valid = true;
-        if (// username is in databse, and )
+        RegisteredUser RU = userDBM.getRUFromUsername(username);
+        if (RU == null) {
+            valid = false;
+            JOptionPane.showMessageDialog(app, "Invalid username.");
+            //let user know their username doesnt exist !!
+        }
+        else if (RU != null) {// if it returned a register user
+            String pw = RU.getPassword(); // get password from database
+            //System.out.println("PW RETREIVED");
+            System.out.println(pw);
+            System.out.println(password);
+            System.out.println(pw);
+            if (!pw.equals(password)) {
+                valid = false;
+                JOptionPane.showMessageDialog(app, "Incorrect password.");
+                //let user know wrong password!
+            }
+            //check if password is correct !!!!!
+        }
         return valid;
     }
 

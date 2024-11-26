@@ -7,6 +7,13 @@ public class User {
     protected String paymentMethod;
 
     public User(){}
+    public User(String Fname, String Lname,String email){
+        this.Fname = Fname;
+        this.Lname = Lname;
+        this.email = email;
+        this.paymentMethod = null; //only to be set if the OU decides to purchase tickets
+        registered = false;
+    }
     
     public User(String Fname, String Lname,String email, Location theatreLocation){
         this.Fname = Fname;
