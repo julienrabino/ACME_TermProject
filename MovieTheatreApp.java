@@ -391,10 +391,10 @@ class SignupPanel extends JPanel {
 
 class MovieListPanel extends JPanel {
     private ArrayList<Movie> movies;
-    private ArrayList<String> locations;
+        private ArrayList<Location> locations;
     private boolean showAll = true;
     private boolean search = false;
-    JComboBox<String> locationComboBox;
+    JComboBox<Location> locationComboBox;
 
 
     private String searchMovie;
@@ -468,36 +468,47 @@ class MovieListPanel extends JPanel {
         locations = new ArrayList<>();
 
 // Create the JComboBox and populate it with the locations from the ArrayList
-        locationComboBox = new JComboBox<>(locations.toArray(new String[0]));
+        locationComboBox = new JComboBox<>(locations.toArray(new Location[0]));
 
 // Add an ActionListener to detect when the user selects a new location
         locationComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String selectedLocation = (String) locationComboBox.getSelectedItem();
+                Location selectedLocation = (Location) locationComboBox.getSelectedItem();
                 // Use the selected location to update other components or details
                 System.out.println("Selected Location: " + selectedLocation);
             }
         });
 
+// Create the movie details label and align it to the left
         movieDetailsLabel = new JLabel("lalalalal");
+        movieDetailsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
+// Create the details panel with a BoxLayout to stack components vertically
         detailsPanel = new JPanel();
-        detailsPanel.setLayout(new BorderLayout());
+        detailsPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Stack components vertically
+
+// Add movie details label
         detailsPanel.add(movieDetailsLabel);
 
-        detailsPanel.add(locationComboBox, BorderLayout.SOUTH);
+// Add vertical space between the movie details label and the combo box
+        detailsPanel.add(Box.createVerticalStrut(10));
+        locationComboBox.setPreferredSize(new Dimension(200, 30));  // Preferred size
+        locationComboBox.setMinimumSize(new Dimension(200, 30));     // Minimum size
+        locationComboBox.setMaximumSize(new Dimension(200, 30));
+// Add the location combo box directly below the movie details label
+        detailsPanel.add(locationComboBox);
 
-// Initially hide the details panel
-        detailsPanel.setVisible(false);  // Hide initially
+// Set the details panel to be hidden initially
+        detailsPanel.setVisible(false);
 
-// Fixed size for the panel
+// Set the preferred size for the panel
         detailsPanel.setPreferredSize(new Dimension(300, 500));
 
+// Add the details panel to the EAST side of the layout
         this.add(detailsPanel, BorderLayout.EAST);
 
-
-
+// Update movie list
         updateMovieList(movieTC, app);
     }
 
@@ -543,16 +554,17 @@ class MovieListPanel extends JPanel {
                     // or just only show movies that can be watched lol
                     if (loc != null && !loc.isEmpty()) {
                         System.out.println("Locations found for movie: " + selectedMovie.getTitle());
+
                     } else {
                         System.out.println("No locations found for movie: " + selectedMovie.getTitle());
                     }
 
                     locations.clear(); //clear the old locations !!!
                     for (Location location : loc) {
-                       locations.add(location.getLocationName());
+                       locations.add(location);
                     }
                     // Update the JComboBox model to reflect the new locations
-                    locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new String[0])));
+                    locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new Location[0])));
 
                     // Optionally, set a default selection (e.g., first location)
                     if (!locations.isEmpty()) {

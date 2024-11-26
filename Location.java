@@ -13,6 +13,11 @@ public class Location {
         movies = new ArrayList<Movie>();
     }
 
+    @Override
+    public String toString(){
+        return locationName;
+    }
+
     //setters
     public void setAddress(String address) {
         this.address = address;
