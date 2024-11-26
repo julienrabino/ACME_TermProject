@@ -1,6 +1,13 @@
 public class UserDatabaseManager {
+    private myJDBC jdbc;
 
-    UserDatabaseManager(myJDBC db){}
+    UserDatabaseManager(myJDBC db){
+        this.jdbc = db;
+    }
+
+    int getIDFromUsrName(String search) {
+
+    }
 
     public RegisteredUser fetchUser(int id){
         // TO DO:

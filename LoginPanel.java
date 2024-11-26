@@ -8,6 +8,8 @@ public class LoginPanel extends JPanel {
     private int height = 30;
     private JTextField usrInput;
     private JPasswordField pwInput;
+    private String username;
+    private String password;
 
     private MovieTheatreApp app;
 
@@ -25,11 +27,11 @@ public class LoginPanel extends JPanel {
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = usrInput.getText();
-                String password = new String(pwInput.getPassword());
+                username = usrInput.getText();
+                password = new String(pwInput.getPassword());
 
                 // Need to change/add to this stuff still
-                if ("admin".equals(username) && "password".equals(password)) {
+                if (validateLogin()) {
                     JOptionPane.showMessageDialog(app, "Logged in successfully!");
                     app.switchToMovieList();  // switch to the movie list panel
                 } else {
@@ -72,6 +74,12 @@ public class LoginPanel extends JPanel {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(component, gbc);
+    }
+
+    private boolean validateLogin() {
+        boolean valid = true;
+        if (// username is in databse, and )
+        return valid;
     }
 
 }
