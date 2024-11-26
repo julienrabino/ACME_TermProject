@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginPanel extends JPanel {
+public class AdminPanel extends JPanel {
     private int width = 100;
     private int height = 30;
     private JTextField usrInput;
@@ -13,7 +13,7 @@ public class LoginPanel extends JPanel {
 
     private MovieTheatreApp app;
 
-    public LoginPanel(MovieTheatreApp app,UserDatabaseManager userDBM) {
+    public AdminPanel(MovieTheatreApp app,UserDatabaseManager userDBM) {
         this.app = app;
 
         JLabel usrLabel = new JLabel("Username:");
@@ -34,11 +34,14 @@ public class LoginPanel extends JPanel {
                 //System.out.println(password);
 
                 // Need to change/add to this stuff still
-                if (validateLogin(userDBM)) {
+                if (password.equals("password") && username.equals("admin")) {
                     JOptionPane.showMessageDialog(app, "Logged in successfully!");
                     usrInput.setText("");
                     pwInput.setText("");
-                    app.switchToMovieList();  // switch to the movie list panel
+                    app.switchToMovieList();  // not sure what to switch to, whatever admins should be able to do
+                }
+                else {
+                    JOptionPane.showMessageDialog(app, "Incorrect username or password.");
                 }
             }
         });
@@ -77,30 +80,6 @@ public class LoginPanel extends JPanel {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(component, gbc);
-    }
-
-    private boolean validateLogin(UserDatabaseManager userDBM) {
-        boolean valid = true;
-        RegisteredUser RU = userDBM.getRUFromUsername(username);
-        if (RU == null) {
-            valid = false;
-            JOptionPane.showMessageDialog(app, "Invalid username.");
-            //let user know their username doesnt exist !!
-        }
-        else if (RU != null) {// if it returned a register user
-            String pw = RU.getPassword(); // get password from database
-            //System.out.println("PW RETREIVED");
-            System.out.println(pw);
-            System.out.println(password);
-            System.out.println(pw);
-            if (!pw.equals(password)) {
-                valid = false;
-                JOptionPane.showMessageDialog(app, "Incorrect password.");
-                //let user know wrong password!
-            }
-            //check if password is correct !!!!!
-        }
-        return valid;
     }
 
 }

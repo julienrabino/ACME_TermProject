@@ -16,6 +16,7 @@ public class MovieTheatreApp extends JFrame {
     private MovieListPanel movieListPanel;
     private GuestPanel guestPanel;
 
+    private AdminPanel adminPanel;
 
     private UserDatabaseManager userDBM;
 
@@ -37,12 +38,14 @@ public class MovieTheatreApp extends JFrame {
         initialPanel = new InitialPanel(this);
         signupPanel = new SignupPanel(this, userDBM);
         guestPanel = new GuestPanel(this, movieTC);
+        adminPanel = new AdminPanel(this, userDBM);
 
         cards.add(loginPanel, "Login");
         cards.add(movieListPanel, "Movies");
         cards.add(initialPanel, "Initial");
         cards.add(signupPanel, "Signup");
         cards.add(guestPanel, "Guest");
+        cards.add(adminPanel, "Admin");
 
         this.add(cards);
 
@@ -76,8 +79,10 @@ public class MovieTheatreApp extends JFrame {
     public void switchToGuest() {
         // just browse and purchase movies i guess?
         cardLayout.show(cards, "Guest");
-
-
+    }
+    public void switchToAdmin() {
+        // just browse and purchase movies i guess?
+        cardLayout.show(cards, "Admin");
     }
 
     public static void main(String[] args) {
