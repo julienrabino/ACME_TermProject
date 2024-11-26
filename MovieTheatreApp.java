@@ -26,8 +26,6 @@ public class MovieTheatreApp extends JFrame {
         db = new myJDBC();
         db.initializeConnection();
         movieTC = new MovieTheatreController(db);
-        pickedLocationID = -1;
-        locationSpecified = false;
 
         // set up the main container with CardLayout
         cards = new JPanel(cardLayout);
@@ -51,6 +49,10 @@ public class MovieTheatreApp extends JFrame {
         // Basic frame setup
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void switchToInitial() {
+        cardLayout.show(cards, "Initial");
     }
 
     public void switchToMovieList() {
