@@ -21,7 +21,9 @@ public class MovieListPanel extends JPanel {
     private JLabel movieDetailsLabel;
     private JPanel detailsPanel;
     private JPanel showtimesPanel;
+    private JPanel seatPanel;
     private MovieTheatreController movieTC;
+
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
 
@@ -78,17 +80,14 @@ public class MovieListPanel extends JPanel {
 
         this.add(searchPanel, BorderLayout.NORTH);
 
-        // Create list model for the JList
         listModel = new DefaultListModel<>();
         movieList = new JList<>(listModel);  // initialize the JList with the empty list model
 
-        // scroll pane for the JList
         JScrollPane movieListScrollPane = new JScrollPane(movieList);
         movieList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         this.add(movieListScrollPane, BorderLayout.CENTER);
         showtimesPanel = new JPanel();
-        // Stuff for the details panel
         locations = new ArrayList<>();
         locationComboBox = new JComboBox<>(locations.toArray(new Location[0]));
 
@@ -117,6 +116,8 @@ public class MovieListPanel extends JPanel {
         detailsPanel.setVisible(false);
 
         detailsPanel.setPreferredSize(new Dimension(300, 500));
+        seatPanel = new JPanel();
+        detailsPanel.add(searchPanel);
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
@@ -164,38 +165,31 @@ public class MovieListPanel extends JPanel {
                     lastSelectedMovie = selectedMovie;
                     detailsPanel.setVisible(true);
 
-                    // Format movie details in HTML
                     String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +
                             "<br><b>Genre:</b> " + selectedMovie.getGenre() + "</html>";
 
-                    // Update the panel with the movie details
                     movieDetailsLabel.setText(movieDetails);
 
-                    // Fetch locations for the selected movie
                     ArrayList<Location> loc = movieTC.getMovieLocations(selectedMovie);
 
-                    // Debug: Check if locations are returned
                     if (loc != null && !loc.isEmpty()) {
                         System.out.println("Locations found for movie: " + selectedMovie.getTitle());
                     } else {
                         System.out.println("No locations found for movie: " + selectedMovie.getTitle());
                     }
 
-                    locations.clear(); // Clear old locations
+                    locations.clear();
                     for (Location location : loc) {
                         locations.add(location);
                     }
 
-                    // Update the JComboBox model to reflect the new locations
                     locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new Location[0])));
 
-                    // Optionally, set a default selection (e.g., first location)
                     if (!locations.isEmpty()) {
                         locationComboBox.setSelectedIndex(0); // Select the first location
                     }
 
                 } else {
-                    // No movie is selected, hide the details panel
                     detailsPanel.setVisible(false);  // Hide the panel
                 }
             }
@@ -245,8 +239,8 @@ public class MovieListPanel extends JPanel {
                     showtimeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            // Handle the button click, e.g., show booking options or further details
                             System.out.println("Showtime selected: " + showtime);
+                            displaySeatMap(showtime);
                         }
                     });
 
@@ -262,4 +256,43 @@ public class MovieListPanel extends JPanel {
         showtimesPanel.repaint();
     }
 
+
+
+    public void displaySeatMap(Showtime showtime){
+        seatPanel.removeAll();
+        ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
+        seatPanel.add(new JLabel("Showing seats for " + showtime));
+        seatPanel.setLayout(new FlowLayout());
+        seatPanel.add(Box.createVerticalStrut(10));
+
+        int col_count = 0;
+        JPanel rowPanel = null;
+        for (Seat seat: seats){
+            JButton seatButton = new JButton(seat.toString());
+            if (!seat.getAvailable()){
+                seatButton.setEnabled(false);
+            }
+            seatButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Seat selected: " + seat);
+                }
+
+            });
+
+            if (col_count == 0){
+                rowPanel = new JPanel();
+                rowPanel.setLayout(new GridLayout(1, 6));
+
+            } else if (col_count == 6){
+                col_count = -1;
+            }
+            col_count++;
+            rowPanel.add(seatButton);
+
+
+
+        }
+
+    }
 }
