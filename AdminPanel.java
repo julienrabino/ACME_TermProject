@@ -38,6 +38,7 @@ public class AdminPanel extends JPanel {
                     JOptionPane.showMessageDialog(app, "Logged in successfully!");
                     usrInput.setText("");
                     pwInput.setText("");
+                    app.setCurrentUser(2); // indicate whoevers using our app rn is an Admin !!!
                     app.switchToMovieList();  // not sure what to switch to, whatever admins should be able to do
                 }
                 else {

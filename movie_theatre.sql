@@ -160,8 +160,8 @@ CREATE TABLE SEAT (
 	SeatRow				char(1)	not null,
 	SeatColumn			int	not null,
     Available			boolean not null,
-    RUID				int,
-    RUReserved			boolean,
+    RUID				int,	
+    RUReserved			boolean not null, -- has this seat been booked early by a RU
 
 	primary key (seatID),
     foreign key (RUID) references REG_USER(ID),
@@ -175,14 +175,19 @@ DROP TABLE IF EXISTS TICKET;
 CREATE TABLE TICKET (
 	TicketID			INT AUTO_INCREMENT,
 	RUID				int,
-    PaymentID			int not null,
+    email				varchar(50)	not null, 	-- so you can track OU
+    PaymentID			int,				 	-- optional (for RU)
     Cost				int not null,
-    TimePurchased		DATETIME not null,
+    TimePurchased		TIME not null,
+    DatePurchased		TIME not null,
+    ShowtimeID			int not null, -- will have movie and theatre too :3
     SeatID              int not null,
+    cancelled			int not null, -- has the ticket been cancelled ?
 	primary key (TicketID),
     foreign key (RUID) references REG_USER(ID),
     foreign key (PaymentID) references PAYMENT(PaymentID),
-    foreign key (SeatID) references SEAT(SeatID)
+    foreign key (SeatID) references SEAT(SeatID),
+    foreign key (ShowtimeID) references SHOWTIME(ShowtimeID)
     );
 
 

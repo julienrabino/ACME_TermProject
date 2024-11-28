@@ -22,6 +22,22 @@ public class MovieTheatreApp extends JFrame {
 
     private MovieTheatreController movieTC;
 
+    private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
+    // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
+    private RegisteredUser RU;
+    public void setCurrentUser (int user) {
+        this.currentUser= user;
+    }
+    public int getCurrentUser () {
+        return this.currentUser;
+    }
+    public void setRU (RegisteredUser user) {
+        this.RU = user; // i think this is a shallow copy maybe but idk
+    }
+    public RegisteredUser getRU () {
+        return this.RU;
+    }
+
     public MovieTheatreApp() {
         super("ACMEPLEX");
         db = new myJDBC();

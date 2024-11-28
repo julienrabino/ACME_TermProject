@@ -36,6 +36,9 @@ public class LoginPanel extends JPanel {
                 // Need to change/add to this stuff still
                 if (validateLogin(userDBM)) {
                     JOptionPane.showMessageDialog(app, "Logged in successfully!");
+                    RegisteredUser RU = userDBM.getRUFromUsername(username);
+                    app.setRU(RU);
+                    app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
                     usrInput.setText("");
                     pwInput.setText("");
                     app.switchToMovieList();  // switch to the movie list panel

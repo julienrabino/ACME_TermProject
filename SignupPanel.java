@@ -85,6 +85,8 @@ public class SignupPanel extends JPanel {
                 if (validateSignup(userDBM)) {
                     userDBM.insertRU(RU);
                     // add to database
+                    app.setRU(RU);
+                    app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
                     app.switchToMovieList();
                 }
                 // DO A CHECK TO MAKE SURE THE USERNAME IS NOT ALREADY IN DB
