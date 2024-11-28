@@ -4,14 +4,19 @@ public class Seat {
     private int seatID;
     private char seatRow;
     private int seatCol;
-    private boolean isAnRUSeat;
+    private boolean isRUReserved; // for seats that are first-come first-served reserved by RUs.
     private boolean isAvailable;
     public Seat(int seatID, char seatRow, int seatCol, boolean isAnRUSeat, boolean isAvailable) {
         this.seatID = seatID;
         this.seatRow = seatRow;
         this.seatCol = seatCol;
-        this.isAnRUSeat = isAnRUSeat;
+        this.isRUReserved = isAnRUSeat;
         this.isAvailable = isAvailable;
+    }
+
+    @Override
+    public String toString(){
+        return String.valueOf(seatRow) + seatCol;
     }
 
     // Getters and Setters
@@ -40,7 +45,7 @@ public class Seat {
     }
 
     public boolean isAnRUSeat() {
-        return isAnRUSeat;
+        return isRUReserved;
     }
 
     public void setAvailable(boolean isAvailable) {
