@@ -27,15 +27,15 @@ public class TicketController {
         // if user is RU, they may attempt to reserve an RU seat, but if unavailable, they may try to reserve an OU seat.
         if (user.getRegistered()) {
             if (showtime.updateSeats(true, 1, true)) {
-                ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), true);
+                //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), true);
             } else if (showtime.updateSeats(false, 1, true)) {
-                ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
+               // ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
             }
         }
 
         // if user is OU, they can only try to purchase an OU seat.
         else if ((!user.getRegistered()) && showtime.updateSeats(false, 1, true)) {
-            ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
+            //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
         }
 
         if (ticket == null) {
@@ -201,8 +201,8 @@ public class TicketController {
                     user = userDBM.fetchUser(userID);
                 }
                 MovieTheatreController movieTC = new MovieTheatreController(jdbc);
-                Showtime showtime = MovieTheatreController.fetchShowtime(showtimeID);
-                return new Ticket(id, showtime, user, -1, price, paymentMethod, isAnRUSeat);
+              //  Showtime showtime = MovieTheatreController.fetchShowtime(showtimeID);
+                //return new Ticket(id, showtime, user, -1, price, paymentMethod, isAnRUSeat);
 
             }
 

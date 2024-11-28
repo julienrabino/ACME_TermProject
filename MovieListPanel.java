@@ -97,6 +97,7 @@ public class MovieListPanel extends JPanel {
                 Location selectedLocation = (Location) locationComboBox.getSelectedItem();
                 System.out.println("Selected Location: " + selectedLocation);
                 showtimesPanel.removeAll();
+                seatPanel.removeAll();
                 detailsPanel.add(showtimesPanel);
                 displayShowtimes(selectedLocation, lastSelectedMovie);
             }
@@ -106,6 +107,8 @@ public class MovieListPanel extends JPanel {
         movieDetailsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         detailsPanel = new JPanel();
+        detailsPanel.setMaximumSize(new Dimension(600, 500));
+
         detailsPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Stack components vertically
         detailsPanel.add(movieDetailsLabel);
         detailsPanel.add(Box.createVerticalStrut(10));
@@ -117,7 +120,7 @@ public class MovieListPanel extends JPanel {
 
         detailsPanel.setPreferredSize(new Dimension(300, 500));
         seatPanel = new JPanel();
-        detailsPanel.add(searchPanel);
+        detailsPanel.add(seatPanel);
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
@@ -156,12 +159,13 @@ public class MovieListPanel extends JPanel {
                 // Get the selected movie from the list
                 Movie selectedMovie = movieList.getSelectedValue();
 
+
                 if (selectedMovie != null) {
                     // Prevent redundant updates if the selected movie is the same as the last selected one
                     if (lastSelectedMovie != null && lastSelectedMovie.equals(selectedMovie)) {
                         return;
                     }
-
+                    seatPanel.removeAll();
                     lastSelectedMovie = selectedMovie;
                     detailsPanel.setVisible(true);
 
@@ -192,6 +196,7 @@ public class MovieListPanel extends JPanel {
                 } else {
                     detailsPanel.setVisible(false);  // Hide the panel
                 }
+
             }
         });
     }
@@ -258,41 +263,48 @@ public class MovieListPanel extends JPanel {
 
 
 
-    public void displaySeatMap(Showtime showtime){
+    public void displaySeatMap(Showtime showtime) {
         seatPanel.removeAll();
-        ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
-        seatPanel.add(new JLabel("Showing seats for " + showtime));
-        seatPanel.setLayout(new FlowLayout());
-        seatPanel.add(Box.createVerticalStrut(10));
 
-        int col_count = 0;
-        JPanel rowPanel = null;
-        for (Seat seat: seats){
-            JButton seatButton = new JButton(seat.toString());
-            if (!seat.getAvailable()){
-                seatButton.setEnabled(false);
-            }
-            seatButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("Seat selected: " + seat);
+
+        ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
+        if (seats == null || seats.isEmpty()) {
+            seatPanel.add(new JLabel("No seats available for this showtime."));
+        } else {
+            seatPanel.setLayout(new GridLayout(0, 6, 5, 5));
+
+            for (Seat seat : seats) {
+                JButton seatButton = new JButton();
+                seatButton.setText(seat.toString());
+//                Font currentFont = seatButton.getFont();
+//                Font newFont = currentFont.deriveFont(currentFont.getSize() - 3f);
+//                seatButton.setFont(newFont);
+//                seatButton.setPreferredSize(new Dimension(40, 40));
+
+                if (!seat.getAvailable()) {
+                    seatButton.setEnabled(false);
                 }
 
-            });
+                seatButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("Seat selected: " + seat);
+                    }
+                });
 
-            if (col_count == 0){
-                rowPanel = new JPanel();
-                rowPanel.setLayout(new GridLayout(1, 6));
-
-            } else if (col_count == 6){
-                col_count = -1;
+                seatPanel.add(seatButton);
             }
-            col_count++;
-            rowPanel.add(seatButton);
-
-
-
         }
 
+        seatPanel.revalidate();
+        seatPanel.repaint();
+
+        if (!detailsPanel.isAncestorOf(seatPanel)) {
+            detailsPanel.add(seatPanel, BorderLayout.SOUTH);  // Add the seat panel to the bottom of the details panel
+        }
+
+        detailsPanel.revalidate();
+        detailsPanel.repaint();
     }
+
 }
