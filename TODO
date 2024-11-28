@@ -1,5 +1,5 @@
 ticket booking for ou
-ticket booking for ru
+ticket booking for ru -> should make a user object upon login so it can be passed to the diff panels
 ticket cancellation ( ***calculating diff in times if ticket is still eligible )
 store credit calculation
 store credit table
