@@ -16,47 +16,47 @@ public class TicketController {
         this.billingSystem = new BillingSystem();
     }
 
-    public Ticket purchaseTicket(Showtime showtime, User user, Seat seat) {
-        //  all methods used here need to be refactored to adapt to the new seat object (it used to be int)
-        double ticketPrice = 13.50;
+//    public Ticket purchaseTicket(Showtime showtime, User user, Seat seat) {
+//        //  all methods used here need to be refactored to adapt to the new seat object (it used to be int)
+//        double ticketPrice = 13.50;
+//
+//        Ticket ticket = null;
+//
+//        int ticketID = produceTicketID();
+//
+//        // if user is RU, they may attempt to reserve an RU seat, but if unavailable, they may try to reserve an OU seat.
+//        if (user.getRegistered()) {
+//            if (showtime.updateSeats(true, 1, true)) {
+//                //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), true);
+//            } else if (showtime.updateSeats(false, 1, true)) {
+//               // ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
+//            }
+//        }
+//
+//        // if user is OU, they can only try to purchase an OU seat.
+//        else if ((!user.getRegistered()) && showtime.updateSeats(false, 1, true)) {
+//            //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
+//        }
+//
+//        if (ticket == null) {
+//            System.out.println("No more seats available for this showtime. Please select another.");
+//            return ticket; // for caller: if purchaseTicket() returns null, request User to pick another showtime.
+//        }
+//
+//        //billingSystem.processTicketPayment(user, ticket);
+//
+//        // TO ADD:
+//        // add ticket to DB
+//        if (!addTicketToDB(ticket)) {
+//            System.out.println("Unable to save ticket to DB.");
+//        }
+//
+//        // save remaining OUSeats for this showtime to DB
+//        if (!updateShowtimeSeats(showtime)) {
+//            System.out.println("Unable to update seat count in DB.");
+//        }
+//        return ticket;
 
-        Ticket ticket = null;
-
-        int ticketID = produceTicketID();
-
-        // if user is RU, they may attempt to reserve an RU seat, but if unavailable, they may try to reserve an OU seat.
-        if (user.getRegistered()) {
-            if (showtime.updateSeats(true, 1, true)) {
-                //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), true);
-            } else if (showtime.updateSeats(false, 1, true)) {
-               // ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
-            }
-        }
-
-        // if user is OU, they can only try to purchase an OU seat.
-        else if ((!user.getRegistered()) && showtime.updateSeats(false, 1, true)) {
-            //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
-        }
-
-        if (ticket == null) {
-            System.out.println("No more seats available for this showtime. Please select another.");
-            return ticket; // for caller: if purchaseTicket() returns null, request User to pick another showtime.
-        }
-
-        //billingSystem.processTicketPayment(user, ticket);
-
-        // TO ADD:
-        // add ticket to DB
-        if (!addTicketToDB(ticket)) {
-            System.out.println("Unable to save ticket to DB.");
-        }
-
-        // save remaining OUSeats for this showtime to DB
-        if (!updateShowtimeSeats(showtime)) {
-            System.out.println("Unable to update seat count in DB.");
-        }
-        return ticket;
-    }
 
     public void cancelTicket(Ticket ticket, User user) {
 
@@ -74,7 +74,7 @@ public class TicketController {
             boolean isAnRUSeat = ticket.getIsAnRUSeat();
 
             Showtime showtime = ticket.getShowtime();
-            showtime.updateSeats(isAnRUSeat, 1, false);
+            //showtime.updateSeats(isAnRUSeat, 1, false);
             if (!updateShowtimeSeats(showtime)){
                 System.out.println("Unable to update seat count in DB.");
 
@@ -221,8 +221,8 @@ public class TicketController {
         String query = "UPDATE showtimes SET availableSeatsRU = ?, availableSeatsOU = ? WHERE showtimeID = ?"; // can we plz add available OU and RU seat columns in showtimes , thx
         try{
             PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
-            statement.setInt(1, showtime.getAvailableRUSeats());
-            statement.setInt(2, showtime.getAvailableOUSeats());
+           // statement.setInt(1, showtime.getAvailableRUSeats());
+           // statement.setInt(2, showtime.getAvailableOUSeats());
             statement.setInt(3, showtime.getShowtimeID());
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0;

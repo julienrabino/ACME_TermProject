@@ -186,18 +186,13 @@ public class MovieTheatreController {
                 int showtimeID = results.getInt("ShowtimeID");
                 Date showDate = results.getDate("ShowDate");
                 Time showtime = results.getTime("Showtime");
-                int totalRUSeats = results.getInt("TotalRUSeats");
-                int totalOUSeats = results.getInt("TotalOUSeats");
-                int availableRUSeats = results.getInt("AvailableRUSeats");
-                int availableOUSeats = results.getInt("AvailableOUSeats");
 
                 System.out.println(showtimeID);
                 String showDateString = (showDate != null) ? dateFormatter.format(showDate) : "";
                 String showtimeString = (showtime != null) ? timeFormatter.format(showtime) : "";
 
 
-                Showtime toAdd = new Showtime(showtimeID, movie, showDateString, showtimeString, location,
-                        totalRUSeats, totalOUSeats, availableRUSeats, availableOUSeats);
+                Showtime toAdd = new Showtime(showtimeID, movie, showDateString, showtimeString, location);
                 showtimes.add(toAdd);
             }
         } catch (SQLException ex) {
