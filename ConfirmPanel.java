@@ -38,7 +38,7 @@ public class ConfirmPanel extends JPanel {
                     pay.displaySavedPayments(app.getRU());
                     app.switchToPaymentRU();
                 }
-                else {
+                else if (app.getCurrentUser() == 0){ // if its a guest currently using it
                     app.switchToPayment();
                 }
             }
