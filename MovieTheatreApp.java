@@ -34,6 +34,8 @@ public class MovieTheatreApp extends JFrame {
     private Showtime selectedShowtime;
     private Seat selectedSeat;
     private Location selectedLocation;
+
+    private Payment selectedPayment;
     public void setCurrentUser (int user) {
         this.currentUser= user;
     }
@@ -59,6 +61,12 @@ public class MovieTheatreApp extends JFrame {
 
     public Showtime getSelectedShowtime(){
         return this.selectedShowtime;
+    }
+    public Payment getSelectedPayment(){
+        return this.selectedPayment;
+    }
+    public void setSelectedPayment(Payment payment){
+        this.selectedPayment = payment;
     }
 
 
@@ -103,8 +111,8 @@ public class MovieTheatreApp extends JFrame {
         guestPanel = new GuestPanel(this, movieTC);
         adminPanel = new AdminPanel(this, userDBM);
         confirmPanel = new ConfirmPanel(this, userDBM, movieTC);
-        paymentPanel = new PaymentPanel(this, userDBM, ticketC  );
-        paymentRUPanel = new PaymentRUPanel(this, userDBM);
+        paymentPanel = new PaymentPanel(this, userDBM, ticketC);
+        paymentRUPanel = new PaymentRUPanel(this, userDBM, ticketC);
 
 
         cards.add(loginPanel, "Login");

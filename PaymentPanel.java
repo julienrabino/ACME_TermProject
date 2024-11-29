@@ -71,7 +71,9 @@ public class PaymentPanel extends JPanel {
         submitButton.setForeground(Red);
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // validate
+                // NEED TO FIX ISANRUSEAT VPARAM !!!
+                Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(),  false, false);
+                ticketC.addTicket(ticket);
             }
         });
 

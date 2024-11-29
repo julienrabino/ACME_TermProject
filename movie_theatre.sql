@@ -173,16 +173,21 @@ CREATE TABLE SEAT (
 DROP TABLE IF EXISTS TICKET;
 CREATE TABLE TICKET (
 	TicketID			INT AUTO_INCREMENT,
+    ShowtimeID			int not null,
 	RUID				int,
     PaymentID			int not null,
     Cost				int not null,
+    Email				varchar(20) not null,
     TimePurchased		TIME not null,
     DatePurchased		DATE not null,
+    Refunded			int not null,
     SeatID              int not null,
+    
 	primary key (TicketID),
     foreign key (RUID) references REG_USER(ID),
     foreign key (PaymentID) references PAYMENT(PaymentID),
-    foreign key (SeatID) references SEAT(SeatID)
+    foreign key (SeatID) references SEAT(SeatID),
+    foreign key (ShowtimeID) references SHOWTIME(ShowtimeID)
     );
 
 -- Showtime 1

@@ -1,6 +1,12 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class TicketController {
 
@@ -94,25 +100,37 @@ public class TicketController {
 
     // TicketDatabaseManager functionality directly inside TicketController
 
-    public boolean addTicketToDB(Ticket ticket) {
+    public boolean addTicket(Ticket ticket) {
         // takes ticket and saves it on DB
         // if successful, return TRUE
-        String query = "INSERT INTO tickets (ticketID, userID, showtimeID, seat, ticketPrice, paymentMethod, isRUSeat) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO TICKET (RUID, showtimeID, SeatID, Cost, PaymentID, Email, TimePurchased, DatePurchased, Refunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        ZoneId calgaryTimeZone = ZoneId.of("America/Edmonton"); // Calgary is in the "America/Edmonton" zone
 
+// Get the current time in Calgary
+        ZonedDateTime calgaryCurrentTime = ZonedDateTime.now(calgaryTimeZone);
+
+// Extract the time (HH:MM:SS) from the ZonedDateTime
+        LocalTime localTime = calgaryCurrentTime.toLocalTime();
+
+// Format the time in "HH:MM:SS" format (compatible with MySQL TIME type)
+        String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalDate currentDate = LocalDate.now();
+        String formattedDate = currentDate.toString();  // toString() gives YYYY-MM-DD
 
         try{
             PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
-            statement.setInt(1, ticket.getTicketID());
-            statement.setInt(3, ticket.getShowtime().getShowtimeID());
-            statement.setInt(4, ticket.getSeat());
-            statement.setDouble(5, ticket.getTicketPrice());
-            statement.setString(6, ticket.getPaymentMethod());
-            statement.setBoolean(7, ticket.getIsAnRUSeat());
-
-            if (!ticket.getUser().getRegistered()){
-                statement.setNull(2, java.sql.Types.INTEGER);
-            } else{
-                statement.setInt(2, ((RegisteredUser)ticket.getUser()).getID());
+            statement.setInt(2, ticket.getShowtime().getShowtimeID());
+            statement.setInt(3, ticket.getSeat().getSeatID());
+            statement.setDouble(4, ticket.getTicketPrice());
+            statement.setInt(5, ticket.getPayment().getPaymentID());
+            statement.setString(6, ticket.getEmail());
+            statement.setString(7, formattedTime);
+            statement.setString(8, formattedDate);
+            statement.setInt(9, 0); // not refunded
+            if (ticket.getRU() != null){
+                statement.setInt(1, ticket.getRU().getID());            }
+            else{
+                statement.setInt(1, -1);
 
             }
             int rowsAffected = statement.executeUpdate();
@@ -120,13 +138,76 @@ public class TicketController {
 
         } catch (SQLException e){
             System.out.println("Error adding ticket to DB: " + e.getMessage());
-
-
         }
-
-
         return false;
     }
+
+    public void changeSeatAvailability(Seat seat, boolean available) {
+        int seatID = seat.getSeatID();
+        String query = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Update query that uses the 'available' parameter
+            query = "UPDATE SEAT SET Available = ? WHERE SeatID = ?;";
+
+            // Prepare the statement
+            statement = jdbc.dbConnect.prepareStatement(query);
+
+            // Set the parameters
+            statement.setBoolean(1, available);  // Set the 'Available' value
+            statement.setInt(2, seatID);  // Set the SeatID for which you want to update availability
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();  // Use executeUpdate for non-SELECT queries
+
+            if (rowsAffected > 0) {
+                System.out.println("Seat availability updated successfully.");
+            } else {
+                System.out.println("No rows affected.");
+            }
+
+            // Close the statement
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+//    public boolean addTicketToDB(Ticket ticket) {
+//        // takes ticket and saves it on DB
+//        // if successful, return TRUE
+//        String query = "INSERT INTO tickets (ticketID, userID, showtimeID, seat, ticketPrice, paymentMethod, isRUSeat) VALUES (?, ?, ?, ?, ?, ?, ?)";
+//
+//
+//        try{
+//            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
+//            statement.setInt(3, ticket.getShowtime().getShowtimeID());
+//            statement.setInt(4, ticket.getSeat().getSeatID());
+//            statement.setDouble(5, ticket.getTicketPrice());
+//            statement.setString(6, ticket.getPaymentMethod());
+//            statement.setBoolean(7, ticket.getIsAnRUSeat());
+//
+//            if (!ticket.getUser().getRegistered()){
+//                statement.setNull(2, java.sql.Types.INTEGER);
+//            } else{
+//                statement.setInt(2, ((RegisteredUser)ticket.getUser()).getID());
+//
+//            }
+//            int rowsAffected = statement.executeUpdate();
+//            return rowsAffected > 0;
+//
+//        } catch (SQLException e){
+//            System.out.println("Error adding ticket to DB: " + e.getMessage());
+//
+//
+//        }
+//
+//
+//        return false;
+//    }
 
     public boolean updateTicketStatus(Ticket ticket) {
         // uses the ticketStatus attribute of ticket to update the ticketStatus on DB

@@ -19,10 +19,14 @@ public class PaymentRUPanel extends JPanel {
     private MovieTheatreApp app;
     private UserDatabaseManager userDBM;
     private ArrayList<Payment> payments;
+    private Payment selectedPayment;
 
-    public PaymentRUPanel(MovieTheatreApp app, UserDatabaseManager userDBM) {
+    private TicketController ticketC;
+
+    public PaymentRUPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
         this.app = app;
         this.userDBM = userDBM;
+        this.ticketC = ticketC;
 
         this.setBackground(Yellow);
 
@@ -42,8 +46,18 @@ public class PaymentRUPanel extends JPanel {
         submitButton.setForeground(Red);
         submitButton.setEnabled(false); // Disabled initially until a selection is made
         submitButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-        submitButton.addActionListener(e -> {
-            // Handle payment action here
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle the action for using another payment method
+                app.setSelectedPayment(selectedPayment);
+                System.out.println("payed");
+                System.out.println(selectedPayment.toString());
+                Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), app.getRU().getEmail(), 12.50, app.getSelectedPayment(), true, false);
+                ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
+                ticketC.addTicket(ticket);
+                // Possibly switch to a new payment screen or form
+            }
         });
 
         // "Use another payment method" button
@@ -108,6 +122,7 @@ public class PaymentRUPanel extends JPanel {
                             updateButtonColor(selectPaymentButton, false);
                             submitButton.setEnabled(true);
                             currentSelectPaymentButton = selectPaymentButton;
+                            selectedPayment = payment;
                         }
                     }
                 });
