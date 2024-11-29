@@ -152,23 +152,6 @@ CREATE TABLE STORE_CREDIT (
     foreign key (RUID) references REG_USER(ID)
 );
 
-DROP TABLE IF EXISTS TICKET;
-CREATE TABLE TICKET (
-	TicketID			INT AUTO_INCREMENT,
-	RUID				int,
-    PaymentID			int not null,
-    Cost				int not null,
-    TimePurchased		DATETIME not null,
-    SeatID              int not null,
-	primary key (TicketID),
-    foreign key (RUID) references REG_USER(ID),
-    foreign key (PaymentID) references PAYMENT(PaymentID),
-    foreign key (SeatID) references SEAT(SeatID)
-    );
-
-
-
-
 DROP TABLE IF EXISTS SEAT;
 CREATE TABLE SEAT (
 	SeatID				INT AUTO_INCREMENT,
@@ -181,6 +164,23 @@ CREATE TABLE SEAT (
 	primary key (seatID),
     foreign key (Showtime) references SHOWTIME(ShowtimeID)
 );
+
+
+DROP TABLE IF EXISTS TICKET;
+CREATE TABLE TICKET (
+	TicketID			INT AUTO_INCREMENT,
+	RUID				int,
+    PaymentID			int not null,
+    Cost				int not null,
+    TimePurchased		TIME not null,
+    DatePurchased		DATE not null,
+    SeatID              int not null,
+	primary key (TicketID),
+    foreign key (RUID) references REG_USER(ID),
+    foreign key (PaymentID) references PAYMENT(PaymentID),
+    foreign key (SeatID) references SEAT(SeatID)
+    );
+
 
 -- Showtime 1
 INSERT INTO SEAT (Showtime, SeatRow, SeatColumn, Available, RUReserved)

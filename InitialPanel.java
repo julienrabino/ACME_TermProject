@@ -5,15 +5,61 @@ import java.awt.event.ActionListener;
 
 public class InitialPanel extends JPanel {
     private MovieTheatreApp app;
+    private Color Red = new Color(139, 0, 0);
+    private int bWidth = 100;
+    private int bHeight = 50;
 
     public InitialPanel(MovieTheatreApp app) {
         this.app = app;
 
+        this.setLayout(new GridLayout(3, 1));
 
-        JButton loginButton = new JButton("login");
-        JButton registerButton = new JButton("sign up");
-        JButton guestButton = new JButton("continue as guest");
-        JButton adminButton = new JButton("admin login");
+
+        this.setBackground(Red);
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+
+
+        JLabel welcomeLabel = new JLabel("Welcome To", JLabel.CENTER);
+        welcomeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        welcomeLabel.setForeground(Color.WHITE);
+
+        JLabel acmeplexLabel = new JLabel("ACMEPLEX", JLabel.CENTER);
+        acmeplexLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        acmeplexLabel.setForeground(Color.WHITE);
+
+        textPanel.add(welcomeLabel);
+
+        textPanel.add(acmeplexLabel);
+
+        textPanel.setBackground(new Color(139, 0, 0));
+
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 50)); // Use FlowLayout for better control
+        buttonPanel.setBackground(Red);
+        JButton loginButton = new JButton("Login");
+        loginButton.setPreferredSize(new Dimension(bWidth, bHeight));
+        loginButton.setForeground(Red);
+
+
+        JButton registerButton = new JButton("Sign Up");
+        registerButton.setPreferredSize(new Dimension(bWidth, bHeight));
+        registerButton.setForeground(Red);
+
+        JButton guestButton = new JButton("Continue as Guest");
+        guestButton.setPreferredSize(new Dimension(200, bHeight));
+        guestButton.setForeground(Red);
+
+
+        JButton adminButton = new JButton("Admin Login");
+        adminButton.setPreferredSize(new Dimension(bWidth, bHeight));
+        adminButton.setForeground(Red);
+
+
+        buttonPanel.add(loginButton);
+        buttonPanel.add(registerButton);
+        buttonPanel.add(guestButton);
+
+
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 app.switchToLogin();
@@ -26,30 +72,26 @@ public class InitialPanel extends JPanel {
         });
         guestButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                app.setCurrentUser(0); // indicate whoevers using our app rn is a guest !!!
+                app.setCurrentUser(0); // Indicate that the current user is a guest
                 app.switchToGuest();
             }
-
         });
         adminButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 app.switchToAdmin();
             }
         });
-        this.setLayout(new BorderLayout());
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Center the buttons
-        buttonPanel.add(loginButton);
-        buttonPanel.add(registerButton);
-        buttonPanel.add(guestButton);
 
-        this.add(buttonPanel, BorderLayout.CENTER);
 
-        JPanel adminPanel = new JPanel();
-        adminPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Center the admin button
-        adminPanel.add(adminButton);
 
-        // Add the adminPanel to the South section of the BorderLayout
-        this.add(adminPanel, BorderLayout.SOUTH);
+        JPanel adminButtonPanel =  new JPanel(new FlowLayout(FlowLayout.RIGHT, 100, 50));
+        adminButtonPanel.setBackground(Red);
+        adminButtonPanel.add(adminButton, BorderLayout.EAST);
+
+
+
+        this.add(adminButtonPanel); // Admin button at top-right
+        this.add(textPanel); // Center the text panel vertically and horizontally
+        this.add(buttonPanel); // Bottom buttons centered
     }
 }
