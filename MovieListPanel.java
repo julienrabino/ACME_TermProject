@@ -24,7 +24,6 @@ public class MovieListPanel extends JPanel {
     private JPanel showtimesPanel;
     private JPanel seatPanel;
     private MovieTheatreController movieTC;
-    private Showtime selectedShowtime;
     private MovieTheatreApp app;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
@@ -280,11 +279,11 @@ public class MovieListPanel extends JPanel {
                     showtimeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            selectedShowtime = showtime;
+                            app.setSelectedShowtime(showtime);
                             submitButton.setVisible(false);
                             //System.out.println("Showtime selected: " + showtime);
-                            System.out.println("Showtime selected ID: " + selectedShowtime.getShowtimeID());
-                            System.out.println("Showtime selected date/time: " + selectedShowtime.getDate() + selectedShowtime.getTime());
+                            System.out.println("Showtime selected ID: " + app.getSelectedShowtime().getShowtimeID());
+                            System.out.println("Showtime selected date/time: " + app.getSelectedShowtime().getDate() + app.getSelectedShowtime().getTime());
                             displaySeatMap(showtime);
                         }
                     });

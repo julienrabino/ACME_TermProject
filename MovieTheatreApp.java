@@ -23,10 +23,12 @@ public class MovieTheatreApp extends JFrame {
 
     private MovieTheatreController movieTC;
 
+
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
     // yes !
     private RegisteredUser RU;
+    private Showtime selectedShowtime;
 
     private Seat selectedSeat;
     public void setCurrentUser (int user) {
@@ -46,6 +48,14 @@ public class MovieTheatreApp extends JFrame {
         selectedSeat = seat;
     }public Seat getSelectedSeat() {
         return selectedSeat;
+    }
+
+    public void setSelectedShowtime(Showtime showtime){
+        this.selectedShowtime = showtime;
+    }
+
+    public Showtime getSelectedShowtime(){
+        return this.selectedShowtime;
     }
 
 
@@ -121,25 +131,11 @@ public class MovieTheatreApp extends JFrame {
     }
 
     public static void main(String[] args) {
-//        String url = "";
-//        String user = "";
-//        String pw = "";
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Enter your database url (e.g. jdbc:mysql://localhost:3306/MOVIE_THEATRE): ");
-//        url = scanner.nextLine();
-//        System.out.println("Enter your database username (e.g. root): ");
-//        user = scanner.nextLine();
-//        System.out.println("Enter your database password: ");
-//        pw = scanner.nextLine();
-//        //myJDBC db = new myJDBC(url, user, pw);
+
         db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "123");
         db = new myJDBC();
         db.initializeConnection();
-//        MovieTheatreController movieTC = new MovieTheatreController(db);
-//        displayMovies(movieTC, scanner);
-//        searchMovie(movieTC, scanner);
-//        displayShowtimes(movieTC, scanner);
-//
+
 
         EventQueue.invokeLater(() -> {
             new MovieTheatreApp().setVisible(true);
