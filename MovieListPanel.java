@@ -23,12 +23,16 @@ public class MovieListPanel extends JPanel {
     private JPanel showtimesPanel;
     private JPanel seatPanel;
     private MovieTheatreController movieTC;
+    private Color Red = new Color(139, 0, 0);
+    private Color Yellow = new Color(255, 248, 191);
+    private Color Orange = new Color(244, 138, 104);
 
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
 
         this.movieTC = movieTC;
         JButton backButton = new JButton("Back");
+        backButton.setForeground(Red);
 
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -40,14 +44,17 @@ public class MovieListPanel extends JPanel {
         this.setLayout(new BorderLayout());
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(backButton);
+        bottomPanel.setBackground(Yellow);
         this.add(bottomPanel, BorderLayout.SOUTH);
         backButton.setVisible(true);
 
 
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        searchPanel.setBackground(Yellow);
 
         showAllButton = new JButton("Show All");
+        showAllButton.setForeground(Red);
         showAllButton.setVisible(false);
         showAllButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +67,10 @@ public class MovieListPanel extends JPanel {
         });
 
         JLabel searchLabel = new JLabel("Search a Movie:");
+        searchLabel.setForeground(Red);
         searchInput = new JTextField(30);
         JButton searchButton = new JButton("Search");
+        searchButton.setForeground(Red);
 
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -88,6 +97,8 @@ public class MovieListPanel extends JPanel {
 
         this.add(movieListScrollPane, BorderLayout.CENTER);
         showtimesPanel = new JPanel();
+        //
+        showtimesPanel.setBackground(Yellow);
         locations = new ArrayList<>();
         locationComboBox = new JComboBox<>(locations.toArray(new Location[0]));
 
@@ -107,7 +118,9 @@ public class MovieListPanel extends JPanel {
         movieDetailsLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
         detailsPanel = new JPanel();
-        detailsPanel.setMaximumSize(new Dimension(600, 500));
+        //
+        detailsPanel.setBackground(Yellow);
+        detailsPanel.setMaximumSize(new Dimension(800, 500));
 
         detailsPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Stack components vertically
         detailsPanel.add(movieDetailsLabel);
@@ -118,8 +131,10 @@ public class MovieListPanel extends JPanel {
         detailsPanel.add(locationComboBox);
         detailsPanel.setVisible(false);
 
-        detailsPanel.setPreferredSize(new Dimension(300, 500));
+        detailsPanel.setPreferredSize(new Dimension(400, 500));
+
         seatPanel = new JPanel();
+        seatPanel.setBackground(Orange);
         detailsPanel.add(seatPanel);
         this.add(detailsPanel, BorderLayout.EAST);
 
@@ -172,7 +187,9 @@ public class MovieListPanel extends JPanel {
                     String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +
                             "<br><b>Genre:</b> " + selectedMovie.getGenre() + "</html>";
 
+
                     movieDetailsLabel.setText(movieDetails);
+                    movieDetailsLabel.setForeground(Red);
 
                     ArrayList<Location> loc = movieTC.getMovieLocations(selectedMovie);
 
@@ -206,6 +223,7 @@ public class MovieListPanel extends JPanel {
 
         if (showtimes == null || showtimes.isEmpty()) {
             JLabel noShowtimesLabel = new JLabel("No showtimes available for this movie at this location.");
+            noShowtimesLabel.setForeground(Red);
             showtimesPanel.add(noShowtimesLabel);
         } else {
             Set<String> uniqueDates = new HashSet<>();  // Collect unique dates
@@ -269,12 +287,19 @@ public class MovieListPanel extends JPanel {
 
         ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
         if (seats == null || seats.isEmpty()) {
-            seatPanel.add(new JLabel("No seats available for this showtime."));
+            JLabel noSeats = new JLabel("No seats available for this showtime.");
+            noSeats.setForeground(Red);
+            seatPanel.add(noSeats);
         } else {
-            seatPanel.setLayout(new GridLayout(0, 6, 5, 5));
+            seatPanel.setLayout(new GridLayout(0, 5, 5, 5));
 
             for (Seat seat : seats) {
                 JButton seatButton = new JButton();
+                seatButton.setForeground(Red);
+                if (false == seat.getAvailable()) {
+                    seatButton.setBackground(Color.gray);
+                    seatButton.setEnabled(false);
+                }
                 seatButton.setText(seat.toString());
 //                Font currentFont = seatButton.getFont();
 //                Font newFont = currentFont.deriveFont(currentFont.getSize() - 3f);
