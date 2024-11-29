@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -84,10 +85,10 @@ public class ConfirmPanel extends JPanel {
     }
 
     public void getInfo() {
-        this.seat = app.getSeat();
+        this.seat = app.getSelectedSeat();
         this.movie = app.getMovie();
         this.theatre = app.getTheatre();
-        this.showtime = app.getShowtime();
+        this.showtime = app.getSelectedShowtime();
 
         System.out.println("IN GET INFO");
         System.out.println(movie.getTitle());
@@ -134,3 +135,4 @@ public class ConfirmPanel extends JPanel {
         panel.add(component, gbc);
     }
 }
+

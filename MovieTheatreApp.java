@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,10 +23,11 @@ public class MovieTheatreApp extends JFrame {
 
     private MovieTheatreController movieTC;
 
+
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
+    // yes !
     private RegisteredUser RU;
-
     private Movie selectedMovie;
     private Showtime selectedShowtime;
     private Seat selectedSeat;
@@ -45,24 +45,22 @@ public class MovieTheatreApp extends JFrame {
         return this.RU;
     }
 
-    public void setMovie (Movie movie) {
-        this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
+    public void setSelectedSeat(Seat seat) {
+        selectedSeat = seat;
     }
-    public Movie getMovie () {
-        return this.selectedMovie;
+    public Seat getSelectedSeat() {
+        return selectedSeat;
     }
-    public void setShowtime (Showtime showtime) {
-        this.selectedShowtime = showtime; // i think this is a shallow copy maybe but idk
+
+    public void setSelectedShowtime(Showtime showtime){
+        this.selectedShowtime = showtime;
     }
-    public Showtime getShowtime () {
+
+    public Showtime getSelectedShowtime(){
         return this.selectedShowtime;
     }
-    public void setSeat (Seat seat) {
-        this.selectedSeat = seat; // i think this is a shallow copy maybe but idk
-    }
-    public Seat getSeat () {
-        return this.selectedSeat;
-    }
+
+
     public void setTheatre (Location loc) {
         this.selectedLocation = loc; // i think this is a shallow copy maybe but idk
     }
@@ -71,6 +69,13 @@ public class MovieTheatreApp extends JFrame {
     }
     public ConfirmPanel getConfirmPanel () {
         return this.confirmPanel;
+    }
+
+    public void setMovie (Movie movie) {
+        this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
+    }
+    public Movie getMovie () {
+        return this.selectedMovie;
     }
 
     public MovieTheatreApp() {
@@ -138,36 +143,23 @@ public class MovieTheatreApp extends JFrame {
         cardLayout.show(cards, "Admin");
     }
 
-    public void switchToConfrim() {
+    public void switchToConfirm() {
         // just browse and purchase movies i guess?
         cardLayout.show(cards, "Confirm");
     }
 
     public static void main(String[] args) {
-//        String url = "";
-//        String user = "";
-//        String pw = "";
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Enter your database url (e.g. jdbc:mysql://localhost:3306/MOVIE_THEATRE): ");
-//        url = scanner.nextLine();
-//        System.out.println("Enter your database username (e.g. root): ");
-//        user = scanner.nextLine();
-//        System.out.println("Enter your database password: ");
-//        pw = scanner.nextLine();
-//        //myJDBC db = new myJDBC(url, user, pw);
+
         db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "123");
-        db = new myJDBC();
+        //db = new myJDBC();
         db.initializeConnection();
-//        MovieTheatreController movieTC = new MovieTheatreController(db);
-//        displayMovies(movieTC, scanner);
-//        searchMovie(movieTC, scanner);
-//        displayShowtimes(movieTC, scanner);
-//
+
 
         EventQueue.invokeLater(() -> {
             new MovieTheatreApp().setVisible(true);
         });
     }
+
 
 }
 

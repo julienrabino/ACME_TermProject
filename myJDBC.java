@@ -22,6 +22,7 @@ public class myJDBC {
         this.USERNAME = username;
         this.PASSWORD = password;
     }
+
     public myJDBC() {
         this.DBURL = "jdbc:mysql://localhost:3306/MOVIE_THEATRE";
         this.USERNAME = "root";
@@ -59,31 +60,4 @@ public class myJDBC {
     }
 
 
-
-    // returns the movie IDs
-//    public ArrayList<Integer> searchMovie(String search) {
-//        ArrayList<Integer> IDs = new ArrayList<>();
-//
-//        try {
-//            Statement myStmt = dbConnect.createStatement();
-//            results = myStmt.executeQuery("select M.MovieID, M.Title\n" +
-//                    "from MOVIE as M\n" +
-//                    "where LOCATE(LOWER('" + search + "'), LOWER(M.Title)) > 0;");
-//
-//            System.out.println("Results: ");
-//            while (results.next()) {
-//                System.out.println("ID: " + results.getInt("MovieID") + "     Name: " +
-//                        results.getString("Title"));
-//                IDs.add(new Integer(results.getInt("MovieID")));
-//            }
-//
-//            myStmt.close();
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        return IDs;
-//    }
 }
-
-
-
