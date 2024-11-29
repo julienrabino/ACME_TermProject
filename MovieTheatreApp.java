@@ -25,7 +25,10 @@ public class MovieTheatreApp extends JFrame {
 
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
+    // yes !
     private RegisteredUser RU;
+
+    private Seat selectedSeat;
     public void setCurrentUser (int user) {
         this.currentUser= user;
     }
@@ -38,6 +41,14 @@ public class MovieTheatreApp extends JFrame {
     public RegisteredUser getRU () {
         return this.RU;
     }
+
+    public void setSelectedSeat(Seat seat) {
+        selectedSeat = seat;
+    }public Seat getSelectedSeat() {
+        return selectedSeat;
+    }
+
+
 
     public MovieTheatreApp() {
         super("ACMEPLEX");
@@ -104,7 +115,7 @@ public class MovieTheatreApp extends JFrame {
         cardLayout.show(cards, "Admin");
     }
 
-    public void switchToConfrim() {
+    public void switchToConfirm() {
         // just browse and purchase movies i guess?
         cardLayout.show(cards, "Confirm");
     }
@@ -134,6 +145,7 @@ public class MovieTheatreApp extends JFrame {
             new MovieTheatreApp().setVisible(true);
         });
     }
+
 
 }
 

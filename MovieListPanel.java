@@ -25,14 +25,14 @@ public class MovieListPanel extends JPanel {
     private JPanel seatPanel;
     private MovieTheatreController movieTC;
     private Showtime selectedShowtime;
-    private Seat selectedSeat;
+    private MovieTheatreApp app;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
 
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
-
+        this.app = app;
         this.movieTC = movieTC;
         JButton backButton = new JButton("Back");
         backButton.setForeground(Red);
@@ -65,7 +65,7 @@ public class MovieListPanel extends JPanel {
                 search = false;
                 showAll = true;
                 searchInput.setText(""); // so whenever you press show all, your search bar clears
-                updateMovieList(app);
+                updateMovieList();
                 showAllButton.setVisible(false);
             }
         });
@@ -80,10 +80,10 @@ public class MovieListPanel extends JPanel {
         submitButton.setForeground(Red);
         submitButton.setVisible(false); // start as false!!!!!
 
-        // MAKE ACTION LISTENERRRR
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               app.switchToConfrim();
+
+               app.switchToConfirm();
             }
         });
 
@@ -93,7 +93,7 @@ public class MovieListPanel extends JPanel {
                 searchMovie = searchInput.getText();
                 search = true;
                 showAll = false;
-                updateMovieList(app);
+                updateMovieList();
                 showAllButton.setVisible(true);
             }
         });
@@ -157,10 +157,10 @@ public class MovieListPanel extends JPanel {
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
-        updateMovieList(app);
+        updateMovieList();
     }
 
-    private void updateMovieList(MovieTheatreApp app) {
+    private void updateMovieList() {
         listModel.clear();  // Clear existing list items
 
         // Fetch movies based on search state
@@ -318,27 +318,30 @@ public class MovieListPanel extends JPanel {
             for (Seat seat : seats) {
                 JButton seatButton = new JButton();
                 seatButton.setForeground(Red);
-                if (false == seat.getAvailable()) {
+                if (!seat.getAvailable()) {
                     //seatButton.setBackground(Red);
                     seatButton.setEnabled(false);
                 }
                 seatButton.setText(seat.toString());
-//                Font currentFont = seatButton.getFont();
-//                Font newFont = currentFont.deriveFont(currentFont.getSize() - 3f);
-//                seatButton.setFont(newFont);
-//                seatButton.setPreferredSize(new Dimension(40, 40));
-
+//
                 if (!seat.getAvailable()) {
                     seatButton.setEnabled(false);
+                }
+                if (seat.isAnRUSeat()){
+                    if (app.getCurrentUser() == 0){
+                        seatButton.setEnabled(false);
+                    }
                 }
 
                 seatButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        selectedSeat = seat;
+
+                        app.setSelectedSeat(seat);
                         submitButton.setVisible(true);
-                        System.out.println("Seat selected ID: " + selectedSeat.getSeatID());
-                        System.out.println("Seat selected: " + selectedSeat.getSeatRow() + selectedSeat.getSeatCol());
+                        System.out.println("Seat selected ID: " + app.getSelectedSeat().getSeatID());
+                        System.out.println("Seat selected: " + app.getSelectedSeat().getSeatRow() + app.getSelectedSeat().getSeatCol());
+
 
                     }
 
@@ -352,7 +355,7 @@ public class MovieListPanel extends JPanel {
         seatPanel.repaint();
 
         if (!detailsPanel.isAncestorOf(seatPanel)) {
-            detailsPanel.add(seatPanel, BorderLayout.SOUTH);  // Add the seat panel to the bottom of the details panel
+            detailsPanel.add(seatPanel, BorderLayout.SOUTH);
         }
 
         detailsPanel.revalidate();
