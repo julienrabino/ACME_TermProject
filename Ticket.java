@@ -62,7 +62,7 @@ public class Ticket {
     public void cancelTicket(){
         this.ticketStatus = false;
         Showtime showtime = this.showtime;
-        showtime.updateSeats(this.isAnRUSeat, 1,false);
+       // showtime.updateSeats(this.isAnRUSeat, 1,false);
 
     }
     public void sendTicketReceipt(Ticket ticket){
