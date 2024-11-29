@@ -10,6 +10,15 @@ public class PaymentPanel extends JPanel {
     private int bWidth = 100;
     private int bHeight = 50;
 
+    private JTextField usrInput;
+    private JPasswordField pwInput;
+    private JPasswordField pwConfirmInput;
+    private JTextField fnameInput;
+    private JTextField lnameInput;
+    private JTextField emailInput;
+    private JTextField addressInput;
+
+
     public PaymentPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
         this.ticketC = ticketC;
         this.app = app;
