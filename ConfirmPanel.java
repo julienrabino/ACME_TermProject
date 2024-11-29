@@ -16,8 +16,6 @@ public class ConfirmPanel extends JPanel {
     private JLabel theatreName;
     private JLabel seatName;
     private JLabel showtimeName;
-    private JLabel showtimeTime;
-    private JLabel showtimeDate;
     private JPanel clientPanel;
     private GridBagConstraints gbc;
 
@@ -68,6 +66,15 @@ public class ConfirmPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                movieName.setText("");
+                theatreName.setText("");
+                showtimeName.setText("");
+                seatName.setText("");
+                int row = 0;
+                addComponent(clientPanel, movieName, 1, row++, gbc);
+                addComponent(clientPanel, theatreName, 1, row++, gbc);
+                addComponent(clientPanel, seatName, 1, row++, gbc);
+                addComponent(clientPanel, showtimeName, 1, row++, gbc);
                 app.switchToMovieList();
             }
         });
@@ -115,7 +122,6 @@ public class ConfirmPanel extends JPanel {
         addComponent(clientPanel, seatLabel, 0, row, gbc);
         addComponent(clientPanel, seatName, 1, row++, gbc);
 
-        String showtime = showtimeDate + " " + showtimeTime;
         addComponent(clientPanel, showtimeLabel, 0, row, gbc);
         addComponent(clientPanel, showtimeName, 1, row++, gbc);
 
