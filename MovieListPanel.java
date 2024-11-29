@@ -26,6 +26,7 @@ public class MovieListPanel extends JPanel {
     private MovieTheatreController movieTC;
     private Showtime selectedShowtime;
     private Seat selectedSeat;
+    private Location selectedLocation;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
@@ -83,7 +84,17 @@ public class MovieListPanel extends JPanel {
         // MAKE ACTION LISTENERRRR
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-               app.switchToConfrim();
+                System.out.println("seat: " + selectedSeat);
+                System.out.println("showtime: " + selectedShowtime);
+                System.out.println("movie: " + lastSelectedMovie);
+                System.out.println("loc: " + selectedLocation);
+                app.setSeat(selectedSeat);
+                app.setShowtime(selectedShowtime);
+                app.setMovie(lastSelectedMovie);
+                app.setTheatre(selectedLocation);
+                ConfirmPanel confirm = app.getConfirmPanel();
+                confirm.getInfo();
+                app.switchToConfrim();
             }
         });
 
@@ -122,7 +133,8 @@ public class MovieListPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 submitButton.setVisible(false);
-                Location selectedLocation = (Location) locationComboBox.getSelectedItem();
+                selectedLocation = (Location) locationComboBox.getSelectedItem();
+                app.setTheatre(selectedLocation);
                 System.out.println("Selected Location: " + selectedLocation);
                 showtimesPanel.removeAll();
                 seatPanel.removeAll();

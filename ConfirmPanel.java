@@ -7,7 +7,24 @@ public class ConfirmPanel extends JPanel {
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
+    private MovieTheatreApp app;
+    private Movie movie;
+    private Location theatre;
+    private Showtime showtime;
+    private Seat seat;
+    private JLabel movieName;
+    private JLabel theatreName;
+    private JLabel seatName;
+    private JLabel showtimeName;
+    private JLabel showtimeTime;
+    private JLabel showtimeDate;
+    private JPanel clientPanel;
+    private GridBagConstraints gbc;
+
     public ConfirmPanel(MovieTheatreApp app, UserDatabaseManager userDBM, MovieTheatreController movieTC) {
+
+        this.app = app;
+
         this.setLayout(new BorderLayout());
         this.setBackground(Yellow);
 
@@ -21,17 +38,33 @@ public class ConfirmPanel extends JPanel {
             }
         });
 
+        JPanel centerPanel = new JPanel();
+        System.out.println("IN CONFIRM PANEL");
+        Movie movie = app.getMovie();  // Assuming app.getMovie() returns a Movie object
+        Location theatre = app.getTheatre();  // Assuming app.getTheatre() returns a Theatre object
+
+
+        clientPanel = new JPanel();
+        clientPanel.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        clientPanel.setBackground(Yellow);
+
+
+        this.add(clientPanel, BorderLayout.CENTER);
+
+
         JPanel confirmPanel = new JPanel();
         confirmPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centering the button
-        confirmPanel.add(confirmButton);
         confirmPanel.setBackground(Yellow);
-        this.add(confirmPanel);
 
         this.add(Box.createVerticalStrut(20));  // Adds vertical space between buttons
 
         JButton backButton = new JButton("Back");
         backButton.setForeground(Red);
         confirmPanel.add(backButton);
+        confirmPanel.add(confirmButton);
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,5 +74,57 @@ public class ConfirmPanel extends JPanel {
 
         this.add(confirmPanel, BorderLayout.SOUTH);
 
+    }
+
+    public void getInfo() {
+        this.seat = app.getSeat();
+        this.movie = app.getMovie();
+        this.theatre = app.getTheatre();
+        this.showtime = app.getShowtime();
+
+        System.out.println("IN GET INFO");
+        System.out.println(movie.getTitle());
+        System.out.println(theatre.getName());
+
+        movieName = new JLabel(movie.getTitle());
+        movieName.setForeground(Red);
+        theatreName = new JLabel(theatre.getName());
+        theatreName.setForeground(Red);
+        seatName = new JLabel(seat.toString());
+        seatName.setForeground(Red);
+        String showtimeStr = showtime.getDate() + " @ " + showtime.getTime();
+        showtimeName = new JLabel(showtimeStr);
+        showtimeName.setForeground(Red);
+        //seatName = new JLabel(app.getSeat());
+        JLabel movieLabel = new JLabel("Movie: ");
+        movieLabel.setForeground(Red);
+        JLabel theatreLabel = new JLabel("Theatre: ");
+        theatreLabel.setForeground(Red);
+        JLabel seatLabel = new JLabel("Seat: ");
+        seatLabel.setForeground(Red);
+        JLabel showtimeLabel = new JLabel("Showtime: ");
+        showtimeLabel.setForeground(Red);
+
+        int row = 0;
+        addComponent(clientPanel, movieLabel, 0, row, gbc);
+        addComponent(clientPanel, movieName, 1, row++, gbc);
+
+        addComponent(clientPanel, theatreLabel, 0, row, gbc);
+        addComponent(clientPanel, theatreName, 1, row++, gbc);
+
+        addComponent(clientPanel, seatLabel, 0, row, gbc);
+        addComponent(clientPanel, seatName, 1, row++, gbc);
+
+        String showtime = showtimeDate + " " + showtimeTime;
+        addComponent(clientPanel, showtimeLabel, 0, row, gbc);
+        addComponent(clientPanel, showtimeName, 1, row++, gbc);
+
+        this.add(clientPanel, BorderLayout.CENTER);
+    }
+
+    private void addComponent(JPanel panel, Component component, int gridx, int gridy, GridBagConstraints gbc) {
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        panel.add(component, gbc);
     }
 }

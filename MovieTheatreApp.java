@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -26,6 +27,11 @@ public class MovieTheatreApp extends JFrame {
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
     private RegisteredUser RU;
+
+    private Movie selectedMovie;
+    private Showtime selectedShowtime;
+    private Seat selectedSeat;
+    private Location selectedLocation;
     public void setCurrentUser (int user) {
         this.currentUser= user;
     }
@@ -37,6 +43,34 @@ public class MovieTheatreApp extends JFrame {
     }
     public RegisteredUser getRU () {
         return this.RU;
+    }
+
+    public void setMovie (Movie movie) {
+        this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
+    }
+    public Movie getMovie () {
+        return this.selectedMovie;
+    }
+    public void setShowtime (Showtime showtime) {
+        this.selectedShowtime = showtime; // i think this is a shallow copy maybe but idk
+    }
+    public Showtime getShowtime () {
+        return this.selectedShowtime;
+    }
+    public void setSeat (Seat seat) {
+        this.selectedSeat = seat; // i think this is a shallow copy maybe but idk
+    }
+    public Seat getSeat () {
+        return this.selectedSeat;
+    }
+    public void setTheatre (Location loc) {
+        this.selectedLocation = loc; // i think this is a shallow copy maybe but idk
+    }
+    public Location getTheatre () {
+        return this.selectedLocation;
+    }
+    public ConfirmPanel getConfirmPanel () {
+        return this.confirmPanel;
     }
 
     public MovieTheatreApp() {
