@@ -281,16 +281,16 @@ public class MovieListPanel extends JPanel {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if (currentShowtimeButton == showtimeButton){
-                                if (currentShowtimeButton.getBackground() == pastelGreen){
+                                if (currentShowtimeButton.getBackground().equals(pastelGreen)){
                                     // means the button was prev Selected, now user wants to unclick
-                                    updateShowtimeButtonColor(currentShowtimeButton, true);
-
-                                    currentShowtimeButton = null;
+                                    updateShowtimeButtonColor(showtimeButton, true); // making the button default bg
+                                    currentShowtimeButton = null; // no selected showtime
                                     System.out.println("Deselected showtime:" + app.getSelectedShowtime().getShowtimeID());
+                                    return;
 
                                 }else {
                                     // means the button wasn't prev selected, now user wants to select it
-                                    updateShowtimeButtonColor(currentShowtimeButton, false);
+                                    updateShowtimeButtonColor(showtimeButton, false);
                                 }
                             }
                             System.out.println("Showtime clicked: " + showtime);
