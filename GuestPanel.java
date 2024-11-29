@@ -9,6 +9,7 @@ public class GuestPanel extends JPanel {
     private Color Orange = new Color(244, 138, 104);
     public GuestPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
         this.setLayout(new GridLayout(3, 3, 10, 10));
+        this.setBackground(Yellow);
 
         JButton browseMovies = new JButton("Browse Movies");
         browseMovies.setForeground(Red);

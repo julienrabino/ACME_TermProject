@@ -15,6 +15,7 @@ public class MovieTheatreApp extends JFrame {
     private SignupPanel signupPanel;
     private MovieListPanel movieListPanel;
     private GuestPanel guestPanel;
+    private ConfirmPanel confirmPanel;
 
     private AdminPanel adminPanel;
 
@@ -55,6 +56,7 @@ public class MovieTheatreApp extends JFrame {
         signupPanel = new SignupPanel(this, userDBM);
         guestPanel = new GuestPanel(this, movieTC);
         adminPanel = new AdminPanel(this, userDBM);
+        confirmPanel = new ConfirmPanel(this, userDBM, movieTC);
 
         cards.add(loginPanel, "Login");
         cards.add(movieListPanel, "Movies");
@@ -62,6 +64,7 @@ public class MovieTheatreApp extends JFrame {
         cards.add(signupPanel, "Signup");
         cards.add(guestPanel, "Guest");
         cards.add(adminPanel, "Admin");
+        cards.add(confirmPanel, "Confirm");
 
         this.add(cards);
 
@@ -99,6 +102,11 @@ public class MovieTheatreApp extends JFrame {
     public void switchToAdmin() {
         // just browse and purchase movies i guess?
         cardLayout.show(cards, "Admin");
+    }
+
+    public void switchToConfrim() {
+        // just browse and purchase movies i guess?
+        cardLayout.show(cards, "Confirm");
     }
 
     public static void main(String[] args) {

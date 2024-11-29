@@ -12,6 +12,7 @@ public class MovieListPanel extends JPanel {
     private boolean search = false;
     JComboBox<Location> locationComboBox;
     private Movie lastSelectedMovie = null;
+    private JButton submitButton;
 
     private String searchMovie;
     private JTextField searchInput;
@@ -23,6 +24,8 @@ public class MovieListPanel extends JPanel {
     private JPanel showtimesPanel;
     private JPanel seatPanel;
     private MovieTheatreController movieTC;
+    private Showtime selectedShowtime;
+    private Seat selectedSeat;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
@@ -58,6 +61,7 @@ public class MovieListPanel extends JPanel {
         showAllButton.setVisible(false);
         showAllButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                submitButton.setVisible(false);
                 search = false;
                 showAll = true;
                 searchInput.setText(""); // so whenever you press show all, your search bar clears
@@ -72,8 +76,20 @@ public class MovieListPanel extends JPanel {
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Red);
 
+        submitButton = new JButton("Book Now");
+        submitButton.setForeground(Red);
+        submitButton.setVisible(false); // start as false!!!!!
+
+        // MAKE ACTION LISTENERRRR
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               app.switchToConfrim();
+            }
+        });
+
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                submitButton.setVisible(false);
                 searchMovie = searchInput.getText();
                 search = true;
                 showAll = false;
@@ -105,6 +121,7 @@ public class MovieListPanel extends JPanel {
         locationComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                submitButton.setVisible(false);
                 Location selectedLocation = (Location) locationComboBox.getSelectedItem();
                 System.out.println("Selected Location: " + selectedLocation);
                 showtimesPanel.removeAll();
@@ -136,10 +153,11 @@ public class MovieListPanel extends JPanel {
         seatPanel = new JPanel();
         seatPanel.setBackground(Orange);
         detailsPanel.add(seatPanel);
+        detailsPanel.add(submitButton);
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
-        updateMovieList( app);
+        updateMovieList(app);
     }
 
     private void updateMovieList(MovieTheatreApp app) {
@@ -189,7 +207,7 @@ public class MovieListPanel extends JPanel {
 
 
                     movieDetailsLabel.setText(movieDetails);
-                    movieDetailsLabel.setForeground(Red);
+                    //movieDetailsLabel.setForeground(Red);
 
                     ArrayList<Location> loc = movieTC.getMovieLocations(selectedMovie);
 
@@ -262,7 +280,11 @@ public class MovieListPanel extends JPanel {
                     showtimeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println("Showtime selected: " + showtime);
+                            selectedShowtime = showtime;
+                            submitButton.setVisible(false);
+                            //System.out.println("Showtime selected: " + showtime);
+                            System.out.println("Showtime selected ID: " + selectedShowtime.getShowtimeID());
+                            System.out.println("Showtime selected date/time: " + selectedShowtime.getDate() + selectedShowtime.getTime());
                             displaySeatMap(showtime);
                         }
                     });
@@ -297,7 +319,7 @@ public class MovieListPanel extends JPanel {
                 JButton seatButton = new JButton();
                 seatButton.setForeground(Red);
                 if (false == seat.getAvailable()) {
-                    seatButton.setBackground(Color.gray);
+                    //seatButton.setBackground(Red);
                     seatButton.setEnabled(false);
                 }
                 seatButton.setText(seat.toString());
@@ -313,8 +335,13 @@ public class MovieListPanel extends JPanel {
                 seatButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println("Seat selected: " + seat);
+                        selectedSeat = seat;
+                        submitButton.setVisible(true);
+                        System.out.println("Seat selected ID: " + selectedSeat.getSeatID());
+                        System.out.println("Seat selected: " + selectedSeat.getSeatRow() + selectedSeat.getSeatCol());
+
                     }
+
                 });
 
                 seatPanel.add(seatButton);
