@@ -18,11 +18,12 @@ public class MovieTheatreApp extends JFrame {
     private ConfirmPanel confirmPanel;
 
     private AdminPanel adminPanel;
+    private PaymentPanel paymentPanel;
 
     private UserDatabaseManager userDBM;
 
     private MovieTheatreController movieTC;
-
+    private TicketController ticketC;
 
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
@@ -83,7 +84,7 @@ public class MovieTheatreApp extends JFrame {
         db.initializeConnection();
         movieTC = new MovieTheatreController(db);
         userDBM = new UserDatabaseManager(db);
-
+        ticketC = new TicketController(db);
         // set up the main container with CardLayout
         cards = new JPanel(cardLayout);
 
@@ -95,6 +96,8 @@ public class MovieTheatreApp extends JFrame {
         guestPanel = new GuestPanel(this, movieTC);
         adminPanel = new AdminPanel(this, userDBM);
         confirmPanel = new ConfirmPanel(this, userDBM, movieTC);
+        paymentPanel = new PaymentPanel(this, userDBM, ticketC  );
+
 
         cards.add(loginPanel, "Login");
         cards.add(movieListPanel, "Movies");
@@ -103,6 +106,8 @@ public class MovieTheatreApp extends JFrame {
         cards.add(guestPanel, "Guest");
         cards.add(adminPanel, "Admin");
         cards.add(confirmPanel, "Confirm");
+        cards.add(paymentPanel, "Payment");
+
 
         this.add(cards);
 
@@ -145,6 +150,9 @@ public class MovieTheatreApp extends JFrame {
     public void switchToConfirm() {
         // just browse and purchase movies i guess?
         cardLayout.show(cards, "Confirm");
+    }
+    public void switchToPayment(){
+        cardLayout.show(cards, "Payment");
     }
 
     public static void main(String[] args) {

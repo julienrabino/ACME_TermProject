@@ -10,7 +10,7 @@ public class PaymentPanel extends JPanel {
     private int bWidth = 100;
     private int bHeight = 50;
 
-    public PaymentPanel(MovieTheatreApp app, TicketController ticketC) {
+    public PaymentPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
         this.ticketC = ticketC;
         this.app = app;
         this.setLayout(new BorderLayout());

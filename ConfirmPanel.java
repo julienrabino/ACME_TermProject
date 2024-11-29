@@ -33,7 +33,7 @@ public class ConfirmPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
                 // SHOULD SWITCH TO PAYMENT PANEL
-                app.switchToMovieList();
+                app.switchToPayment();
             }
         });
 

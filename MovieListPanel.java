@@ -32,6 +32,7 @@ public class MovieListPanel extends JPanel {
     private final Color pastelGreen = new Color(152, 251, 152); // Light pastel green
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
+
         this.app = app;
         this.movieTC = movieTC;
 
@@ -132,6 +133,7 @@ public class MovieListPanel extends JPanel {
         // Showtimes panel
         showtimesPanel = new JPanel();
         showtimesPanel.setLayout(new BoxLayout(showtimesPanel, BoxLayout.Y_AXIS));
+        showtimesPanel.setBackground(Yellow);;
         showtimesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsPanel.add(showtimesPanel);
         detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
@@ -168,6 +170,8 @@ public class MovieListPanel extends JPanel {
 
         // Initialize the movie list
         updateMovieList();
+        currentSeatButton = null;
+        currentShowtimeButton = null;
     }
 
     private void updateMovieList() {
@@ -203,7 +207,7 @@ public class MovieListPanel extends JPanel {
                     if (lastSelectedMovie != null && lastSelectedMovie.equals(selectedMovie)) {
                         return;
                     }
-
+                    seatPanel.setVisible(false);
                     seatPanel.removeAll();
                     lastSelectedMovie = selectedMovie;
                     app.setMovie(lastSelectedMovie);
@@ -231,7 +235,6 @@ public class MovieListPanel extends JPanel {
         });
     }
     public void displayShowtimes(Location location, Movie movie) {
-        currentShowtimeButton = null;
         showtimesPanel.removeAll();  // Clear old components
         ArrayList<Showtime> showtimes = movieTC.fetchShowtimes(location, movie);
 
@@ -271,25 +274,41 @@ public class MovieListPanel extends JPanel {
 
                 // Add showtimes as JButton for each showtime entry
                 for (Showtime showtime : dateShowtimes) {
-                    JButton showtimeButton = new JButton(showtime.toString());  // Using the overridden toString method
+                    JButton showtimeButton = new JButton(showtime.toString());// Using the overridden toString method
+                    updateShowtimeButtonColor(showtimeButton, true);
                     showtimeButton.setAlignmentX(Component.LEFT_ALIGNMENT);  // Align it to the left
                     showtimeButton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            if (currentShowtimeButton == showtimeButton){
+                                if (currentShowtimeButton.getBackground() == pastelGreen){
+                                    // means the button was prev Selected, now user wants to unclick
+                                    updateShowtimeButtonColor(currentShowtimeButton, true);
+
+                                    currentShowtimeButton = null;
+                                    System.out.println("Deselected showtime:" + app.getSelectedShowtime().getShowtimeID());
+
+                                }else {
+                                    // means the button wasn't prev selected, now user wants to select it
+                                    updateShowtimeButtonColor(currentShowtimeButton, false);
+                                }
+                            }
+                            System.out.println("Showtime clicked: " + showtime);
+                            updateShowtimeButtonColor(showtimeButton, false);
+                            if (currentShowtimeButton != null) {
+                                updateShowtimeButtonColor(currentShowtimeButton, true);
+                            }
                             app.setSelectedShowtime(showtime);
                             submitButton.setVisible(false);
-                            showtimeButton.setBackground(pastelGreen);
-                            if (currentShowtimeButton != null){
-                                currentShowtimeButton.setBackground(UIManager.getColor("Button.background"));
-                            }
-                            currentShowtimeButton = showtimeButton;
+                            seatPanel.setVisible(false);
 
-                            //System.out.println("Showtime selected: " + showtime);
+                            currentShowtimeButton = showtimeButton;  // Update the current showtime button
+
+                            // Debugging: Check selected showtime details
                             System.out.println("Showtime selected ID: " + app.getSelectedShowtime().getShowtimeID());
-                            System.out.println("Showtime selected date/time: " + app.getSelectedShowtime().getDate() + app.getSelectedShowtime().getTime());
-                            displaySeatMap(showtime);
-                            seatPanel.setVisible(true);
-
+                            System.out.println("Showtime selected date/time: " + app.getSelectedShowtime().getDate() + " " + app.getSelectedShowtime().getTime());
+                            displaySeatMap(showtime);  // Show seat map for the selected showtime
+                            seatPanel.setVisible(true);  // Make seat panel visible
                         }
                     });
 
@@ -309,7 +328,6 @@ public class MovieListPanel extends JPanel {
 
     public void displaySeatMap(Showtime showtime) {
         seatPanel.removeAll();
-        currentSeatButton = null;
 
         ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
         if (seats == null || seats.isEmpty()) {
@@ -370,4 +388,12 @@ public class MovieListPanel extends JPanel {
         detailsPanel.repaint();
     }
 
+    public void updateShowtimeButtonColor(JButton button, boolean unclicked){
+        if (unclicked){
+            button.setBackground(UIManager.getColor("Button.background"));
+        } else
+        {
+            button.setBackground(pastelGreen);
+        }
+    }
 }
