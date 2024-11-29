@@ -18,6 +18,7 @@ public class MovieTheatreApp extends JFrame {
     private ConfirmPanel confirmPanel;
 
     private AdminPanel adminPanel;
+    private PaymentRUPanel paymentRUPanel;
     private PaymentPanel paymentPanel;
 
     private UserDatabaseManager userDBM;
@@ -70,6 +71,9 @@ public class MovieTheatreApp extends JFrame {
     public ConfirmPanel getConfirmPanel () {
         return this.confirmPanel;
     }
+    public PaymentRUPanel getPaymentRUPanel () {
+        return this.paymentRUPanel;
+    }
 
     public void setMovie (Movie movie) {
         this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
@@ -97,6 +101,7 @@ public class MovieTheatreApp extends JFrame {
         adminPanel = new AdminPanel(this, userDBM);
         confirmPanel = new ConfirmPanel(this, userDBM, movieTC);
         paymentPanel = new PaymentPanel(this, userDBM, ticketC  );
+        paymentRUPanel = new PaymentRUPanel(this, userDBM);
 
 
         cards.add(loginPanel, "Login");
@@ -107,6 +112,7 @@ public class MovieTheatreApp extends JFrame {
         cards.add(adminPanel, "Admin");
         cards.add(confirmPanel, "Confirm");
         cards.add(paymentPanel, "Payment");
+        cards.add(paymentRUPanel, "PaymentRU");
 
 
         this.add(cards);
@@ -153,6 +159,9 @@ public class MovieTheatreApp extends JFrame {
     }
     public void switchToPayment(){
         cardLayout.show(cards, "Payment");
+    }
+    public void switchToPaymentRU(){
+        cardLayout.show(cards, "PaymentRU");
     }
 
     public static void main(String[] args) {

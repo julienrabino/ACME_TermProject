@@ -13,6 +13,43 @@ public class UserDatabaseManager {
         this.jdbc = db;
     }
 
+// returns all saved payments of the RU
+    public ArrayList<Payment> getPayment(RegisteredUser RU) {
+        int RUID = RU.getID();
+        String query = null;
+        ArrayList<Payment> payments = new ArrayList<>();
+        PreparedStatement statement = null;
+
+        try {
+            query = "select P.PaymentID, P.CardNum, P.ExpiryDate, P.Fname, P.Lname, P.RUID, P.SecurityCode\n" +
+                    "from PAYMENT AS P, REG_USER AS RU\n" +
+                    "where RU.ID = ? AND P.RUID = RU.ID";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, RUID);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                int paymentID = results.getInt("PaymentID");
+                //int ruID = results.getInt("RUID");
+                String cardNum = results.getString("CardNum");
+                String expiryDate = results.getString("ExpiryDate");
+                String fName = results.getString("Fname");
+                String lName = results.getString("Lname");
+                String security = results.getString("SecurityCode");
+                Payment payment = new Payment(paymentID,RUID, fName, lName, cardNum, expiryDate, security);
+                payments.add(payment);
+                //System.out.println(name);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payments;
+    }
+
+
     public void insertRU(RegisteredUser RU) {
         String Fname = RU.getFname();
         String Lname = RU.getFname();

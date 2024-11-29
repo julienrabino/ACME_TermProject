@@ -33,7 +33,14 @@ public class ConfirmPanel extends JPanel {
             public void actionPerformed(ActionEvent e)
             {
                 // SHOULD SWITCH TO PAYMENT PANEL
-                app.switchToPayment();
+                if (app.getCurrentUser() == 1) {// if a RU is currently using our app
+                    PaymentRUPanel pay = app.getPaymentRUPanel();
+                    pay.displaySavedPayments(app.getRU());
+                    app.switchToPaymentRU();
+                }
+                else {
+                    app.switchToPayment();
+                }
             }
         });
 

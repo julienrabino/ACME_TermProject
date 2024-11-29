@@ -18,6 +18,11 @@ public class Payment {
         this.securityCode = securityCode;
     }
 
+    @Override
+    public String toString(){
+        return cardNum;
+    }
+
     // Getters
     public int getPaymentID() {
         return paymentID;

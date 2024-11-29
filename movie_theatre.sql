@@ -140,6 +140,7 @@ CREATE TABLE PAYMENT (
 INSERT INTO PAYMENT (RUID, Fname, Lname, CardNum, ExpiryDate, SecurityCode)
 VALUES
 (2, 'Alice', 'Johnson', '4111-2345-6789-1234', '12/25', '123'), 
+(2, 'Alice', 'Johnson', '4892-2333-6789-4321', '12/26', '321'), 
 (3, 'Bob', 'Smith', '4222-2345-6789-2345', '11/25', '456'),  
 (5, 'Liam', 'Brown', '5105-2345-6789-3456', '01/26', '789'),    
 (6, 'Sophia', 'Davis', '4111-2345-6789-4321', '05/26', '012'),   
