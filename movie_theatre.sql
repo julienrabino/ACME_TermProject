@@ -18,29 +18,33 @@ VALUES
 ('Candy Cane Lane, North Pole','AcmePlex: Santa Edition');
 
 DROP TABLE IF EXISTS MOVIE;
+
 CREATE TABLE MOVIE (
-	MovieID					INT AUTO_INCREMENT,
-	Title					varchar(100)	not null,
-	Genre					varchar(100)	not null,
-    primary key(MovieID)
+    MovieID                  INT AUTO_INCREMENT,
+    Title                    VARCHAR(100) NOT NULL,
+    Genre                    VARCHAR(100) NOT NULL,
+    ReleaseDate              DATE NOT NULL,
+    PRIMARY KEY(MovieID)
 );
 
-INSERT INTO MOVIE (Title, Genre)
+INSERT INTO MOVIE (Title, Genre, ReleaseDate)
 VALUES
-('The Garfeild Movie','Fat Cat, Animated, Lasagna'),
-('The Wild Robot','Adventure, Family, Animated'),
-('The Barbie Movie','Societal Issues'),
-('Barbie as the Three Musketeers','Action, Friendship, Animated'),
-('Barbie as the Island Princess','Tropical, Adventure, Animated'),
-('Barbie in the Princess Charm School','Magical, Redemption Arc, Animated'),
-('The Spongebob Movie','Comedy, Adventure, Animated'),
-('Clueless','Rom-Com'),
-('Diary of a Wimpy Kid: Rodrick Rules','Comedy, Slice of Life?'),
-('Kimi No Nawa','Anime, Romance'),
-('Home Alone','Christmas, Comedy'),
-('Home Alone 2','Christmas, Comedy'),
-('Home Alone 3','Christmas, Comedy'),
-('The Grinch','Christmas, Kindness, Animated');
+('The Garfeild Movie', 'Fat Cat, Animated, Lasagna', '2024-11-01'),
+('The Wild Robot', 'Adventure, Family, Animated', '2024-11-02'),
+('The Barbie Movie', 'Societal Issues', '2024-11-03'),
+('Barbie as the Three Musketeers', 'Action, Friendship, Animated', '2024-11-04'),
+('Barbie as the Island Princess', 'Tropical, Adventure, Animated', '2024-11-05'),
+('Barbie in the Princess Charm School', 'Magical, Redemption Arc, Animated', '2024-11-06'),
+('The Spongebob Movie', 'Comedy, Adventure, Animated', '2024-11-07'),
+('Clueless', 'Rom-Com', '2024-11-08'),
+('Diary of a Wimpy Kid: Rodrick Rules', 'Comedy, Slice of Life?', '2024-11-09'),
+('Kimi No Nawa', 'Anime, Romance', '2024-11-10'),
+('Home Alone', 'Christmas, Comedy', '2024-11-11'),
+('Home Alone 2', 'Christmas, Comedy', '2024-11-12'),
+('Home Alone 3', 'Christmas, Comedy', '2024-11-13'),
+('The Grinch', 'Christmas, Kindness, Animated', '2024-11-14'),
+('Moana 2', 'Adventure, Chicken, Ocean', '2024-12-12');
+
 
 DROP TABLE IF EXISTS SHOWTIME;
 

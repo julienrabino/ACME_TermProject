@@ -4,6 +4,7 @@ public class Movie {
     private String title;
     private String genre;
     private int movieID;
+    private String releaseDate;
     private ArrayList<Showtime> showtimes;
 
     public Movie(int id, String title, String genre){
@@ -37,6 +38,9 @@ public class Movie {
     public void setGenre(String genre) {
         this.genre = genre;
     }
+    public void setReleaseDate(String date) {
+        this.releaseDate = date;
+    }
     public void setMovieID(int movieID) {
         this.movieID = movieID;
     }
@@ -48,6 +52,9 @@ public class Movie {
     //getters
     public String getGenre() {
         return genre;
+    }
+    public String getReleaseDate() {
+        return releaseDate;
     }
     public int getMovieID() {
         return movieID;
