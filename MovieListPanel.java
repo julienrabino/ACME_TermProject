@@ -81,8 +81,13 @@ public class MovieListPanel extends JPanel {
 
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-               app.switchToConfirm();
+                System.out.println("seat: " + app.getSelectedSeat());
+                System.out.println("showtime: " + app.getSelectedShowtime());
+                System.out.println("movie: " + app.getMovie());
+                System.out.println("loc: " + app.getTheatre());
+                ConfirmPanel confirm = app.getConfirmPanel();
+                confirm.getInfo();
+                app.switchToConfirm();
             }
         });
 
@@ -122,6 +127,7 @@ public class MovieListPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 submitButton.setVisible(false);
                 Location selectedLocation = (Location) locationComboBox.getSelectedItem();
+                app.setTheatre(selectedLocation);
                 System.out.println("Selected Location: " + selectedLocation);
                 showtimesPanel.removeAll();
                 seatPanel.removeAll();
@@ -199,6 +205,7 @@ public class MovieListPanel extends JPanel {
                     }
                     seatPanel.removeAll();
                     lastSelectedMovie = selectedMovie;
+                    app.setMovie(lastSelectedMovie);
                     detailsPanel.setVisible(true);
 
                     String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +

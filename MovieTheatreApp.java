@@ -28,9 +28,10 @@ public class MovieTheatreApp extends JFrame {
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
     // yes !
     private RegisteredUser RU;
+    private Movie selectedMovie;
     private Showtime selectedShowtime;
-
     private Seat selectedSeat;
+    private Location selectedLocation;
     public void setCurrentUser (int user) {
         this.currentUser= user;
     }
@@ -46,7 +47,8 @@ public class MovieTheatreApp extends JFrame {
 
     public void setSelectedSeat(Seat seat) {
         selectedSeat = seat;
-    }public Seat getSelectedSeat() {
+    }
+    public Seat getSelectedSeat() {
         return selectedSeat;
     }
 
@@ -59,6 +61,22 @@ public class MovieTheatreApp extends JFrame {
     }
 
 
+    public void setTheatre (Location loc) {
+        this.selectedLocation = loc; // i think this is a shallow copy maybe but idk
+    }
+    public Location getTheatre () {
+        return this.selectedLocation;
+    }
+    public ConfirmPanel getConfirmPanel () {
+        return this.confirmPanel;
+    }
+
+    public void setMovie (Movie movie) {
+        this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
+    }
+    public Movie getMovie () {
+        return this.selectedMovie;
+    }
 
     public MovieTheatreApp() {
         super("ACMEPLEX");
@@ -133,7 +151,7 @@ public class MovieTheatreApp extends JFrame {
     public static void main(String[] args) {
 
         db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "123");
-        db = new myJDBC();
+        //db = new myJDBC();
         db.initializeConnection();
 
 
