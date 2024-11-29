@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -10,7 +9,7 @@ public class MovieListPanel extends JPanel {
     private ArrayList<Location> locations;
     private boolean showAll = true;
     private boolean search = false;
-    JComboBox<Location> locationComboBox;
+    private JComboBox<Location> locationComboBox;
     private Movie lastSelectedMovie = null;
     private JButton submitButton;
 
@@ -27,83 +26,59 @@ public class MovieListPanel extends JPanel {
     private JButton currentShowtimeButton;
     private MovieTheatreController movieTC;
     private MovieTheatreApp app;
-    private Color Red = new Color(139, 0, 0);
-    private Color Yellow = new Color(255, 248, 191);
-    private Color Orange = new Color(244, 138, 104);
-    private Color pastelGreen = new Color(152, 251, 152); // Light pastel green
-
-
+    private final Color Red = new Color(139, 0, 0);
+    private final Color Yellow = new Color(255, 248, 191);
+    private final Color Orange = new Color(244, 138, 104);
+    private final Color pastelGreen = new Color(152, 251, 152); // Light pastel green
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
         this.app = app;
         this.movieTC = movieTC;
+
+        // Set layout for the main panel
+        this.setLayout(new BorderLayout());
+
+        // Back button at the bottom
         JButton backButton = new JButton("Back");
         backButton.setForeground(Red);
+        backButton.addActionListener(e -> app.switchToGuest());
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                app.switchToGuest();
-            }
-        });
-        // layout for the main panel
-        this.setLayout(new BorderLayout());
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(backButton);
         bottomPanel.setBackground(Yellow);
         this.add(bottomPanel, BorderLayout.SOUTH);
-        backButton.setVisible(true);
 
-
-        JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        // Search bar at the top
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(Yellow);
-
-        showAllButton = new JButton("Show All");
-        showAllButton.setForeground(Red);
-        showAllButton.setVisible(false);
-        showAllButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                submitButton.setVisible(false);
-                search = false;
-                showAll = true;
-                searchInput.setText(""); // so whenever you press show all, your search bar clears
-                updateMovieList();
-                showAllButton.setVisible(false);
-            }
-        });
 
         JLabel searchLabel = new JLabel("Search a Movie:");
         searchLabel.setForeground(Red);
+
         searchInput = new JTextField(30);
         JButton searchButton = new JButton("Search");
         searchButton.setForeground(Red);
 
-        submitButton = new JButton("Book Now");
-        submitButton.setForeground(Red);
-        submitButton.setVisible(false); // start as false!!!!!
+        showAllButton = new JButton("Show All");
+        showAllButton.setForeground(Red);
+        showAllButton.setVisible(false);
 
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("seat: " + app.getSelectedSeat());
-                System.out.println("showtime: " + app.getSelectedShowtime());
-                System.out.println("movie: " + app.getMovie());
-                System.out.println("loc: " + app.getTheatre());
-                ConfirmPanel confirm = app.getConfirmPanel();
-                confirm.getInfo();
-                app.switchToConfirm();
-            }
+        searchButton.addActionListener(e -> {
+            submitButton.setVisible(false);
+            searchMovie = searchInput.getText();
+            search = true;
+            showAll = false;
+            updateMovieList();
+            showAllButton.setVisible(true);
         });
 
-        searchButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                submitButton.setVisible(false);
-                searchMovie = searchInput.getText();
-                search = true;
-                showAll = false;
-                updateMovieList();
-                showAllButton.setVisible(true);
-            }
+        showAllButton.addActionListener(e -> {
+            submitButton.setVisible(false);
+            search = false;
+            showAll = true;
+            searchInput.setText(""); // Clear the search bar
+            updateMovieList();
+            showAllButton.setVisible(false);
         });
 
         searchPanel.add(searchLabel);
@@ -113,56 +88,82 @@ public class MovieListPanel extends JPanel {
 
         this.add(searchPanel, BorderLayout.NORTH);
 
+        // Movie list in the center
         listModel = new DefaultListModel<>();
-        movieList = new JList<>(listModel);  // initialize the JList with the empty list model
-
-        JScrollPane movieListScrollPane = new JScrollPane(movieList);
+        movieList = new JList<>(listModel);
         movieList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        JScrollPane movieListScrollPane = new JScrollPane(movieList);
         this.add(movieListScrollPane, BorderLayout.CENTER);
-        showtimesPanel = new JPanel();
-        //
-        showtimesPanel.setBackground(Yellow);
+
+        // Details panel on the right
+        detailsPanel = new JPanel();
+        detailsPanel.setLayout(new BoxLayout(detailsPanel, BoxLayout.Y_AXIS));
+        detailsPanel.setBackground(Yellow);
+        detailsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Movie details label
+        movieDetailsLabel = new JLabel("Movie Details");
+        movieDetailsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        detailsPanel.add(movieDetailsLabel);
+        detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
+
+        // Location dropdown
         locations = new ArrayList<>();
         locationComboBox = new JComboBox<>(locations.toArray(new Location[0]));
+        locationComboBox.setPreferredSize(new Dimension(200, 30));
+        locationComboBox.setMaximumSize(locationComboBox.getPreferredSize());
+        locationComboBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        locationComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                submitButton.setVisible(false);
-                Location selectedLocation = (Location) locationComboBox.getSelectedItem();
-                app.setTheatre(selectedLocation);
-                System.out.println("Selected Location: " + selectedLocation);
-                showtimesPanel.removeAll();
-                seatPanel.removeAll();
-                detailsPanel.add(showtimesPanel);
-                displayShowtimes(selectedLocation, lastSelectedMovie);
-            }
+        locationComboBox.addActionListener(e -> {
+            submitButton.setVisible(false);
+            Location selectedLocation = (Location) locationComboBox.getSelectedItem();
+            app.setTheatre(selectedLocation);
+            System.out.println("Selected Location: " + selectedLocation);
+            showtimesPanel.removeAll();
+            seatPanel.removeAll();
+            detailsPanel.add(showtimesPanel);
+            displayShowtimes(selectedLocation, lastSelectedMovie);
         });
 
-        movieDetailsLabel = new JLabel("lalalalal");
-        movieDetailsLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
-        detailsPanel = new JPanel();
-        //
-        detailsPanel.setBackground(Yellow);
-        detailsPanel.setMaximumSize(new Dimension(800, 500));
-
-        detailsPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Stack components vertically
-        detailsPanel.add(movieDetailsLabel);
-        detailsPanel.add(Box.createVerticalStrut(10));
-        locationComboBox.setPreferredSize(new Dimension(200, 30));  // Preferred size
-        locationComboBox.setMinimumSize(new Dimension(200, 30));     // Minimum size
-        locationComboBox.setMaximumSize(new Dimension(200, 30));
         detailsPanel.add(locationComboBox);
-        detailsPanel.setVisible(false);
+        detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
 
-        detailsPanel.setPreferredSize(new Dimension(400, 500));
+        // Showtimes panel
+        showtimesPanel = new JPanel();
+        showtimesPanel.setLayout(new BoxLayout(showtimesPanel, BoxLayout.Y_AXIS));
+        showtimesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        detailsPanel.add(showtimesPanel);
+        detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
 
+        // Seat panel
         seatPanel = new JPanel();
+        seatPanel.setLayout(new GridLayout(0, 5, 5, 5));
         seatPanel.setBackground(Orange);
+        seatPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        seatPanel.setVisible(false);
+
         detailsPanel.add(seatPanel);
+        detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
+
+        // Submit button
+        submitButton = new JButton("Book Now");
+        submitButton.setForeground(Red);
+        submitButton.setVisible(false);
+        submitButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        submitButton.addActionListener(e -> {
+            System.out.println("seat: " + app.getSelectedSeat());
+            System.out.println("showtime: " + app.getSelectedShowtime());
+            System.out.println("movie: " + app.getMovie());
+            System.out.println("loc: " + app.getTheatre());
+            ConfirmPanel confirm = app.getConfirmPanel();
+            confirm.getInfo();
+            app.switchToConfirm();
+        });
+
         detailsPanel.add(submitButton);
+
+        // Add details panel to the main layout
         this.add(detailsPanel, BorderLayout.EAST);
 
         // Initialize the movie list
@@ -193,20 +194,16 @@ public class MovieListPanel extends JPanel {
         addMovieSelectionListener(movieTC);
     }
 
-    // Separate method to handle the movie selection event
     private void addMovieSelectionListener(MovieTheatreController movieTC) {
         movieList.addListSelectionListener(e -> {
-            // Only update when the selection is finalized (i.e., no longer adjusting)
             if (!e.getValueIsAdjusting()) {
-                // Get the selected movie from the list
                 Movie selectedMovie = movieList.getSelectedValue();
 
-
                 if (selectedMovie != null) {
-                    // Prevent redundant updates if the selected movie is the same as the last selected one
                     if (lastSelectedMovie != null && lastSelectedMovie.equals(selectedMovie)) {
                         return;
                     }
+
                     seatPanel.removeAll();
                     lastSelectedMovie = selectedMovie;
                     app.setMovie(lastSelectedMovie);
@@ -214,34 +211,22 @@ public class MovieListPanel extends JPanel {
 
                     String movieDetails = "<html><b>Title:</b> " + selectedMovie.getTitle() +
                             "<br><b>Genre:</b> " + selectedMovie.getGenre() + "</html>";
-
-
                     movieDetailsLabel.setText(movieDetails);
-                    //movieDetailsLabel.setForeground(Red);
 
                     ArrayList<Location> loc = movieTC.getMovieLocations(selectedMovie);
 
-                    if (loc != null && !loc.isEmpty()) {
-                        System.out.println("Locations found for movie: " + selectedMovie.getTitle());
-                    } else {
-                        System.out.println("No locations found for movie: " + selectedMovie.getTitle());
-                    }
-
                     locations.clear();
-                    for (Location location : loc) {
-                        locations.add(location);
+                    if (loc != null) {
+                        locations.addAll(loc);
                     }
 
                     locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new Location[0])));
-
                     if (!locations.isEmpty()) {
-                        locationComboBox.setSelectedIndex(0); // Select the first location
+                        locationComboBox.setSelectedIndex(0);
                     }
-
                 } else {
-                    detailsPanel.setVisible(false);  // Hide the panel
+                    detailsPanel.setVisible(false);
                 }
-
             }
         });
     }
@@ -303,6 +288,8 @@ public class MovieListPanel extends JPanel {
                             System.out.println("Showtime selected ID: " + app.getSelectedShowtime().getShowtimeID());
                             System.out.println("Showtime selected date/time: " + app.getSelectedShowtime().getDate() + app.getSelectedShowtime().getTime());
                             displaySeatMap(showtime);
+                            seatPanel.setVisible(true);
+
                         }
                     });
 

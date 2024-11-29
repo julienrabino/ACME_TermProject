@@ -47,8 +47,7 @@ public class MovieTheatreApp extends JFrame {
 
     public void setSelectedSeat(Seat seat) {
         selectedSeat = seat;
-    }
-    public Seat getSelectedSeat() {
+    }public Seat getSelectedSeat() {
         return selectedSeat;
     }
 
@@ -151,7 +150,7 @@ public class MovieTheatreApp extends JFrame {
     public static void main(String[] args) {
 
         db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "123");
-        //db = new myJDBC();
+        db = new myJDBC();
         db.initializeConnection();
 
 
