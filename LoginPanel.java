@@ -12,12 +12,17 @@ public class LoginPanel extends JPanel {
     private String password;
 
     private MovieTheatreApp app;
+    private Color Red = new Color(139, 0, 0);
+    private Color Yellow = new Color(255, 248, 191);
+    private Color Orange = new Color(244, 138, 104);
 
     public LoginPanel(MovieTheatreApp app,UserDatabaseManager userDBM) {
         this.app = app;
 
         JLabel usrLabel = new JLabel("Username:");
+        usrLabel.setForeground(Red);
         JLabel pwLabel = new JLabel("Password:");
+        pwLabel.setForeground(Red);
 
         usrInput = new JTextField(15);
         pwInput = new JPasswordField(15);
@@ -25,6 +30,7 @@ public class LoginPanel extends JPanel {
         pwInput.setPreferredSize(new Dimension(width, height));
 
         JButton submitButton = new JButton("Submit");
+        submitButton.setForeground(Red);
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 username = usrInput.getText();
@@ -50,7 +56,9 @@ public class LoginPanel extends JPanel {
 
         JPanel headerPanel = new JPanel();
         JLabel title = new JLabel("Sign In");
+        title.setForeground(Red);
         headerPanel.add(title);
+        headerPanel.setBackground(Yellow);
 
         this.add(headerPanel, BorderLayout.NORTH);
 
@@ -58,13 +66,14 @@ public class LoginPanel extends JPanel {
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         submitPanel.add(submitButton);
         this.add(submitPanel, BorderLayout.PAGE_END);
+        submitPanel.setBackground(Orange);
 
         JPanel clientPanel = new JPanel();
         clientPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
-
+        clientPanel.setBackground(Yellow);
 
         int row = 0;
         addComponent(clientPanel, usrLabel, 0, row, gbc);

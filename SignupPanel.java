@@ -16,6 +16,9 @@ public class SignupPanel extends JPanel {
     private LocalDate expiryDate;
     private LocalDate joinDate;
     private boolean savedPayment;
+    private Color Red = new Color(139, 0, 0);
+    private Color Yellow = new Color(255, 248, 191);
+    private Color Orange = new Color(244, 138, 104);
 
     private RegisteredUser RU;
 
@@ -36,12 +39,19 @@ public class SignupPanel extends JPanel {
         this.app = app;
 
         JLabel usrLabel = new JLabel("Username:");
+        usrLabel.setForeground(Red);
         JLabel pwLabel = new JLabel("Password:");
+        pwLabel.setForeground(Red);
         JLabel pwConfirmLabel = new JLabel("Confirm Password:");
+        pwConfirmLabel.setForeground(Red);
         JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setForeground(Red);
         JLabel fnameLabel = new JLabel("First Name:");
+        fnameLabel.setForeground(Red);
         JLabel lnameLabel = new JLabel("Last Name:");
+        lnameLabel.setForeground(Red);
         JLabel addressLabel = new JLabel("Address:");
+        addressLabel.setForeground(Red);
 
         usrInput = new JTextField(15);
         pwInput = new JPasswordField(15);
@@ -66,6 +76,7 @@ public class SignupPanel extends JPanel {
 //        submitPanel.setLayout(new FlowLayout());
 
         JButton submitButton = new JButton("Submit");
+        submitButton.setForeground(Red);
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int safe = 1;
@@ -88,6 +99,13 @@ public class SignupPanel extends JPanel {
                     app.setRU(RU);
                     app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
                     app.switchToMovieList();
+                    fnameInput.setText("");
+                    lnameInput.setText("");
+                    emailInput.setText("");
+                    addressInput.setText("");
+                    usrInput.setText("");
+                    pwInput.setText("");
+                    pwConfirmInput.setText("");
                 }
                 // DO A CHECK TO MAKE SURE THE USERNAME IS NOT ALREADY IN DB
                 // AFTER CHECK MAKE THE RU AND SET THEIR INFO
@@ -101,7 +119,9 @@ public class SignupPanel extends JPanel {
 
         JPanel headerPanel = new JPanel();
         JLabel title = new JLabel("Please Fill Out All Fields: ");
+        title.setForeground(Red);
         headerPanel.add(title);
+        headerPanel.setBackground(Yellow);
         this.add(headerPanel, BorderLayout.NORTH);
 
         JPanel clientPanel = new JPanel();
@@ -109,6 +129,7 @@ public class SignupPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
+        clientPanel.setBackground(Yellow);
 
 
         int row = 0;
@@ -139,6 +160,7 @@ public class SignupPanel extends JPanel {
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         submitPanel.add(submitButton);
+        submitPanel.setBackground(Orange);
 
         this.add(submitPanel, BorderLayout.PAGE_END);
     }

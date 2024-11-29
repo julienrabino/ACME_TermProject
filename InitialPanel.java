@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 public class InitialPanel extends JPanel {
     private MovieTheatreApp app;
     private Color Red = new Color(139, 0, 0);
+    private Color Yellow = new Color(255, 248, 191);
+    private Color Orange = new Color(244, 138, 104);
     private int bWidth = 100;
     private int bHeight = 50;
 
@@ -15,7 +17,7 @@ public class InitialPanel extends JPanel {
         this.setLayout(new GridLayout(3, 1));
 
 
-        this.setBackground(Red);
+        this.setBackground(Yellow);
         JPanel textPanel = new JPanel(new GridLayout(2, 1));
 
 
@@ -24,17 +26,17 @@ public class InitialPanel extends JPanel {
         welcomeLabel.setForeground(Color.WHITE);
 
         JLabel acmeplexLabel = new JLabel("ACMEPLEX", JLabel.CENTER);
-        acmeplexLabel.setFont(new Font("Arial", Font.BOLD, 50));
+        acmeplexLabel.setFont(new Font("Times New Roman", Font.BOLD, 50));
         acmeplexLabel.setForeground(Color.WHITE);
 
         textPanel.add(welcomeLabel);
 
         textPanel.add(acmeplexLabel);
 
-        textPanel.setBackground(new Color(139, 0, 0));
+        textPanel.setBackground(Orange);
 
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 100, 50)); // Use FlowLayout for better control
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 50)); // Use FlowLayout for better control
         buttonPanel.setBackground(Red);
         JButton loginButton = new JButton("Login");
         loginButton.setPreferredSize(new Dimension(bWidth, bHeight));
@@ -58,6 +60,7 @@ public class InitialPanel extends JPanel {
         buttonPanel.add(loginButton);
         buttonPanel.add(registerButton);
         buttonPanel.add(guestButton);
+        buttonPanel.setBackground(Yellow);
 
 
         loginButton.addActionListener(new ActionListener() {
@@ -84,8 +87,8 @@ public class InitialPanel extends JPanel {
 
 
 
-        JPanel adminButtonPanel =  new JPanel(new FlowLayout(FlowLayout.RIGHT, 100, 50));
-        adminButtonPanel.setBackground(Red);
+        JPanel adminButtonPanel =  new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        adminButtonPanel.setBackground(Yellow);
         adminButtonPanel.add(adminButton, BorderLayout.EAST);
 
 
