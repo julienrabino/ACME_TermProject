@@ -74,6 +74,9 @@ public class MovieTheatreApp extends JFrame {
     public PaymentRUPanel getPaymentRUPanel () {
         return this.paymentRUPanel;
     }
+    public PaymentPanel getPaymentPanel () {
+        return this.paymentPanel;
+    }
 
     public void setMovie (Movie movie) {
         this.selectedMovie = movie; // i think this is a shallow copy maybe but idk

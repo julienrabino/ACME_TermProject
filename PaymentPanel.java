@@ -105,6 +105,16 @@ public class PaymentPanel extends JPanel {
         this.add(submitPanel, BorderLayout.PAGE_END);
 
     }
+    public void autofillRU() {
+        if(app.getRU() != null) {
+            System.out.println("RU RETRIEVED");
+            RegisteredUser RU = app.getRU();
+            System.out.println(RU.getFname());
+            fnameField.setText(RU.getFname());
+            lnameField.setText(RU.getLname());
+            emailField.setText(RU.getEmail());
+        }
+    }
     private void addComponent(JPanel panel, Component component, int gridx, int gridy, GridBagConstraints gbc) {
         gbc.gridx = gridx;
         gbc.gridy = gridy;

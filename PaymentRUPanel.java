@@ -55,6 +55,8 @@ public class PaymentRUPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Handle the action for using another payment method
                 System.out.println("Redirecting to another payment method...");
+                PaymentPanel pay = app.getPaymentPanel();
+                pay.autofillRU();
                 app.switchToPayment();
                 // Possibly switch to a new payment screen or form
             }
