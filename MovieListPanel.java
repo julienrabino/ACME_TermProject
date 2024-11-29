@@ -275,7 +275,7 @@ public class MovieListPanel extends JPanel {
                 // Add showtimes as JButton for each showtime entry
                 for (Showtime showtime : dateShowtimes) {
                     JButton showtimeButton = new JButton(showtime.toString());// Using the overridden toString method
-                    updateShowtimeButtonColor(showtimeButton, true);
+                    updateButtonColor(showtimeButton, true);
                     showtimeButton.setAlignmentX(Component.LEFT_ALIGNMENT);  // Align it to the left
                     showtimeButton.addActionListener(new ActionListener() {
                         @Override
@@ -283,20 +283,25 @@ public class MovieListPanel extends JPanel {
                             if (currentShowtimeButton == showtimeButton){
                                 if (currentShowtimeButton.getBackground().equals(pastelGreen)){
                                     // means the button was prev Selected, now user wants to unclick
-                                    updateShowtimeButtonColor(showtimeButton, true); // making the button default bg
+                                    updateButtonColor(showtimeButton, true); // making the button default bg
                                     currentShowtimeButton = null; // no selected showtime
                                     System.out.println("Deselected showtime:" + app.getSelectedShowtime().getShowtimeID());
+                                    seatPanel.removeAll();
+                                    seatPanel.setVisible(false);
+                                    app.setSelectedShowtime(null);
+                                    submitButton.setVisible(false);
                                     return;
 
                                 }else {
                                     // means the button wasn't prev selected, now user wants to select it
-                                    updateShowtimeButtonColor(showtimeButton, false);
+                                    updateButtonColor(showtimeButton, false);
                                 }
                             }
+
                             System.out.println("Showtime clicked: " + showtime);
-                            updateShowtimeButtonColor(showtimeButton, false);
+                            updateButtonColor(showtimeButton, false);
                             if (currentShowtimeButton != null) {
-                                updateShowtimeButtonColor(currentShowtimeButton, true);
+                                updateButtonColor(currentShowtimeButton, true);
                             }
                             app.setSelectedShowtime(showtime);
                             submitButton.setVisible(false);
@@ -349,8 +354,8 @@ public class MovieListPanel extends JPanel {
                 if (!seat.getAvailable()) {
                     seatButton.setEnabled(false);
                 }
-                if (seat.isAnRUSeat()){
-                    if (app.getCurrentUser() == 0){
+                if (seat.isAnRUSeat()) {
+                    if (app.getCurrentUser() == 0) {
                         seatButton.setEnabled(false);
                     }
                 }
@@ -358,13 +363,26 @@ public class MovieListPanel extends JPanel {
                 seatButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        if (currentSeatButton == seatButton) {
+                            if (currentSeatButton.getBackground().equals(pastelGreen)) {
+                                updateButtonColor(seatButton, true); // making the button default bg
+                                currentSeatButton = null;
 
+                                System.out.println("Deselected seat:" + app.getSelectedSeat().getSeatID());
+                                app.setSelectedSeat(null);
+                                submitButton.setVisible(false);
+
+                                return;
+                            } else {
+                                updateButtonColor(seatButton, false);
+                            }
+                        }
                         app.setSelectedSeat(seat);
                         submitButton.setVisible(true);
                         seatButton.setBackground(pastelGreen);
                         System.out.println("Seat selected ID: " + app.getSelectedSeat().getSeatID());
                         System.out.println("Seat selected: " + app.getSelectedSeat().getSeatRow() + app.getSelectedSeat().getSeatCol());
-                        if (currentSeatButton != null){
+                        if (currentSeatButton != null) {
                             currentSeatButton.setBackground(UIManager.getColor("Button.background"));
                         }
                         currentSeatButton = seatButton;
@@ -374,21 +392,23 @@ public class MovieListPanel extends JPanel {
                 });
 
                 seatPanel.add(seatButton);
+
+                seatPanel.revalidate();
+                seatPanel.repaint();
+
+                if (!detailsPanel.isAncestorOf(seatPanel)) {
+                    detailsPanel.add(seatPanel, BorderLayout.SOUTH);
+                }
+
+                detailsPanel.revalidate();
+                detailsPanel.repaint();
+
             }
         }
-
-        seatPanel.revalidate();
-        seatPanel.repaint();
-
-        if (!detailsPanel.isAncestorOf(seatPanel)) {
-            detailsPanel.add(seatPanel, BorderLayout.SOUTH);
-        }
-
-        detailsPanel.revalidate();
-        detailsPanel.repaint();
     }
 
-    public void updateShowtimeButtonColor(JButton button, boolean unclicked){
+
+    public void updateButtonColor(JButton button, boolean unclicked){
         if (unclicked){
             button.setBackground(UIManager.getColor("Button.background"));
         } else
@@ -396,4 +416,5 @@ public class MovieListPanel extends JPanel {
             button.setBackground(pastelGreen);
         }
     }
+
 }
