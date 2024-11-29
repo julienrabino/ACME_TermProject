@@ -23,11 +23,15 @@ public class MovieListPanel extends JPanel {
     private JPanel detailsPanel;
     private JPanel showtimesPanel;
     private JPanel seatPanel;
+    private JButton currentSeatButton;
+    private JButton currentShowtimeButton;
     private MovieTheatreController movieTC;
     private MovieTheatreApp app;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
+    private Color pastelGreen = new Color(152, 251, 152); // Light pastel green
+
 
 
     public MovieListPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
@@ -242,6 +246,7 @@ public class MovieListPanel extends JPanel {
         });
     }
     public void displayShowtimes(Location location, Movie movie) {
+        currentShowtimeButton = null;
         showtimesPanel.removeAll();  // Clear old components
         ArrayList<Showtime> showtimes = movieTC.fetchShowtimes(location, movie);
 
@@ -288,6 +293,12 @@ public class MovieListPanel extends JPanel {
                         public void actionPerformed(ActionEvent e) {
                             app.setSelectedShowtime(showtime);
                             submitButton.setVisible(false);
+                            showtimeButton.setBackground(pastelGreen);
+                            if (currentShowtimeButton != null){
+                                currentShowtimeButton.setBackground(UIManager.getColor("Button.background"));
+                            }
+                            currentShowtimeButton = showtimeButton;
+
                             //System.out.println("Showtime selected: " + showtime);
                             System.out.println("Showtime selected ID: " + app.getSelectedShowtime().getShowtimeID());
                             System.out.println("Showtime selected date/time: " + app.getSelectedShowtime().getDate() + app.getSelectedShowtime().getTime());
@@ -311,7 +322,7 @@ public class MovieListPanel extends JPanel {
 
     public void displaySeatMap(Showtime showtime) {
         seatPanel.removeAll();
-
+        currentSeatButton = null;
 
         ArrayList<Seat> seats = movieTC.fetchSeats(showtime.getShowtimeID());
         if (seats == null || seats.isEmpty()) {
@@ -345,9 +356,13 @@ public class MovieListPanel extends JPanel {
 
                         app.setSelectedSeat(seat);
                         submitButton.setVisible(true);
+                        seatButton.setBackground(pastelGreen);
                         System.out.println("Seat selected ID: " + app.getSelectedSeat().getSeatID());
                         System.out.println("Seat selected: " + app.getSelectedSeat().getSeatRow() + app.getSelectedSeat().getSeatCol());
-
+                        if (currentSeatButton != null){
+                            currentSeatButton.setBackground(UIManager.getColor("Button.background"));
+                        }
+                        currentSeatButton = seatButton;
 
                     }
 
