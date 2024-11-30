@@ -100,6 +100,8 @@ public class PaymentRUPanel extends JPanel {
         if (payments == null || payments.isEmpty()) {
             JLabel noPayments = new JLabel("No saved payments.");
             noPayments.setForeground(Red);
+            noPayments.setHorizontalAlignment(SwingConstants.CENTER);
+            noPayments.setVerticalAlignment(SwingConstants.CENTER);
             savedPaymentsPanel.add(noPayments);
         } else {
             // Loop through saved payments and create a button for each
