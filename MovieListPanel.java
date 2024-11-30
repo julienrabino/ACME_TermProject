@@ -21,6 +21,7 @@ public class MovieListPanel extends JPanel {
     private JLabel movieDetailsLabel;
     private JPanel detailsPanel;
     private JPanel showtimesPanel;
+    private JPanel noLocationsPanel;
     private JPanel seatPanel;
     private JButton currentSeatButton;
     private JButton currentShowtimeButton;
@@ -155,6 +156,23 @@ public class MovieListPanel extends JPanel {
         detailsPanel.add(locationComboBox);
         detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
 
+
+        // No Locations Panel
+        noLocationsPanel = new JPanel();
+        noLocationsPanel.setLayout(new BoxLayout(noLocationsPanel, BoxLayout.Y_AXIS)); // Align vertically
+        noLocationsPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align with the left edge of the detailsPanel
+        noLocationsPanel.setBackground(Yellow); // Match the background color
+        noLocationsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add some padding
+
+        JLabel noLocationsLabel = new JLabel("<html><b>No Theatres are showing this Movie.</b></html>");
+        noLocationsLabel.setForeground(Red);
+        noLocationsLabel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align text with the panel
+        noLocationsPanel.add(noLocationsLabel);
+
+        noLocationsPanel.setVisible(false);
+        detailsPanel.add(noLocationsPanel);
+
+
         // Showtimes panel
         showtimesPanel = new JPanel();
         showtimesPanel.setLayout(new BoxLayout(showtimesPanel, BoxLayout.Y_AXIS));
@@ -227,6 +245,7 @@ public class MovieListPanel extends JPanel {
         movieList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 seatPanel.setVisible(false);
+                noLocationsPanel.setVisible(false);
                 Movie selectedMovie = movieList.getSelectedValue();
 
                 if (selectedMovie != null) {
@@ -235,6 +254,8 @@ public class MovieListPanel extends JPanel {
                     }
                     seatPanel.setVisible(false);
                     seatPanel.removeAll();
+                    showtimesPanel.removeAll();
+                    locationComboBox.setVisible(true);
                     lastSelectedMovie = selectedMovie;
                     app.setMovie(lastSelectedMovie);
                     detailsPanel.setVisible(true);
@@ -246,17 +267,28 @@ public class MovieListPanel extends JPanel {
                     ArrayList<Location> loc = movieTC.getMovieLocations(selectedMovie);
 
                     locations.clear();
-                    if (loc != null) {
+                    if (!loc.isEmpty()) {
                         locations.addAll(loc);
+                    } else{
+                        System.out.println("No theatres available.");
+
+                        noLocationsPanel.setVisible(true);
+                        locationComboBox.setVisible(false);
+                        detailsPanel.revalidate();
+                        detailsPanel.repaint();
+                        return;
                     }
 
                     locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new Location[0])));
                     if (!locations.isEmpty()) {
                         locationComboBox.setSelectedIndex(0);
+
                     }
                 } else {
                     detailsPanel.setVisible(false);
                 }
+                detailsPanel.revalidate();
+                detailsPanel.repaint();
             }
         });
     }
