@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class MovieTheatreController {
@@ -206,4 +207,29 @@ public class MovieTheatreController {
 
     }
 
+    public boolean isReleased(int movieID) {
+        String query = "SELECT ReleaseDate FROM MOVIE WHERE MovieID = ?";
+        boolean isReleased = false;
+
+        try {
+            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, movieID);
+
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                Date releaseDate = rs.getDate("ReleaseDate");
+                if (releaseDate != null) {
+                    LocalDate releaseLocalDate = releaseDate.toLocalDate();
+
+                    isReleased = !LocalDate.now().isBefore(releaseLocalDate);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            }
+        return isReleased;
+
+    }
 }

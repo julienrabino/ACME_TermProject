@@ -21,7 +21,6 @@ public class MovieListPanel extends JPanel {
     private JLabel movieDetailsLabel;
     private JPanel detailsPanel;
     private JPanel showtimesPanel;
-    private JPanel noLocationsPanel;
     private JPanel seatPanel;
     private JButton currentSeatButton;
     private JButton currentShowtimeButton;
@@ -143,6 +142,7 @@ public class MovieListPanel extends JPanel {
             System.out.println("Selected Location: " + selectedLocation);
             showtimesPanel.removeAll();
             seatPanel.removeAll();
+            seatPanel.setVisible(false);
             detailsPanel.add(showtimesPanel);
             displayShowtimes(selectedLocation, lastSelectedMovie);
         });
@@ -151,20 +151,7 @@ public class MovieListPanel extends JPanel {
         detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
 
 
-        // No Locations Panel
-        noLocationsPanel = new JPanel();
-        noLocationsPanel.setLayout(new BoxLayout(noLocationsPanel, BoxLayout.Y_AXIS)); // Align vertically
-        noLocationsPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align with the left edge of the detailsPanel
-        noLocationsPanel.setBackground(Yellow); // Match the background color
-        noLocationsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add some padding
 
-        JLabel noLocationsLabel = new JLabel("<html><b>No Theatres are showing this Movie.</b></html>");
-        noLocationsLabel.setForeground(Red);
-        noLocationsLabel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align text with the panel
-        noLocationsPanel.add(noLocationsLabel);
-
-        noLocationsPanel.setVisible(false);
-        detailsPanel.add(noLocationsPanel);
 
 
         // Showtimes panel
@@ -209,9 +196,10 @@ public class MovieListPanel extends JPanel {
         updateMovieList();
         currentSeatButton = null;
         currentShowtimeButton = null;
+
     }
 
-    private void updateMovieList() {
+    public void updateMovieList() {
         listModel.clear();  // Clear existing list items
 
         // Fetch movies based on search state
@@ -225,13 +213,15 @@ public class MovieListPanel extends JPanel {
             listModel.clear();
             return;
         }
-
+        System.out.println(app.getCurrentUser());
         for (Movie movie : movies) {
             if (movie != null) {
-                listModel.addElement(movie); // Add the entire movie object to the list model
+                if (movieTC.isReleased(movie.getMovieID()) || app.getCurrentUser() == 1) {
+                    listModel.addElement(movie); // Add the entire movie object to the list model
+
+                }
             }
         }
-
         addMovieSelectionListener(movieTC);
     }
 
@@ -239,7 +229,6 @@ public class MovieListPanel extends JPanel {
         movieList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 seatPanel.setVisible(false);
-                noLocationsPanel.setVisible(false);
                 Movie selectedMovie = movieList.getSelectedValue();
 
                 if (selectedMovie != null) {
@@ -262,16 +251,11 @@ public class MovieListPanel extends JPanel {
 
                     locations.clear();
                     if (!loc.isEmpty()) {
-                        locations.addAll(loc);
-                    } else{
-                        System.out.println("No theatres available.");
+                            locations.addAll(loc);
 
-                        noLocationsPanel.setVisible(true);
-                        locationComboBox.setVisible(false);
-                        detailsPanel.revalidate();
-                        detailsPanel.repaint();
-                        return;
-                    }
+                        }
+
+
 
                     locationComboBox.setModel(new DefaultComboBoxModel<>(locations.toArray(new Location[0])));
                     if (!locations.isEmpty()) {
@@ -398,19 +382,16 @@ public class MovieListPanel extends JPanel {
                 JButton seatButton = new JButton();
                 seatButton.setForeground(Red);
                 if (!seat.getAvailable()) {
-                    //seatButton.setBackground(Red);
                     seatButton.setEnabled(false);
                 }
                 seatButton.setText(seat.toString());
-//
-                if (!seat.getAvailable()) {
+
+                if ((seat.isAnRUSeat() && app.getCurrentUser() == 0) ||
+                        (!seat.isAnRUSeat() && !movieTC.isReleased(lastSelectedMovie.getMovieID()) && app.getCurrentUser() == 1)) {
                     seatButton.setEnabled(false);
                 }
-                if (seat.isAnRUSeat()) {
-                    if (app.getCurrentUser() == 0) {
-                        seatButton.setEnabled(false);
-                    }
-                }
+
+
 
                 seatButton.addActionListener(new ActionListener() {
                     @Override

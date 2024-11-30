@@ -13,22 +13,16 @@ public class RegisteredPanel extends JPanel {
         browseMovies.setForeground(Red);
         browseMovies.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                app.getMovieListPanel().updateMovieList();
                 app.switchToMovieList();
             }
         });
-        JButton movieNews = new JButton("See Movie News");
-        movieNews.setForeground(Red);
-        movieNews.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                app.switchToMovieList();
-            }
-        });
+
 
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER)); // Centering the button
         centerPanel.add(browseMovies);
-        centerPanel.add(movieNews);
         centerPanel.setBackground(Yellow);
         this.add(centerPanel);
 

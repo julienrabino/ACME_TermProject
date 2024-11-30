@@ -40,9 +40,9 @@ VALUES
 ('Diary of a Wimpy Kid: Rodrick Rules', 'Comedy, Slice of Life?', '2024-11-09'),
 ('Kimi No Nawa', 'Anime, Romance', '2024-11-10'),
 ('Home Alone', 'Christmas, Comedy', '2024-11-11'),
-('Home Alone 2', 'Christmas, Comedy', '2024-11-12'),
-('Home Alone 3', 'Christmas, Comedy', '2024-11-13'),
-('The Grinch', 'Christmas, Kindness, Animated', '2024-11-14'),
+('Home Alone 2', 'Christmas, Comedy', '2024-11-12' ),
+('Home Alone 3', 'Christmas, Comedy', '2024-11-13' ),
+('The Grinch', 'Christmas, Kindness, Animated', '2024-11-14' ),
 ('Moana 2', 'Adventure, Chicken, Ocean', '2024-12-12');
 
 
@@ -90,8 +90,9 @@ INSERT INTO SHOWTIME (MovieID, ShowDate, ShowTime, TheatreID) VALUES
 (10, '2024-12-07', '11:30:00', 2), -- 26
 (11, '2024-12-04', '13:00:00', 1), -- 27
 (12, '2024-12-04', '15:15:00', 2), -- 28
-(13, '2024-12-04', '17:45:00', 4), -- 29
-(14, '2024-12-04', '20:00:00', 3); -- 30
+(15, '2024-12-12', '17:45:00', 4), -- 29
+(15, '2024-12-12', '20:00:00', 3); -- 30
+
 
 
 

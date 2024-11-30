@@ -96,7 +96,10 @@ public class MovieTheatreApp extends JFrame {
         this.loginPanel = loginPanel;
     }
 
-
+    public MovieListPanel getMovieListPanel()
+    {
+        return movieListPanel;
+    }
     public void setMovie (Movie movie) {
         this.selectedMovie = movie; // i think this is a shallow copy maybe but idk
     }
