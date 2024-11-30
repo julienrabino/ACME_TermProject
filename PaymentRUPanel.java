@@ -56,6 +56,8 @@ public class PaymentRUPanel extends JPanel {
                 Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), app.getRU().getEmail(), 12.50, app.getSelectedPayment(), true, false);
                 ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                 ticketC.addTicket(ticket);
+                String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();
+                JOptionPane.showMessageDialog(app, message);
                 // Possibly switch to a new payment screen or form
             }
         });
