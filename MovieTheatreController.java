@@ -134,8 +134,9 @@ public class MovieTheatreController {
                 int movieID = results.getInt("MovieID");
                 String title = results.getString("Title");
                 String genre = results.getString("Genre");
+                String releaseDate = results.getString("ReleaseDate");
 
-                Movie movie = new Movie(movieID, title, genre);
+                Movie movie = new Movie(movieID, title, genre, releaseDate);
                 movies.add(movie);
             }
 
@@ -159,7 +160,9 @@ public class MovieTheatreController {
                 int movieID = results.getInt("MovieID");
                 String title = results.getString("Title");
                 String genre = results.getString("Genre");
-                Movie movie = new Movie(movieID, title, genre);
+                String releaseDate = results.getString("ReleaseDate");
+
+                Movie movie = new Movie(movieID, title, genre, releaseDate);
                 movies.add(movie);
             }
 

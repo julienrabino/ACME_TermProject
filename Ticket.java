@@ -90,11 +90,21 @@ public class Ticket {
 
     public void setTicketID(int ticketID) {
         this.ticketID = ticketID;
-    }public void setTicketPrice(double ticketPrice) {
+    }
+
+    public void setPaymentID(int id){
+            this.paymentID = id;
+    }
+    public int getPaymentID(){
+        return this.paymentID;
+    }
+    public void setTicketPrice(double ticketPrice) {
         this.ticketPrice = ticketPrice;
-    }public void setTicketStatus(boolean ticketStatus) {
+    }
+    public void setTicketStatus(boolean ticketStatus) {
         this.ticketStatus = ticketStatus;
-    }public void setRU(RegisteredUser RU) {
+    }
+    public void setRU(RegisteredUser RU) {
         this.RU = RU;
     }
 

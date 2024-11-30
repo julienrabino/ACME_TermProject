@@ -33,7 +33,9 @@ public class MovieDatabaseManager {
                 String title = results.getString("Title");
                 String genre = results.getString("Genre");
 
-                Movie movie = new Movie(movieID, title, genre);
+                String releaseDate = results.getString("ReleaseDate");
+
+                Movie movie = new Movie(movieID, title, genre, releaseDate);
                 movies.add(movie);
             }
 
@@ -58,7 +60,9 @@ public class MovieDatabaseManager {
                 int movieID = results.getInt("MovieID");
                 String title = results.getString("Title");
                 String genre = results.getString("Genre");
-                Movie movie = new Movie(movieID, title, genre);
+                String releaseDate = results.getString("ReleaseDate");
+
+                Movie movie = new Movie(movieID, title, genre, releaseDate);
                 movies.add(movie);
             }
 

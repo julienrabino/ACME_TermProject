@@ -7,9 +7,17 @@ public class Payment {
     private String expiryDate;
     private String securityCode;
 
-    public Payment(int paymentID, int RUID, String fName, String lName,
-                   String cardNum, String expiryDate, String securityCode) {
+    public Payment(int paymentID, int RUID, String fName, String lName, String cardNum, String expiryDate, String securityCode) {
         this.paymentID = paymentID;
+        this.RUID = RUID; // maybe just set RUID to -1 if theyre not an RU
+        this.fName = fName;
+        this.lName = lName;
+        this.cardNum = cardNum;
+        this.expiryDate = expiryDate;
+        this.securityCode = securityCode;
+    }
+    public Payment(int RUID, String fName, String lName, String cardNum, String expiryDate, String securityCode) {
+        //this.paymentID = paymentID;
         this.RUID = RUID; // maybe just set RUID to -1 if theyre not an RU
         this.fName = fName;
         this.lName = lName;

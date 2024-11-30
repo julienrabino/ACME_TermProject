@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.sql.Types;
 
 public class TicketController {
 
@@ -122,11 +123,10 @@ public class TicketController {
                 boolean refunded = false;
                 if (refund == 0) {
                     refunded = false;
-                }
-                else {
+                } else {
                     refunded = true;
                 }
-                Ticket ticket = new Ticket(ticketID, showtimeID, seatID,  RUID, email, cost,  paymentID,  refunded);
+                Ticket ticket = new Ticket(ticketID, showtimeID, seatID, RUID, email, cost, paymentID, refunded);
                 tickets.add(ticket);
             }
 
@@ -134,47 +134,124 @@ public class TicketController {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
         return tickets;
     }
+        public Payment getPaymentFromCard(String card) {
+            String query = null;
+            PreparedStatement statement = null;
+            Payment payment = null;
+
+            try {
+                query = "select *\n" +
+                        "from PAYMENT AS P\n" +
+                        "where P.CardNum = ? ;";
+                statement = jdbc.dbConnect.prepareStatement(query);
+                statement.setString(1, card);
+
+                ResultSet results = statement.executeQuery();
+
+                while (results.next()) {
+                    int paymentID = results.getInt("PaymentID");
+                    int RUID = results.getInt("RUID");
+                    String cardNum = results.getString("CardNum");
+                    String expiryDate = results.getString("ExpiryDate");
+                    String fName = results.getString("Fname");
+                    String lName = results.getString("Lname");
+                    String security = results.getString("SecurityCode");
+                    payment = new Payment(paymentID,RUID, fName, lName, cardNum, expiryDate, security);
+
+                    //System.out.println(name);
+                }
+
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return payment;
+    }
+
     public boolean addTicket(Ticket ticket) {
-        // takes ticket and saves it on DB
-        // if successful, return TRUE
-        String query = "INSERT INTO TICKET (RUID, showtimeID, SeatID, Cost, PaymentID, Email, TimePurchased, DatePurchased, Refunded) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Takes ticket and saves it on DB
+        // If successful, return TRUE
+        String query = "INSERT INTO TICKET (RUID, ShowtimeID, SeatID, Cost, PaymentID, Email, TimePurchased, DatePurchased, Refunded) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         ZoneId calgaryTimeZone = ZoneId.of("America/Edmonton"); // Calgary is in the "America/Edmonton" zone
 
-// Get the current time in Calgary
+        // Get the current time in Calgary
         ZonedDateTime calgaryCurrentTime = ZonedDateTime.now(calgaryTimeZone);
 
-// Extract the time (HH:MM:SS) from the ZonedDateTime
+        // Extract the time (HH:MM:SS) from the ZonedDateTime
         LocalTime localTime = calgaryCurrentTime.toLocalTime();
 
-// Format the time in "HH:MM:SS" format (compatible with MySQL TIME type)
+        // Format the time in "HH:MM:SS" format (compatible with MySQL TIME type)
         String formattedTime = localTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
         LocalDate currentDate = LocalDate.now();
         String formattedDate = currentDate.toString();  // toString() gives YYYY-MM-DD
 
+        // Get RegisteredUser and Payment info
+        RegisteredUser RU = ticket.getRU();
+        Payment payment = ticket.getPayment();
+
+        try {
+            // Prepare the statement
+            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
+
+            // Set parameters in the correct order
+            if (RU != null && RU.getID() != -1) {
+                statement.setInt(1, RU.getID()); // RUID
+            } else {
+                statement.setNull(1, Types.INTEGER); // Set null for RUID if it's invalid
+            }
+
+            statement.setInt(2, ticket.getShowtime().getShowtimeID()); // ShowtimeID
+            statement.setInt(3, ticket.getSeat().getSeatID()); // SeatID
+            statement.setDouble(4, ticket.getTicketPrice()); // Cost
+            if (payment != null) {
+                statement.setInt(5, payment.getPaymentID()); // PaymentID
+            } else {
+                statement.setNull(5, Types.INTEGER); // Set null for PaymentID if payment is not available
+            }
+            statement.setString(6, ticket.getEmail()); // Email
+            statement.setString(7, formattedTime); // TimePurchased
+            statement.setString(8, formattedDate); // DatePurchased
+            statement.setInt(9, 0); // Refunded (0 for not refunded, 1 for refunded)
+
+            // Execute the query
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Return true if insertion was successful
+
+        } catch (SQLException e) {
+            System.out.println("Error adding ticket to DB: " + e.getMessage());
+        }
+
+        return false; // Return false if there was an error
+    }
+
+
+
+    public boolean addPayment(Payment payment) {
+        String query = "INSERT INTO PAYMENT (RUID, Fname, Lname, CardNum, ExpiryDate, SecurityCode)\n" +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
         try{
             PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
-            statement.setInt(2, ticket.getShowtime().getShowtimeID());
-            statement.setInt(3, ticket.getSeat().getSeatID());
-            statement.setDouble(4, ticket.getTicketPrice());
-            statement.setInt(5, ticket.getPayment().getPaymentID());
-            statement.setString(6, ticket.getEmail());
-            statement.setString(7, formattedTime);
-            statement.setString(8, formattedDate);
-            statement.setInt(9, 0); // not refunded
-            if (ticket.getRU() != null){
-                statement.setInt(1, ticket.getRU().getID());            }
-            else{
-                statement.setInt(1, -1);
-
+            int ruid = payment.getRUID();
+            if (ruid != -1) {
+                statement.setInt(1, ruid); // RUID
+            } else {
+                statement.setNull(1, Types.INTEGER); // Set null for RUID if it's invalid
             }
+            statement.setString(2,payment.getfName());
+            statement.setString(3,payment.getlName());
+            statement.setString(4, payment.getCardNum());
+            statement.setString(5, payment.getExpiryDate());
+            statement.setString(6, payment.getSecurityCode());
+
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0;
 
         } catch (SQLException e){
-            System.out.println("Error adding ticket to DB: " + e.getMessage());
+            System.out.println("Error adding payment to DB: " + e.getMessage());
         }
         return false;
     }

@@ -72,9 +72,18 @@ public class PaymentPanel extends JPanel {
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean Reg = false;
+                int ruid = -1;
                 if (app.getRU() != null) {
                     Reg = true;
+                    ruid = app.getRU().getID();
                 }
+
+                Payment payment = new Payment(ruid, fnameField.getText(), lnameField.getText(), cardNumField.getText(), expiryDateField.getText(), securityCodeField.getText());
+                ticketC.addPayment(payment);
+                System.out.println("JUST ADDED PAYMENT PANEL PAYMENT TO DB");
+                Payment payment1 = ticketC.getPaymentFromCard(payment.getCardNum());
+                app.setSelectedPayment(payment1);
+
                 Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(),  Reg, false);
                 ticketC.addTicket(ticket);
                 ticketC.changeSeatAvailability(app.getSelectedSeat(), false);

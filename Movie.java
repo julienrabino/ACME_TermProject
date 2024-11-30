@@ -7,10 +7,11 @@ public class Movie {
     private String releaseDate;
     private ArrayList<Showtime> showtimes;
 
-    public Movie(int id, String title, String genre){
+    public Movie(int id, String title, String genre, String releaseDate){
         this.movieID = id;
         this.title = title;
         this.genre = genre;
+        this.releaseDate = releaseDate;
         this.showtimes = new ArrayList<>();
 
     }
