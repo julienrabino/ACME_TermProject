@@ -48,7 +48,7 @@ public class LoginPanel extends JPanel {
 
                     usrInput.setText("");
                     pwInput.setText("");
-                    app.switchToMovieList();  // switch to the movie list panel
+                    app.switchToRegistered();  // switch to the movie list panel
                 }
             }
         });
@@ -72,8 +72,8 @@ public class LoginPanel extends JPanel {
 
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        submitPanel.add(submitButton);
         submitPanel.add(backButton);
+        submitPanel.add(submitButton);
         this.add(submitPanel, BorderLayout.PAGE_END);
         submitPanel.setBackground(Orange);
 

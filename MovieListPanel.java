@@ -44,31 +44,21 @@ public class MovieListPanel extends JPanel {
         JButton backButton = new JButton("Back");
         backButton.setForeground(Red);
         backButton.addActionListener(e -> {
+
+            seatPanel.removeAll();
+            seatPanel.setVisible(false);
+            if (currentShowtimeButton != null) {
+                updateButtonColor(currentShowtimeButton, true);
+            }
+            currentShowtimeButton = null;
+            app.setSelectedShowtime(null);
+            submitButton.setVisible(false);
             if(app.getCurrentUser() == 0){
                 System.out.println("Going to Guest view.");
-                seatPanel.removeAll();
-                seatPanel.setVisible(false);
-                if (currentShowtimeButton != null) {
-                    updateButtonColor(currentShowtimeButton, true);
-                    currentShowtimeButton = null;
-                }
-                app.setSelectedShowtime(null);
-                submitButton.setVisible(false);
                 app.switchToGuest();
             } else if (app.getCurrentUser() == 1){
-                System.out.println("Going to initial view.");
-                app.setCurrentUser(0);
-                app.setRU(null);
-                System.out.println("Logging out");
-                seatPanel.removeAll();
-                seatPanel.setVisible(false);
-                if (currentShowtimeButton != null) {
-                    updateButtonColor(currentShowtimeButton, true);
-                }
-                currentShowtimeButton = null;
-                app.setSelectedShowtime(null);
-                submitButton.setVisible(false);
-                app.switchToInitial();
+                System.out.println("Going to Registered view.");
+                app.switchToRegistered();
             }
 
 
