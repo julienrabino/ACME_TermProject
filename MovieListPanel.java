@@ -48,8 +48,10 @@ public class MovieListPanel extends JPanel {
                 System.out.println("Going to Guest view.");
                 seatPanel.removeAll();
                 seatPanel.setVisible(false);
-                updateButtonColor(currentShowtimeButton, true);
-                currentShowtimeButton = null;
+                if (currentShowtimeButton != null) {
+                    updateButtonColor(currentShowtimeButton, true);
+                    currentShowtimeButton = null;
+                }
                 app.setSelectedShowtime(null);
                 submitButton.setVisible(false);
                 app.switchToGuest();
@@ -60,7 +62,9 @@ public class MovieListPanel extends JPanel {
                 System.out.println("Logging out");
                 seatPanel.removeAll();
                 seatPanel.setVisible(false);
-                updateButtonColor(currentShowtimeButton, true);
+                if (currentShowtimeButton != null) {
+                    updateButtonColor(currentShowtimeButton, true);
+                }
                 currentShowtimeButton = null;
                 app.setSelectedShowtime(null);
                 submitButton.setVisible(false);

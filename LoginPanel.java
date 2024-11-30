@@ -52,6 +52,13 @@ public class LoginPanel extends JPanel {
                 }
             }
         });
+        JButton backButton = new JButton("Back");
+        backButton.setForeground(Red);
+        backButton.addActionListener(e -> {
+            System.out.println("Going back to initial panel");
+            app.switchToInitial();
+                });
+
 
         setLayout(new BorderLayout());
 
@@ -66,6 +73,7 @@ public class LoginPanel extends JPanel {
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         submitPanel.add(submitButton);
+        submitPanel.add(backButton);
         this.add(submitPanel, BorderLayout.PAGE_END);
         submitPanel.setBackground(Orange);
 
