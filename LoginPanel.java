@@ -45,6 +45,7 @@ public class LoginPanel extends JPanel {
                     RegisteredUser RU = userDBM.getRUFromUsername(username);
                     app.setRU(RU);
                     app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
+
                     usrInput.setText("");
                     pwInput.setText("");
                     app.switchToMovieList();  // switch to the movie list panel

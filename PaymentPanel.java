@@ -90,6 +90,8 @@ public class PaymentPanel extends JPanel {
                 ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                 String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();
                 JOptionPane.showMessageDialog(app, message);
+                app.switchToMovieList();
+
             }
         });
 

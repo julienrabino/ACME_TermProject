@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class MovieTheatreApp extends JFrame {
     private static myJDBC db;
     private static final CardLayout cardLayout = new CardLayout();
-    private JPanel cards;  // main container to hold different panels (like cards)
+    public JPanel cards;  // main container to hold different panels (like cards)
     private InitialPanel initialPanel;
     private LoginPanel loginPanel;
     private SignupPanel signupPanel;
@@ -85,6 +85,16 @@ public class MovieTheatreApp extends JFrame {
     public PaymentPanel getPaymentPanel () {
         return this.paymentPanel;
     }
+    public LoginPanel getLoginPanel(){
+        return loginPanel;
+    }
+    public UserDatabaseManager getUserDBM(){
+        return userDBM;
+    }
+    public void setLoginPanel(LoginPanel loginPanel){
+        this.loginPanel = loginPanel;
+    }
+
 
     public void setMovie (Movie movie) {
         this.selectedMovie = movie; // i think this is a shallow copy maybe but idk

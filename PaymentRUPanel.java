@@ -58,7 +58,7 @@ public class PaymentRUPanel extends JPanel {
                 ticketC.addTicket(ticket);
                 String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();
                 JOptionPane.showMessageDialog(app, message);
-                // Possibly switch to a new payment screen or form
+                app.switchToMovieList();
             }
         });
 

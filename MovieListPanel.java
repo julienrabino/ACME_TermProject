@@ -42,7 +42,32 @@ public class MovieListPanel extends JPanel {
         // Back button at the bottom
         JButton backButton = new JButton("Back");
         backButton.setForeground(Red);
-        backButton.addActionListener(e -> app.switchToGuest());
+        backButton.addActionListener(e -> {
+            if(app.getCurrentUser() == 0){
+                System.out.println("Going to Guest view.");
+                seatPanel.removeAll();
+                seatPanel.setVisible(false);
+                updateButtonColor(currentShowtimeButton, true);
+                currentShowtimeButton = null;
+                app.setSelectedShowtime(null);
+                submitButton.setVisible(false);
+                app.switchToGuest();
+            } else if (app.getCurrentUser() == 1){
+                System.out.println("Going to initial view.");
+                app.setCurrentUser(0);
+                app.setRU(null);
+                System.out.println("Logging out");
+                seatPanel.removeAll();
+                seatPanel.setVisible(false);
+                updateButtonColor(currentShowtimeButton, true);
+                currentShowtimeButton = null;
+                app.setSelectedShowtime(null);
+                submitButton.setVisible(false);
+                app.switchToInitial();
+            }
+
+
+            });
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(backButton);
