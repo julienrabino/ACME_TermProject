@@ -78,13 +78,13 @@ public class PaymentPanel extends JPanel {
                     ruid = app.getRU().getID();
                 }
 
-                // STILL NEED TO DO VALIDATION
-                Payment payment = new Payment(ruid, fnameField.getText(), lnameField.getText(), cardNumField.getText(), expiryDateField.getText(), securityCodeField.getText());
-                ticketC.addPayment(payment);
-                System.out.println("JUST ADDED PAYMENT PANEL PAYMENT TO DB");
-                Payment payment1 = ticketC.getPaymentFromCard(payment.getCardNum());
-                app.setSelectedPayment(payment1);
 
+                BillingSystem billingS = ticketC.getBillingSystem();
+                Payment payment = new Payment(ruid, fnameField.getText(), lnameField.getText(), cardNumField.getText(), expiryDateField.getText(), securityCodeField.getText());
+                billingS.addPayment(payment);// STILL NEED TO DO VALIDATION IN THIS METHOD
+                System.out.println("JUST ADDED PAYMENT PANEL PAYMENT TO DB");
+                Payment payment1 = billingS.getPaymentFromCard(payment.getCardNum());
+                app.setSelectedPayment(payment1);
                 Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(),  Reg, false);
                 ticketC.addTicket(ticket);
                 ticketC.changeSeatAvailability(app.getSelectedSeat(), false);

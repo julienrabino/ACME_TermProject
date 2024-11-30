@@ -17,85 +17,19 @@ public class TicketController {
 
     public TicketController(myJDBC myJDBC){
         this.jdbc = myJDBC;
+        billingSystem = new BillingSystem(jdbc);
     }
 
 
-    TicketController() {
-        this.billingSystem = new BillingSystem();
+
+
+    public BillingSystem getBillingSystem(){
+        return billingSystem;
     }
 
-//    public Ticket purchaseTicket(Showtime showtime, User user, Seat seat) {
-//        //  all methods used here need to be refactored to adapt to the new seat object (it used to be int)
-//        double ticketPrice = 13.50;
-//
-//        Ticket ticket = null;
-//
-//        int ticketID = produceTicketID();
-//
-//        // if user is RU, they may attempt to reserve an RU seat, but if unavailable, they may try to reserve an OU seat.
-//        if (user.getRegistered()) {
-//            if (showtime.updateSeats(true, 1, true)) {
-//                //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), true);
-//            } else if (showtime.updateSeats(false, 1, true)) {
-//               // ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
-//            }
-//        }
-//
-//        // if user is OU, they can only try to purchase an OU seat.
-//        else if ((!user.getRegistered()) && showtime.updateSeats(false, 1, true)) {
-//            //ticket = new Ticket(ticketID, showtime, user, seat, ticketPrice, user.getPaymentMethod(), false);
-//        }
-//
-//        if (ticket == null) {
-//            System.out.println("No more seats available for this showtime. Please select another.");
-//            return ticket; // for caller: if purchaseTicket() returns null, request User to pick another showtime.
-//        }
-//
-//        //billingSystem.processTicketPayment(user, ticket);
-//
-//        // TO ADD:
-//        // add ticket to DB
-//        if (!addTicketToDB(ticket)) {
-//            System.out.println("Unable to save ticket to DB.");
-//        }
-//
-//        // save remaining OUSeats for this showtime to DB
-//        if (!updateShowtimeSeats(showtime)) {
-//            System.out.println("Unable to update seat count in DB.");
-//        }
-//        return ticket;
 
 
-    public void cancelTicket(Ticket ticket, User user) {
 
-        boolean cancellationEligibility = fetchCancellationEligibility(ticket); // default
-
-
-        // query DB if ticket is still eligible for cancellation; reassign cancellationEligibility
-
-        if (cancellationEligibility) {
-            //billingSystem.processTicketRefund(ticket, user);
-            ticket.cancelTicket();
-            if (!updateTicketStatus(ticket)){
-                System.out.println("Unable to update ticket status in DB. Ticket may already be cancelled.");
-            }
-            boolean isAnRUSeat = ticket.getIsAnRUSeat();
-
-            Showtime showtime = ticket.getShowtime();
-            //showtime.updateSeats(isAnRUSeat, 1, false);
-            if (!updateShowtimeSeats(showtime)){
-                System.out.println("Unable to update seat count in DB.");
-
-            }
-
-
-        } else {
-            System.out.println("Ticket is not eligible for cancellation.");
-        }
-    }
-
-    // Can probably remove this method if it has no other functionality
-    // can just call ticket method directly?
     public void sendTicketReceipt(Ticket ticket) {
         ticket.sendTicketReceipt(ticket);
     }
@@ -136,39 +70,6 @@ public class TicketController {
         }
         return tickets;
     }
-        public Payment getPaymentFromCard(String card) {
-            String query = null;
-            PreparedStatement statement = null;
-            Payment payment = null;
-
-            try {
-                query = "select *\n" +
-                        "from PAYMENT AS P\n" +
-                        "where P.CardNum = ? ;";
-                statement = jdbc.dbConnect.prepareStatement(query);
-                statement.setString(1, card);
-
-                ResultSet results = statement.executeQuery();
-
-                while (results.next()) {
-                    int paymentID = results.getInt("PaymentID");
-                    int RUID = results.getInt("RUID");
-                    String cardNum = results.getString("CardNum");
-                    String expiryDate = results.getString("ExpiryDate");
-                    String fName = results.getString("Fname");
-                    String lName = results.getString("Lname");
-                    String security = results.getString("SecurityCode");
-                    payment = new Payment(paymentID,RUID, fName, lName, cardNum, expiryDate, security);
-
-                    //System.out.println(name);
-                }
-
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return payment;
-    }
 
     public boolean addTicket(Ticket ticket) {
         // Takes ticket and saves it on DB
@@ -191,6 +92,7 @@ public class TicketController {
         // Get RegisteredUser and Payment info
         RegisteredUser RU = ticket.getRU();
         Payment payment = ticket.getPayment();
+
 
         try {
             // Prepare the statement
@@ -229,32 +131,7 @@ public class TicketController {
 
 
 
-    public boolean addPayment(Payment payment) {
-        String query = "INSERT INTO PAYMENT (RUID, Fname, Lname, CardNum, ExpiryDate, SecurityCode)\n" +
-                "VALUES (?, ?, ?, ?, ?, ?)";
 
-        try{
-            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
-            int ruid = payment.getRUID();
-            if (ruid != -1) {
-                statement.setInt(1, ruid); // RUID
-            } else {
-                statement.setNull(1, Types.INTEGER); // Set null for RUID if it's invalid
-            }
-            statement.setString(2,payment.getfName());
-            statement.setString(3,payment.getlName());
-            statement.setString(4, payment.getCardNum());
-            statement.setString(5, payment.getExpiryDate());
-            statement.setString(6, payment.getSecurityCode());
-
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0;
-
-        } catch (SQLException e){
-            System.out.println("Error adding payment to DB: " + e.getMessage());
-        }
-        return false;
-    }
 
     public void changeSeatAvailability(Seat seat, boolean available) {
         int seatID = seat.getSeatID();
@@ -412,21 +289,5 @@ public class TicketController {
 
     }
 
-    public boolean updateShowtimeSeats(Showtime showtime) {
-        // saves showtime AvailableRUSeats and AvailableOUSeats in DB
-        // returns TRUE if successful
-        String query = "UPDATE showtimes SET availableSeatsRU = ?, availableSeatsOU = ? WHERE showtimeID = ?"; // can we plz add available OU and RU seat columns in showtimes , thx
-        try{
-            PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
-           // statement.setInt(1, showtime.getAvailableRUSeats());
-           // statement.setInt(2, showtime.getAvailableOUSeats());
-            statement.setInt(3, showtime.getShowtimeID());
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0;
 
-        }catch(SQLException e) {
-            System.out.println("Error updating showtime seats:  " + e.getMessage());
-        }
-        return false;
-    }
 }
