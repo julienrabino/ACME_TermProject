@@ -386,11 +386,9 @@ public class MovieListPanel extends JPanel {
                 }
                 seatButton.setText(seat.toString());
 
-                if ((seat.isAnRUSeat() && app.getCurrentUser() == 0) ||
-                        (!seat.isAnRUSeat() && !movieTC.isReleased(lastSelectedMovie.getMovieID()) && app.getCurrentUser() == 1)) {
+                if (!seat.isAnRUSeat() && !movieTC.isReleased(lastSelectedMovie.getMovieID()) && app.getCurrentUser() == 1) {
                     seatButton.setEnabled(false);
                 }
-
 
 
                 seatButton.addActionListener(new ActionListener() {
