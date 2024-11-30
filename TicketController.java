@@ -1,6 +1,7 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.ZoneId;
@@ -99,7 +100,43 @@ public class TicketController {
     }
 
     // TicketDatabaseManager functionality directly inside TicketController
+    public ArrayList<Ticket> getTickets() {
+        ResultSet results;
+        ArrayList<Ticket> tickets = new ArrayList<>();
 
+        try {
+            Statement myStmt = jdbc.dbConnect.createStatement();
+            results = myStmt.executeQuery("SELECT * FROM TICKET AS T ;");
+
+            while (results.next()) {
+                int ticketID = results.getInt("TicketID");
+                int showtimeID = results.getInt("ShowtimeID");
+                int RUID = results.getInt("RUID");
+                int paymentID = results.getInt("PaymentID");
+                double cost = results.getDouble("Cost");
+                String email = results.getString("Email");
+                String time = results.getString("TimePurchased");
+                String date = results.getString("DatePurchased");
+                int refund = results.getInt("Refunded");
+                int seatID = results.getInt("SeatID");
+                boolean refunded = false;
+                if (refund == 0) {
+                    refunded = false;
+                }
+                else {
+                    refunded = true;
+                }
+                Ticket ticket = new Ticket(ticketID, showtimeID, seatID,  RUID, email, cost,  paymentID,  refunded);
+                tickets.add(ticket);
+            }
+
+            myStmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return tickets;
+    }
     public boolean addTicket(Ticket ticket) {
         // takes ticket and saves it on DB
         // if successful, return TRUE
@@ -174,6 +211,8 @@ public class TicketController {
             e.printStackTrace();
         }
     }
+
+
 
 
 //    public boolean addTicketToDB(Ticket ticket) {

@@ -1,7 +1,11 @@
 public class Ticket {
     private int ticketID;
     private Showtime showtime;
+    private int showtimeID;
     private RegisteredUser RU;
+    private int seatID;
+    private int paymentID;
+    private int RUID;
     private Seat seat;
     private double ticketPrice;
     private Payment payment;
@@ -32,6 +36,18 @@ public class Ticket {
         this.ticketPrice = ticketPrice;
         this.payment = payment;
         this.isAnRUSeat = isAnRUSeat;
+        this.refunded = refunded;
+        this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
+    }
+    public Ticket(int ticketID, int showtimeID, int seatID,  int RUID, String email,  double ticketPrice, int paymentID,  boolean refunded){
+        this.ticketID = ticketID;
+        this.showtimeID = showtimeID;
+        this.RUID = RUID;
+        this.email = email;
+        this.seatID = seatID;
+        this.ticketPrice = ticketPrice;
+        this.paymentID = paymentID;
+        //this.isAnRUSeat = isAnRUSeat;
         this.refunded = refunded;
         this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
     }

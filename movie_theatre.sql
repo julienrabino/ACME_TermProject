@@ -176,7 +176,7 @@ CREATE TABLE TICKET (
     ShowtimeID			int not null,
 	RUID				int,
     PaymentID			int not null,
-    Cost				int not null,
+    Cost				double not null,
     Email				varchar(20) not null,
     TimePurchased		TIME not null,
     DatePurchased		DATE not null,
