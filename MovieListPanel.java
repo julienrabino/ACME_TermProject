@@ -201,6 +201,7 @@ public class MovieListPanel extends JPanel {
     private void addMovieSelectionListener(MovieTheatreController movieTC) {
         movieList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
+                seatPanel.setVisible(false);
                 Movie selectedMovie = movieList.getSelectedValue();
 
                 if (selectedMovie != null) {
