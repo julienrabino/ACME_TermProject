@@ -101,12 +101,14 @@ public class PaymentPanel extends JPanel {
 
                             app.switchToMovieList();
                         }
-                    } else {
-                        JOptionPane.showMessageDialog(app, "Failed to add payment to the database. Please try again.");
                     }
-                } else{
-                    JOptionPane.showMessageDialog(app, "Invalid payment details. Please try again.");
+//                    else {
+//                        JOptionPane.showMessageDialog(app, "Failed to add payment to the database. Please try again.");
+//                    }
                 }
+//                else{
+//                    JOptionPane.showMessageDialog(app, "Invalid payment details. Please try again.");
+//                }
 
             }
         });

@@ -123,7 +123,7 @@ public class MovieTheatreController {
                     "FROM MOVIE AS M WHERE LOCATE(LOWER(?), LOWER(M.Title)) > 0;";
 
             PreparedStatement myStmt = jdbc.dbConnect.prepareStatement(query);
-            myStmt.setString(1, search.toLowerCase());  
+            myStmt.setString(1, search.toLowerCase());
 
             results = myStmt.executeQuery();
 
