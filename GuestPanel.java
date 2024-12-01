@@ -11,6 +11,7 @@ public class GuestPanel extends JPanel {
     private JButton logoutButton;
     private JButton backButton;
     private JButton refundButton;
+    private JButton renewButton;
     private MovieTheatreApp app;
 
     public GuestPanel(MovieTheatreApp app, MovieTheatreController movieTC) {
@@ -41,7 +42,7 @@ public class GuestPanel extends JPanel {
         // Refund Button (added directly below Browse Movies)
         refundButton = new JButton("Refund");
         refundButton.setForeground(Red);
-        refundButton.setBackground(Yellow);
+        //refundButton.setBackground(Yellow);
 
         refundButton.addActionListener(new ActionListener() {
             @Override
@@ -70,6 +71,15 @@ public class GuestPanel extends JPanel {
         // Add Refund Button Panel to the main panel
         this.add(refundPanel);
 
+        // renew membership button
+        renewButton = new JButton("Renew Membership");
+        renewButton.setForeground(Red);
+        renewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                app.switchToPayAnnualFee();
+            }
+        });
+        refundPanel.add(renewButton);
         // Logout and Back Buttons (These should be placed at the bottom)
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Aligns buttons to the left
@@ -86,7 +96,7 @@ public class GuestPanel extends JPanel {
 
         logoutButton = new JButton("Log out");
         logoutButton.setForeground(Red);
-        logoutButton.setBackground(Yellow);
+        //logoutButton.setBackground(Yellow);
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,9 +119,11 @@ public class GuestPanel extends JPanel {
         if (app.getCurrentUser() == 0) {
             logoutButton.setVisible(false);
             backButton.setVisible(true);
+            renewButton.setVisible(false);
         } else {
             logoutButton.setVisible(true);
             backButton.setVisible(false);
+            renewButton.setVisible(true);
         }
     }
 }

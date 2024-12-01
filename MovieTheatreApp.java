@@ -41,6 +41,14 @@ public class MovieTheatreApp extends JFrame {
     private Location selectedLocation;
 
     private Payment selectedPayment;
+    private boolean annualFeePaid; //to ensure user pays fee when signing up
+
+    public boolean isAnnualFeePaid(){
+        return annualFeePaid;
+    }
+    public void setAnnualFeePaid(boolean feePaid){
+        this.annualFeePaid = feePaid;
+    }
     public void setCurrentUser (int user) {
         this.currentUser= user;
     }

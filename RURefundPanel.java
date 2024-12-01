@@ -91,9 +91,17 @@ public class RURefundPanel extends JPanel {
             }
         });
 
+        // back button
+        JButton backButton = new JButton("Back");
+        backButton.setForeground(Red);
+        backButton.addActionListener(e -> {
+            System.out.println("Going back to guest panel");
+            app.switchToGuest();
+        });
         // Submit panel that holds the buttons at the bottom
         submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Centering the button
         submitPanel.setBackground(Yellow);
+        submitPanel.add(backButton);
         submitPanel.add(submitButton);
 
 

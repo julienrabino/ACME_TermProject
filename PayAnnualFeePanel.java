@@ -32,6 +32,7 @@ public class PayAnnualFeePanel extends JPanel{
     private JLabel emailLabel;
 
     private JButton submitButton;
+    private JButton backButton;
 
     public PayAnnualFeePanel(MovieTheatreApp app, UserDatabaseManager userDBM, BillingSystem billingSystem){
         this.app = app;
@@ -95,9 +96,18 @@ public class PayAnnualFeePanel extends JPanel{
                         String datePurchased = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                         System.out.println(datePurchased);
                         System.out.println(timePurchased);
+                        app.setAnnualFeePaid(true);
+                        JOptionPane.showMessageDialog(app, "Annual Fee Paid Successfully!");
                         app.switchToRegister();
                     }
                 }
+            }
+        });
+        backButton = new JButton("Back");
+        backButton.setForeground(Red);
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                app.switchToRegister();
             }
         });
 
@@ -124,6 +134,7 @@ public class PayAnnualFeePanel extends JPanel{
 
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        submitPanel.add(backButton);
         submitPanel.add(submitButton);
         submitPanel.setBackground(Orange);
 

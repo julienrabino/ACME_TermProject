@@ -38,7 +38,7 @@ public class SignupPanel extends JPanel {
 
     public SignupPanel(MovieTheatreApp app, UserDatabaseManager userDBM) {
         this.app = app;
-
+        app.setAnnualFeePaid(false);
         JLabel usrLabel = new JLabel("Username:");
         usrLabel.setForeground(Red);
         JLabel pwLabel = new JLabel("Password:");
@@ -73,7 +73,14 @@ public class SignupPanel extends JPanel {
         //submit button
         JButton submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
-        submitButton.setEnabled(false);
+        //submitButton.setEnabled(false);
+        System.out.println(app.isAnnualFeePaid());
+        if (app.isAnnualFeePaid()){
+            submitButton.setEnabled(true);
+        }
+        else{
+            submitButton.setEnabled(false);
+        }
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int safe = 1;
@@ -116,9 +123,9 @@ public class SignupPanel extends JPanel {
         paymentButton.setForeground(Red);
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                feePaid = true;
+                //feePaid = true;
                 app.switchToPayAnnualFee(); 
-                submitButton.setEnabled(true);
+                //submitButton.setEnabled(true);
             }
         });
 
@@ -223,6 +230,9 @@ public class SignupPanel extends JPanel {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         panel.add(component, gbc);
+    }
+    public void refresh(){ //dynamically updates feePaid variable
+        
     }
 
     private boolean validateSignup(UserDatabaseManager userDBM) {
