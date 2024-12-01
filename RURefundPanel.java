@@ -155,41 +155,54 @@ public class RURefundPanel extends JPanel {
         ticketsPanel.revalidate();  // Ensure layout updates after adding components
         ticketsPanel.repaint();     // Ensure repaint of the panel
     }
+    
 
     private boolean validateRefund(Showtime showtime) {
         boolean valid = false;
+
         String showtimeDateStr = showtime.getDate();
         String showtimeTimeStr = showtime.getTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalTime showtimeTime = LocalTime.parse(showtimeTimeStr);
 
-        ZoneId calgaryZone = ZoneId.of("America/Edmonton");
-        ZonedDateTime calgaryZonedDateTime = ZonedDateTime.now(calgaryZone);
+        // Define format for parsing the date part of the showtime
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        // Extract the time part from ZonedDateTime (without the date)
-        LocalTime calgaryTime = calgaryZonedDateTime.toLocalTime();
+        // Parse the showtime date and time strings into LocalDate and LocalTime
+        LocalDate showtimeDate = LocalDate.parse(showtimeDateStr, dateFormatter);
+        LocalTime showtimeTime = LocalTime.parse(showtimeTimeStr, timeFormatter);
 
-        // Parse the date strings into LocalDate objects
-        LocalDate showtimeDate = LocalDate.parse(showtimeDateStr, formatter);
-        LocalDate currentDate = LocalDate.now();
+        // Combine date and time to form a ZonedDateTime object for showtime
+        ZonedDateTime showtimeZonedDateTime = ZonedDateTime.of(showtimeDate, showtimeTime, ZoneId.of("America/Edmonton"));
 
-        System.out.println("SHOWTIME DATE: " + showtimeDate);
-        System.out.println("CURRENT DATE: " + currentDate);
-        System.out.println("SHOWTIME TIME: " + showtimeTime);
-        System.out.println("CURRENT TIME: " + calgaryTime);
+        // Get the current time in Calgary (America/Edmonton time zone)
+        ZonedDateTime currentZonedDateTime = ZonedDateTime.now(ZoneId.of("America/Edmonton"));
 
-        // these following two will be useful for OU refund when i need to check 72hours....
-        long daysBetween = ChronoUnit.DAYS.between(showtimeDate, currentDate);
-        long hoursDifference = java.time.Duration.between(calgaryTime, showtimeTime).toHours();
+        // Calculate the difference in hours between the current time and the showtime
+        long hoursDifference = ChronoUnit.HOURS.between(currentZonedDateTime, showtimeZonedDateTime);
 
-        if (currentDate.isBefore(showtimeDate) || showtimeDate.isEqual(currentDate)) {
-            if(calgaryTime.isBefore(showtimeTime)) {
+        // Print out the details for debugging
+        System.out.println("Showtime: " + showtimeZonedDateTime);
+        System.out.println("Current time: " + currentZonedDateTime);
+        System.out.println("Hours difference: " + hoursDifference);
+
+        if (app.getCurrentUser() == 1) {
+            // Check for logged-in user (example condition for app.getCurrentUser() == 1)
+            if (currentZonedDateTime.isBefore(showtimeZonedDateTime)) {
                 valid = true;
+            }
+        }
+        else if (app.getCurrentUser() == 0) { // CHECK FOR GUEST USER
+            // For guest user, check if the showtime is at least 72 hours ahead of the current time
+            if (hoursDifference >= 72) {
+                valid = true;
+            } else {
+                System.out.println("Showtime is less than 72 hours away. Hours difference: " + hoursDifference);
             }
         }
 
         return valid;
     }
+
 
     public void updateButtonColor(JButton button, boolean unclicked) {
         if (unclicked) {
