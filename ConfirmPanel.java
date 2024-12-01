@@ -92,6 +92,7 @@ public class ConfirmPanel extends JPanel {
     }
 
     public void getInfo() {
+        clientPanel.removeAll();
         this.seat = app.getSelectedSeat();
         this.movie = app.getMovie();
         this.theatre = app.getTheatre();

@@ -168,7 +168,9 @@ public class MovieListPanel extends JPanel {
         seatPanel.setBackground(Orange);
         seatPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         seatPanel.setVisible(false);
-
+        seatPanel.setPreferredSize(new Dimension(300, 200)); // Adjust width and height as needed
+        seatPanel.setMaximumSize(seatPanel.getPreferredSize());
+        seatPanel.setMinimumSize(seatPanel.getPreferredSize());
         detailsPanel.add(seatPanel);
         detailsPanel.add(Box.createVerticalStrut(10)); // Add spacing
 

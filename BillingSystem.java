@@ -17,6 +17,7 @@ public class BillingSystem {
         String query = "INSERT INTO PAYMENT (RUID, Fname, Lname, CardNum, ExpiryDate, SecurityCode)\n" +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
+
         try{
             PreparedStatement statement = jdbc.dbConnect.prepareStatement(query);
             int ruid = payment.getRUID();
@@ -72,5 +73,31 @@ public class BillingSystem {
         }
         return payment;
     }
+
+    public boolean validatePayment(Payment payment) {
+        String cardNum = payment.getCardNum();
+        String cardPattern = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
+        if (!cardNum.matches(cardPattern)) {
+            System.out.println("Invalid card number.");
+            return false;
+        }
+
+        String expiryDate = payment.getExpiryDate();
+        String datePattern = "(0[1-9]|1[0-2])/\\d{2}";
+        if (!expiryDate.matches(datePattern)) {
+            System.out.println("Invalid expiry date .");
+            return false;
+        }
+
+        String securityCode = payment.getSecurityCode();
+        String securityCodePattern = "\\d{3}";
+        if (!securityCode.matches(securityCodePattern)) {
+            System.out.println("Invalid security code .");
+            return false;
+        }
+
+        return true;
+    }
+
 
 }

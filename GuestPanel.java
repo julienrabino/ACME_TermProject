@@ -15,6 +15,7 @@ public class GuestPanel extends JPanel {
         browseMovies.setForeground(Red);
         browseMovies.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                app.getMovieListPanel().updateMovieList();
                 app.switchToMovieList();
             }
         });
