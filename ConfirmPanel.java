@@ -17,6 +17,7 @@ public class ConfirmPanel extends JPanel {
     private JLabel theatreName;
     private JLabel seatName;
     private JLabel showtimeName;
+    private JLabel costName;
     private JPanel clientPanel;
     private GridBagConstraints gbc;
 
@@ -111,6 +112,8 @@ public class ConfirmPanel extends JPanel {
         String showtimeStr = showtime.getDate() + " @ " + showtime.getTime();
         showtimeName = new JLabel(showtimeStr);
         showtimeName.setForeground(Red);
+        costName = new JLabel("$12.50");
+        costName.setForeground(Red);
         //seatName = new JLabel(app.getSeat());
         JLabel movieLabel = new JLabel("Movie: ");
         movieLabel.setForeground(Red);
@@ -120,6 +123,8 @@ public class ConfirmPanel extends JPanel {
         seatLabel.setForeground(Red);
         JLabel showtimeLabel = new JLabel("Showtime: ");
         showtimeLabel.setForeground(Red);
+        JLabel costLabel = new JLabel("Cost: ");
+        costLabel.setForeground(Red);
 
         int row = 0;
         addComponent(clientPanel, movieLabel, 0, row, gbc);
@@ -132,6 +137,9 @@ public class ConfirmPanel extends JPanel {
         addComponent(clientPanel, seatName, 1, row++, gbc);
 
         addComponent(clientPanel, showtimeLabel, 0, row, gbc);
+        addComponent(clientPanel, showtimeName, 1, row++, gbc);
+
+        addComponent(clientPanel, costLabel, 0, row, gbc);
         addComponent(clientPanel, showtimeName, 1, row++, gbc);
 
         this.add(clientPanel, BorderLayout.CENTER);
