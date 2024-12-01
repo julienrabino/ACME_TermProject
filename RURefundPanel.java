@@ -35,6 +35,8 @@ public class RURefundPanel extends JPanel {
 
     private Seat seat;
 
+    private String email;
+
     public RURefundPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
         this.app = app;
         this.userDBM = userDBM;
@@ -70,10 +72,18 @@ public class RURefundPanel extends JPanel {
                 seat = ticketC.getSeatFromID(seatID);
 
                 if (validateRefund(showtime)) {
-                    // do refund process.....
+                    // UMMM MAYBE ADD WHAT CARD NUMBER IT REFUNDED TO IDK
+                    JOptionPane.showMessageDialog(app, "$12.50 sucessfully refunded to " + email);
+
+                    ticketC.changeRefunded(selectedTicket, true);
+                    displayPurchasedTickets(email);
+                    ticketC.changeSeatAvailability(seat, true);
+
                     System.out.println("VALID TICKET FOR REFUND. DO REFUND NOW ");
                 }
                 else {
+                    JOptionPane.showMessageDialog(app, "Valid time for refund has passed.");
+
                     System.out.println("NOT VALID TICKET FOR REFUND ");
 
                 }
@@ -94,6 +104,7 @@ public class RURefundPanel extends JPanel {
     }
 
     public void displayPurchasedTickets(String email) {
+        this.email = email;
         ticketsPanel.removeAll();  // Clear existing components
         // Retrieve payments for the current registered user
         this.tickets = ticketC.getTicketsFromEmail(email);
@@ -101,6 +112,7 @@ public class RURefundPanel extends JPanel {
 
 
         if (tickets == null || tickets.isEmpty()) {
+            submitButton.setEnabled(false);
             JLabel noTickets = new JLabel("No purchased tickets.");
             noTickets.setForeground(Red);
             noTickets.setHorizontalAlignment(SwingConstants.CENTER);
@@ -109,53 +121,66 @@ public class RURefundPanel extends JPanel {
         } else {
             // Loop through saved payments and create a button for each
             for (Ticket ticket : tickets) {
+                System.out.println("IN RU REFUND< TICKET FOR LOOP, TICKET ID IS " + ticket.getTicketID());
+                if (!ticket.getRefunded()) { // ONLY SHOW NON REFUNDED ONES HOPEFULLY
+                    System.out.println("TICKET NOT REFUNDED");
+                    int showtimeID = ticket.getShowtimeID();
+                    Showtime showtimeTemp = ticketC.getShowtimeFromID(showtimeID);
+                    Movie movieTemp = showtimeTemp.getMovie();
+                    Location theatreTemp = showtimeTemp.getLocation();
+                    int seatID = ticket.getSeatID();
+                    Seat seatTemp = ticketC.getSeatFromID(seatID);
 
-                int showtimeID = ticket.getShowtimeID();
-                Showtime showtimeTemp = ticketC.getShowtimeFromID(showtimeID);
-                Movie movieTemp = showtimeTemp.getMovie();
-                Location theatreTemp = showtimeTemp.getLocation();
-                int seatID = ticket.getSeatID();
-                Seat seatTemp = ticketC.getSeatFromID(seatID);
+                    JLabel cardNumLabel = new JLabel("<html>Movie: " + movieTemp.getTitle() + "<br>" +
+                            "Showtime: " + showtimeTemp.getDate() + " @ " + showtimeTemp.getTime() + "<br>" +
+                            "Seat: " + seatTemp.toString() + "<br>" +
+                            "Cost: $12.50 <br>" +
+                            ticket.toString() + "</html>");
 
-                JLabel cardNumLabel = new JLabel("<html>Movie: " + movieTemp.getTitle() + "<br>" +
-                        "Showtime: " + showtimeTemp.getDate() + " @ " + showtimeTemp.getTime() + "<br>" +
-                        "Seat: " + seatTemp.toString() + "<br>" +
-                        "Cost: $12.50 <br>" +
-                        ticket.toString() + "</html>");
+                    cardNumLabel.setForeground(Red);
+                    JButton selectTicketButton = new JButton("Select");
+                    selectTicketButton.setForeground(Red);
+                    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-                cardNumLabel.setForeground(Red);
-                JButton selectTicketButton = new JButton("Select");
-                selectTicketButton.setForeground(Red);
 
-                JPanel buttonPanel = new JPanel( new FlowLayout(FlowLayout.CENTER));
-                buttonPanel.add(cardNumLabel);
-                buttonPanel.add(selectTicketButton);
-                buttonPanel.setBackground(Yellow);
-                selectTicketButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (currentSelectTicketButton == selectTicketButton) {
-                            updateButtonColor(selectTicketButton, true);
-                            currentSelectTicketButton = null;
-                            submitButton.setEnabled(false);
-                        } else {
-                            updateButtonColor(selectTicketButton, false);
-                            submitButton.setEnabled(true);
-                            currentSelectTicketButton = selectTicketButton;
-                            selectedTicket = ticket;
+                    buttonPanel.add(cardNumLabel);
+                    buttonPanel.add(selectTicketButton);
+                    buttonPanel.setBackground(Yellow);
+                    selectTicketButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (currentSelectTicketButton == selectTicketButton) {
+                                updateButtonColor(selectTicketButton, true);
+                                currentSelectTicketButton = null;
+                                submitButton.setEnabled(false);
+                            } else {
+                                updateButtonColor(selectTicketButton, false);
+                                submitButton.setEnabled(true);
+                                currentSelectTicketButton = selectTicketButton;
+                                selectedTicket = ticket;
+                            }
                         }
-                    }
-                });
+                    });
 
-                // Add the label and the select button for each saved payment
-                ticketsPanel.add(buttonPanel);
+
+                    // Add the label and the select button for each saved payment
+                    ticketsPanel.add(buttonPanel);
+                }
+                else {
+                    submitButton.setEnabled(false);
+                    JLabel noTickets = new JLabel("No purchased tickets.");
+                    noTickets.setForeground(Red);
+                    noTickets.setHorizontalAlignment(SwingConstants.CENTER);
+                    noTickets.setVerticalAlignment(SwingConstants.CENTER);
+                    ticketsPanel.add(noTickets);
+                }
             }
         }
 
         ticketsPanel.revalidate();  // Ensure layout updates after adding components
         ticketsPanel.repaint();     // Ensure repaint of the panel
     }
-    
+
 
     private boolean validateRefund(Showtime showtime) {
         boolean valid = false;

@@ -91,6 +91,7 @@ public class TicketController {
                 String date = results.getString("DatePurchased");
                 int refund = results.getInt("Refunded");
                 int seatID = results.getInt("SeatID");
+                System.out.println("IN GET TICKETS FROM EMAIL, TICKET ID IS " + ticketID);
 
                 // Determine if ticket is refunded
                 boolean refunded = refund == 1;
@@ -292,6 +293,44 @@ public class TicketController {
             e.printStackTrace();
         }
         return seat;
+    }
+
+    public void changeRefunded(Ticket ticket, boolean refunded) {
+        int ticketID = ticket.getTicketID();
+        System.out.println("IN CHANGE REFUNDED FUNC, TICKET ID IS " + ticketID);
+        String query = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Update query that uses the 'available' parameter
+            query = "UPDATE TICKET SET Refunded = ? WHERE TicketID = ?;";
+
+            // Prepare the statement
+            statement = jdbc.dbConnect.prepareStatement(query);
+            int ref = 0;
+            if (refunded){
+                ref = 1;
+            }
+
+            // Set the parameters
+            statement.setInt(1, ref);  // Set the 'Available' value
+            statement.setInt(2, ticketID);  // Set the SeatID for which you want to update availability
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();  // Use executeUpdate for non-SELECT queries
+
+            if (rowsAffected > 0) {
+                System.out.println("Ticket refund updated successfully.");
+            } else {
+                System.out.println("No rows affected.");
+            }
+
+            // Close the statement
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
