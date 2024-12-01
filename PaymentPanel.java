@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-
+import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 public class PaymentPanel extends JPanel {
     private  BillingSystem billingS;
     private TicketController ticketC;
@@ -91,7 +93,12 @@ public class PaymentPanel extends JPanel {
                         System.out.println("JUST ADDED PAYMENT PANEL PAYMENT TO DB");
                         Payment payment1 = billingS.getPaymentFromCard(payment.getCardNum());
                         app.setSelectedPayment(payment1);
-                        Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(), Reg, false);
+                        LocalDate currentDate = LocalDate.now();
+                        LocalTime currentTime = LocalTime.now();
+                        String timePurchased = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                        String datePurchased = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
+                        Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(), datePurchased, timePurchased, Reg, false);
                         if (ticketC.addTicket(ticket)) {
                             ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                             String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();

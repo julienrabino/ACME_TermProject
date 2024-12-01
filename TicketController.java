@@ -53,7 +53,7 @@ public class TicketController {
                 } else {
                     refunded = true;
                 }
-                Ticket ticket = new Ticket(ticketID, showtimeID, seatID, RUID, email, cost, paymentID, refunded);
+                Ticket ticket = new Ticket(ticketID, showtimeID, seatID, RUID, email, cost, paymentID, date, time, refunded);
                 tickets.add(ticket);
             }
 
@@ -63,6 +63,53 @@ public class TicketController {
         }
         return tickets;
     }
+    public ArrayList<Ticket> getTicketsFromEmail(String email) {
+        ResultSet results;
+        ArrayList<Ticket> tickets = new ArrayList<>();
+
+        // SQL query to fetch tickets by email
+        String query = "SELECT * FROM TICKET AS T WHERE T.Email = ?";
+
+        try {
+            // Use PreparedStatement to prevent SQL injection
+            PreparedStatement myStmt = jdbc.dbConnect.prepareStatement(query);
+
+            // Set the email parameter in the query
+            myStmt.setString(1, email);
+
+            // Execute the query
+            results = myStmt.executeQuery();
+
+            // Process the results
+            while (results.next()) {
+                int ticketID = results.getInt("TicketID");
+                int showtimeID = results.getInt("ShowtimeID");
+                int RUID = results.getInt("RUID");
+                int paymentID = results.getInt("PaymentID");
+                double cost = results.getDouble("Cost");
+                String time = results.getString("TimePurchased");
+                String date = results.getString("DatePurchased");
+                int refund = results.getInt("Refunded");
+                int seatID = results.getInt("SeatID");
+
+                // Determine if ticket is refunded
+                boolean refunded = refund == 1;
+
+                // Create a Ticket object and add to the list
+                Ticket ticket = new Ticket(ticketID, showtimeID, seatID, RUID, email, cost, paymentID, date, time, refunded);
+                tickets.add(ticket);
+            }
+
+            // Close statement
+            myStmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return tickets;
+    }
+
+
 
     public boolean addTicket(Ticket ticket) {
         // Takes ticket and saves it on DB

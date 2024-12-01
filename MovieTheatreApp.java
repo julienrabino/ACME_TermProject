@@ -90,6 +90,9 @@ public class MovieTheatreApp extends JFrame {
     public LoginPanel getLoginPanel(){
         return loginPanel;
     }
+    public GuestPanel getGuestPanel(){
+        return guestPanel;
+    }
     public UserDatabaseManager getUserDBM(){
         return userDBM;
     }

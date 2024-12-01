@@ -48,7 +48,10 @@ public class LoginPanel extends JPanel {
                     System.out.println("Logged in successfully");
                     usrInput.setText("");
                     pwInput.setText("");
-                    app.switchToRegistered();
+                    //app.switchToRegistered();
+                    GuestPanel guest = app.getGuestPanel();
+                    guest.updateButtons();
+                    app.switchToGuest();
 
                 }
             }

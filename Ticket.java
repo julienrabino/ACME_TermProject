@@ -13,6 +13,8 @@ public class Ticket {
     private String paymentMethod;
     private boolean ticketStatus;
     private boolean refunded;
+    private String datePurchased;
+    private String timePurchased;
     private boolean isAnRUSeat; //boolean to check if the ticket saves a seat that was reserved for an RU
 
 
@@ -39,7 +41,7 @@ public class Ticket {
         this.refunded = refunded;
         this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
     }
-    public Ticket(int ticketID, int showtimeID, int seatID,  int RUID, String email,  double ticketPrice, int paymentID,  boolean refunded){
+    public Ticket(int ticketID, int showtimeID, int seatID,  int RUID, String email,  double ticketPrice, int paymentID,  String datePurchased, String timePurchased, boolean refunded){
         this.ticketID = ticketID;
         this.showtimeID = showtimeID;
         this.RUID = RUID;
@@ -51,7 +53,7 @@ public class Ticket {
         this.refunded = refunded;
         this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
     }
-    public Ticket(Showtime showtime, Seat seat,  RegisteredUser RU, String email,  double ticketPrice, Payment payment, boolean isAnRUSeat, boolean refunded){
+    public Ticket(Showtime showtime, Seat seat,  RegisteredUser RU, String email,  double ticketPrice, Payment payment,  String datePurchased, String timePurchased, boolean isAnRUSeat, boolean refunded){
         this.showtime = showtime;
         this.RU = RU;
         this.email = email;

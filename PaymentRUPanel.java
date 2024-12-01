@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class PaymentRUPanel extends JPanel {
@@ -51,9 +54,13 @@ public class PaymentRUPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Handle the action for using another payment method
                 app.setSelectedPayment(selectedPayment);
+                LocalDate currentDate = LocalDate.now();
+                LocalTime currentTime = LocalTime.now();
+                String timePurchased = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                String datePurchased = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
                 System.out.println("payed");
                 System.out.println(selectedPayment.toString());
-                Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), app.getRU().getEmail(), 12.50, app.getSelectedPayment(), true, false);
+                Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), app.getRU().getEmail(), 12.50, app.getSelectedPayment(), datePurchased, timePurchased, true, false);
                 ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                 ticketC.addTicket(ticket);
                 String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();

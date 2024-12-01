@@ -76,6 +76,8 @@ public class InitialPanel extends JPanel {
         guestButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 app.setCurrentUser(0); // Indicate that the current user is a guest
+                GuestPanel guest = app.getGuestPanel();
+                guest.updateButtons();
                 app.switchToGuest();
             }
         });

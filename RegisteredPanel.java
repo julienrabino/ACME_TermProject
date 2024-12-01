@@ -49,9 +49,6 @@ public class RegisteredPanel extends JPanel {
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(bottomPanel, BorderLayout.SOUTH);
 
-
-
-
     }
 
 }
