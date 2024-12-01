@@ -115,7 +115,7 @@ public class MovieTheatreApp extends JFrame {
         movieTC = new MovieTheatreController(db);
         userDBM = new UserDatabaseManager(db);
         ticketC = new TicketController(db);
-        billingS = new BillingSystem(db);
+        billingS = new BillingSystem(db, this);
         // set up the main container with CardLayout
         cards = new JPanel(cardLayout);
 

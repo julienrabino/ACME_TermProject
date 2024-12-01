@@ -83,7 +83,7 @@ public class PaymentPanel extends JPanel {
 
 
                 Payment payment = new Payment(ruid, fnameField.getText(), lnameField.getText(), cardNumField.getText(), expiryDateField.getText(), securityCodeField.getText());
-                if (billingS.validatePayment(payment)) {
+                if (billingS.validatePayment(payment, emailField.getText())) {
                     System.out.println("Payment details have valid patterns.");
 
                     if (billingS.addPayment(payment)) {

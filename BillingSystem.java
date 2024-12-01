@@ -1,14 +1,17 @@
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.regex.Pattern;
 
 public class BillingSystem {
 
     private myJDBC jdbc;
+    private MovieTheatreApp app;
 
 
-    BillingSystem(myJDBC jdbc){
+    BillingSystem(myJDBC jdbc, MovieTheatreApp app){
         this.jdbc = jdbc;
 
 
@@ -74,10 +77,11 @@ public class BillingSystem {
         return payment;
     }
 
-    public boolean validatePayment(Payment payment) {
+    public boolean validatePayment(Payment payment, String email) {
         String cardNum = payment.getCardNum();
         String cardPattern = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
         if (!cardNum.matches(cardPattern)) {
+            JOptionPane.showMessageDialog(app, "Invalid card number. Card number must be in form 'xxxx-xxxx-xxxx-xxxx'");
             System.out.println("Invalid card number.");
             return false;
         }
@@ -85,6 +89,7 @@ public class BillingSystem {
         String expiryDate = payment.getExpiryDate();
         String datePattern = "(0[1-9]|1[0-2])/\\d{2}";
         if (!expiryDate.matches(datePattern)) {
+            JOptionPane.showMessageDialog(app, "Invalid expiry date.");
             System.out.println("Invalid expiry date .");
             return false;
         }
@@ -92,7 +97,13 @@ public class BillingSystem {
         String securityCode = payment.getSecurityCode();
         String securityCodePattern = "\\d{3}";
         if (!securityCode.matches(securityCodePattern)) {
+            JOptionPane.showMessageDialog(app, "Invalid security code. Must be 3 digits (e.g. 123)");
             System.out.println("Invalid security code .");
+            return false;
+        }
+        String emailRegex = "^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}$";
+        if (!Pattern.matches(emailRegex, email)) {
+            JOptionPane.showMessageDialog(app, "Invalid email format. Only letters, numbers, '_', '.', and '@' are allowed.");
             return false;
         }
 
