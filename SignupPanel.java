@@ -98,7 +98,8 @@ public class SignupPanel extends JPanel {
                     // add to database
                     app.setRU(RU);
                     app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
-                    app.switchToMovieList();
+                    JOptionPane.showMessageDialog(app, "Please login with your credentials.");
+                    app.switchToInitial();
                     fnameInput.setText("");
                     lnameInput.setText("");
                     emailInput.setText("");

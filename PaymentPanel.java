@@ -87,16 +87,18 @@ public class PaymentPanel extends JPanel {
                     if (billingS.addPayment(payment)) {
 
                         System.out.println("JUST ADDED PAYMENT PANEL PAYMENT TO DB");
-                        //Payment payment1 = billingS.getPaymentFromCard(payment.getCardNum());
-                        app.setSelectedPayment(payment);
+                        Payment payment1 = billingS.getPaymentFromCard(payment.getCardNum());
+                        app.setSelectedPayment(payment1);
                         Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(), Reg, false);
-                        ticketC.addTicket(ticket);
-                        ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
-                        String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();
-                        JOptionPane.showMessageDialog(app, message);
-                        MovieListPanel movieListPanel = app.getMovieListPanel();
-                        movieListPanel.displaySeatMap(app.getSelectedShowtime());
-                        app.switchToMovieList();
+                        if (ticketC.addTicket(ticket)) {
+                            ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
+                            String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();
+                            JOptionPane.showMessageDialog(app, message);
+                            MovieListPanel movieListPanel = app.getMovieListPanel();
+                            movieListPanel.displaySeatMap(app.getSelectedShowtime());
+
+                            app.switchToMovieList();
+                        }
                     } else {
                         JOptionPane.showMessageDialog(app, "Failed to add payment to the database. Please try again.");
                     }
