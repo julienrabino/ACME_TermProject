@@ -17,6 +17,12 @@ public class Ticket {
     private String timePurchased;
     private boolean isAnRUSeat; //boolean to check if the ticket saves a seat that was reserved for an RU
 
+    @Override
+    public String toString() {
+        // Return a string in the format: "TicketID: [ticketID], Date Purchased: [datePurchased], Time Purchased: [timePurchased]"
+        return "TicketID: " + ticketID + ", Date Purchased: " + datePurchased + ", Time Purchased: " + timePurchased;
+    }
+
 
     public Ticket(int ticketID, Showtime showtime, RegisteredUser RU, Seat seat, double ticketPrice, String paymentMethod, boolean isAnRUSeat ){
         this.ticketID = ticketID;
@@ -49,6 +55,8 @@ public class Ticket {
         this.seatID = seatID;
         this.ticketPrice = ticketPrice;
         this.paymentID = paymentID;
+        this.datePurchased = datePurchased;
+        this.timePurchased = timePurchased;
         //this.isAnRUSeat = isAnRUSeat;
         this.refunded = refunded;
         this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
@@ -61,6 +69,8 @@ public class Ticket {
         this.ticketPrice = ticketPrice;
         this.payment = payment;
         this.isAnRUSeat = isAnRUSeat;
+        this.datePurchased = datePurchased;
+        this.timePurchased = timePurchased;
         this.refunded = refunded;
         this.ticketStatus = true; // ticketStatus is TRUE when it is still a valid ticket
     }
@@ -89,6 +99,18 @@ public class Ticket {
     public Payment getPayment() {
         return payment;
     }
+    public void setShowtimeID(int id) {
+        this.showtimeID = id;
+    }
+    public int getShowtimeID() {
+        return showtimeID;
+    }
+    public void setSeatID(int id) {
+        this.seatID = id;
+    }
+    public int getSeatID() {
+        return seatID;
+    }
 
     public void setTicketID(int ticketID) {
         this.ticketID = ticketID;
@@ -113,6 +135,22 @@ public class Ticket {
     // getters
     public String getPaymentMethod() {
         return paymentMethod;
+    }
+    public String getDatePurchased() {
+        return datePurchased;
+    }
+
+    public void setDatePurchased(String datePurchased) {
+        this.datePurchased = datePurchased;
+    }
+
+    // Getters and Setters for timePurchased
+    public String getTimePurchased() {
+        return timePurchased;
+    }
+
+    public void setTimePurchased(String timePurchased) {
+        this.timePurchased = timePurchased;
     }
     public Seat getSeat() {
         return seat;

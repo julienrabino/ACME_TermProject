@@ -97,8 +97,13 @@ public class PaymentPanel extends JPanel {
                         LocalTime currentTime = LocalTime.now();
                         String timePurchased = currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
                         String datePurchased = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE);
-
+                        System.out.println(datePurchased);
+                        System.out.println(timePurchased);
                         Ticket ticket = new Ticket(app.getSelectedShowtime(), app.getSelectedSeat(), app.getRU(), emailField.getText(), 12.50, app.getSelectedPayment(), datePurchased, timePurchased, Reg, false);
+                        System.out.println("JUST MADE NEW TICKET VAR IN PAYMENT PANEL");
+                        System.out.println(ticket.getDatePurchased());
+                        System.out.println(ticket.getTimePurchased());
+
                         if (ticketC.addTicket(ticket)) {
                             ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                             String message = "Ticket purchased successfully! Sent to " + ticket.getEmail();

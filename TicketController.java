@@ -154,8 +154,8 @@ public class TicketController {
                 statement.setNull(5, Types.INTEGER); // Set null for PaymentID if payment is not available
             }
             statement.setString(6, ticket.getEmail()); // Email
-            statement.setString(7, formattedTime); // TimePurchased
-            statement.setString(8, formattedDate); // DatePurchased
+            statement.setString(7, ticket.getTimePurchased()); // TimePurchased
+            statement.setString(8, ticket.getDatePurchased()); // DatePurchased
             statement.setInt(9, 0); // Refunded (0 for not refunded, 1 for refunded)
 
             // Execute the query

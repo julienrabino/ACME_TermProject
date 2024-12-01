@@ -52,13 +52,14 @@ public class MovieListPanel extends JPanel {
             currentShowtimeButton = null;
             app.setSelectedShowtime(null);
             submitButton.setVisible(false);
-            if(app.getCurrentUser() == 0){
-                System.out.println("Going to Guest view.");
-                app.switchToGuest();
-            } else if (app.getCurrentUser() == 1){
-                System.out.println("Going to Registered view.");
-                app.switchToRegistered();
-            }
+            app.switchToGuest(); // bc i got rid of registered panel so just one anel for both RU and OU
+//            if(app.getCurrentUser() == 0){
+//                System.out.println("Going to Guest view.");
+//                app.switchToGuest();
+//            } else if (app.getCurrentUser() == 1){
+//                System.out.println("Going to Registered view.");
+//                app.switchToRegistered();
+//            }
 
 
             });
