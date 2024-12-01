@@ -140,7 +140,7 @@ public class ConfirmPanel extends JPanel {
         addComponent(clientPanel, showtimeName, 1, row++, gbc);
 
         addComponent(clientPanel, costLabel, 0, row, gbc);
-        addComponent(clientPanel, showtimeName, 1, row++, gbc);
+        addComponent(clientPanel, costName, 1, row++, gbc);
 
         this.add(clientPanel, BorderLayout.CENTER);
     }
