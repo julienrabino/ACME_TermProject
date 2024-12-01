@@ -49,7 +49,7 @@ public class MovieTheatreController {
     }
 
     public ArrayList<Seat> fetchSeats(int showtimeID) {
-        String query = "SELECT seatID, seatRow, seatColumn, Available, RUReserved FROM SEAT WHERE Showtime = ?";
+        String query = "SELECT seatID, seatRow, seatColumn, Showtime, Available, RUReserved FROM SEAT WHERE Showtime = ?";
         ArrayList<Seat> seats = new ArrayList<>();
         PreparedStatement statement = null;
 
@@ -61,12 +61,13 @@ public class MovieTheatreController {
 
             while (results.next()) {
                 int seatID = results.getInt("seatID");
+                int showtimeid = results.getInt("Showtime");
                 char seatRow = results.getString("seatRow").charAt(0);  // Assuming seatRow is a single character
                 int seatColumn = results.getInt("seatColumn");
                 boolean isAvailable = results.getBoolean("Available");
                 boolean isRUReserved = results.getBoolean("RUReserved");
 
-                Seat seat = new Seat(seatID, seatRow, seatColumn, isRUReserved, isAvailable);
+                Seat seat = new Seat(seatID, seatRow, seatColumn, showtimeid, isRUReserved, isAvailable);
                 seats.add(seat);
             }
             statement.close();

@@ -91,6 +91,7 @@ public class TicketController {
                 String date = results.getString("DatePurchased");
                 int refund = results.getInt("Refunded");
                 int seatID = results.getInt("SeatID");
+                System.out.println("IN GET TICKETS FROM EMAIL, TICKET ID IS " + ticketID);
 
                 // Determine if ticket is refunded
                 boolean refunded = refund == 1;
@@ -167,6 +168,169 @@ public class TicketController {
         }
 
         return false; // Return false if there was an error
+    }
+
+    public Showtime getShowtimeFromID(int id) {
+        String query = null;
+        Showtime showtime = null;
+        Movie movie = null;
+        Location theatre = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            query = "SELECT * FROM SHOWTIME AS S WHERE S.ShowtimeID  = ?";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+
+                int movieID = results.getInt("MovieID");
+                int theatreID = results.getInt("TheatreID");
+                String showDate = results.getString("ShowDate");
+                String showTime = results.getString("ShowTime");
+
+                movie = getMovieFromID(movieID);
+                theatre = getTheatreFromID(theatreID);
+                showtime = new Showtime( id, movie, showDate, showTime, theatre);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return showtime;
+    }
+
+    public Movie getMovieFromID(int id) {
+        String query = null;
+        Movie movie = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            query = "SELECT * FROM MOVIE AS M WHERE M.MovieID  = ?";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+
+                String title = results.getString("Title");
+                String genre = results.getString("Genre");
+                String releaseDate = results.getString("ReleaseDate");
+
+                movie = new Movie(id, title, genre, releaseDate);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movie;
+    }
+
+    public Location getTheatreFromID(int id) {
+        String query = null;
+        Location location = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            query = "SELECT * FROM THEATRE AS T WHERE T.TheatreID  = ?";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+
+                String address = results.getString("Address");
+                String name = results.getString("TheatreName");
+
+                location = new Location(address, name,id);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return location;
+    }
+
+    public Seat getSeatFromID(int id) {
+        String query = null;
+        Seat seat = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            query = "SELECT * FROM SEAT AS S WHERE S.SeatID  = ?";
+            statement = jdbc.dbConnect.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+
+                int showtimeID = results.getInt("Showtime");
+                String seatRowStr = results.getString("SeatRow");
+                int col = results.getInt("SeatColumn");
+                boolean available = results.getBoolean("Available");
+                boolean RUreserved = results.getBoolean("RUReserved");
+
+                char row = (seatRowStr != null && seatRowStr.length() > 0) ? seatRowStr.charAt(0) : ' ';
+
+
+                seat = new Seat(id,  row, col, showtimeID,RUreserved, available);
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seat;
+    }
+
+    public void changeRefunded(Ticket ticket, boolean refunded) {
+        int ticketID = ticket.getTicketID();
+        System.out.println("IN CHANGE REFUNDED FUNC, TICKET ID IS " + ticketID);
+        String query = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Update query that uses the 'available' parameter
+            query = "UPDATE TICKET SET Refunded = ? WHERE TicketID = ?;";
+
+            // Prepare the statement
+            statement = jdbc.dbConnect.prepareStatement(query);
+            int ref = 0;
+            if (refunded){
+                ref = 1;
+            }
+
+            // Set the parameters
+            statement.setInt(1, ref);  // Set the 'Available' value
+            statement.setInt(2, ticketID);  // Set the SeatID for which you want to update availability
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();  // Use executeUpdate for non-SELECT queries
+
+            if (rowsAffected > 0) {
+                System.out.println("Ticket refund updated successfully.");
+            } else {
+                System.out.println("No rows affected.");
+            }
+
+            // Close the statement
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

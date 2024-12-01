@@ -112,6 +112,13 @@ public class Ticket {
         return seatID;
     }
 
+    public void setRefunded(boolean ref) {
+        this.refunded = ref;
+    }
+    public boolean getRefunded() {
+        return refunded;
+    }
+
     public void setTicketID(int ticketID) {
         this.ticketID = ticketID;
     }

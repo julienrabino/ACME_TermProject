@@ -47,8 +47,7 @@ public class GuestPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (app.getCurrentUser() == 0){
-                    // do refund for guest (maybe make them type in email)
-                    JOptionPane.showMessageDialog(app, "Please log in to proceed with refund.");
+                    app.switchToOURefundPanel();
                 }
                 else {
                     RURefundPanel refund = app.getRURefundPanel();

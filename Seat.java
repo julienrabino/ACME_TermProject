@@ -6,10 +6,13 @@ public class Seat {
     private int seatCol;
     private boolean isRUReserved; // for seats that are first-come first-served reserved by RUs.
     private boolean isAvailable;
-    public Seat(int seatID, char seatRow, int seatCol, boolean isAnRUSeat, boolean isAvailable) {
+
+    private int showtimeID;
+    public Seat(int seatID, char seatRow, int seatCol, int showtimeID, boolean isAnRUSeat, boolean isAvailable) {
         this.seatID = seatID;
         this.seatRow = seatRow;
         this.seatCol = seatCol;
+        this.showtimeID = showtimeID;
         this.isRUReserved = isAnRUSeat;
         this.isAvailable = isAvailable;
     }

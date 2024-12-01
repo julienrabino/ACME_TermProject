@@ -20,6 +20,7 @@ public class MovieTheatreApp extends JFrame {
     private PayAnnualFeePanel payAnnualFeePanel;
 
     private AdminPanel adminPanel;
+    private OURefundPanel OURefundPanel;
     private PaymentRUPanel paymentRUPanel;
     private PaymentPanel paymentPanel;
     private RegisteredPanel registeredPanel;
@@ -142,6 +143,7 @@ public class MovieTheatreApp extends JFrame {
         RURefundPanel = new RURefundPanel(this, userDBM, ticketC);
         payAnnualFeePanel = new PayAnnualFeePanel(this, userDBM, billingS);
         
+        OURefundPanel = new OURefundPanel(this, userDBM);
 
 
         cards.add(loginPanel, "Login");
@@ -155,6 +157,8 @@ public class MovieTheatreApp extends JFrame {
         cards.add(paymentRUPanel, "PaymentRU");
         cards.add(registeredPanel, "Registered");
         cards.add(RURefundPanel, "RURefund");
+        cards.add(OURefundPanel, "OURefund");
+
         cards.add(payAnnualFeePanel, "PayAnnualFee");
 
 
@@ -214,6 +218,11 @@ public class MovieTheatreApp extends JFrame {
     public void switchToRURefundPanel(){
         cardLayout.show(cards,"RURefund");
     }
+
+    public void switchToOURefundPanel(){
+        cardLayout.show(cards,"OURefund");
+    }
+
 
     public void switchToPayAnnualFee(){
         cardLayout.show(cards, "PayAnnualFee");
