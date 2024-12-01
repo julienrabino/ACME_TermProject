@@ -52,7 +52,7 @@ public class UserDatabaseManager {
 
     public void insertRU(RegisteredUser RU) {
         String Fname = RU.getFname();
-        String Lname = RU.getFname();
+        String Lname = RU.getLname();
         String usr = RU.getUsername();
         String pw = RU.getPassword();
         String email = RU.getEmail();

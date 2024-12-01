@@ -35,6 +35,7 @@ public class RegisteredUser extends User{
     }
     public RegisteredUser(String Fname, String Lname, String username, String password, String email, String Address, LocalDate expiryDate, LocalDate joinDate, boolean paymentMethodSaved ){
 
+
         super(Fname, Lname, email); // calls ctor of base class User
         this.expiryDate = expiryDate;
         this.joinDate = joinDate;
