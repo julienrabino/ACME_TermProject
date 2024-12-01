@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class RURefundPanel extends JPanel {
     private final Color Red = new Color(139, 0, 0);
@@ -25,6 +28,12 @@ public class RURefundPanel extends JPanel {
     private Ticket selectedTicket;
 
     private TicketController ticketC;
+
+    private Showtime showtime;
+    private Movie movie;
+    private Location theatre;
+
+    private Seat seat;
 
     public RURefundPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
         this.app = app;
@@ -54,6 +63,20 @@ public class RURefundPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //  NEED TO CHECK DATE OF SHOWTIME AND GET CURRENT DATE AND SEE IF U CAN REFUND IT
                 int showtimeID = selectedTicket.getShowtimeID();
+                showtime = ticketC.getShowtimeFromID(showtimeID);
+                movie = showtime.getMovie();
+                theatre = showtime.getLocation();
+                int seatID = selectedTicket.getSeatID();
+                seat = ticketC.getSeatFromID(seatID);
+
+                if (validateRefund(showtime)) {
+                    // do refund process.....
+                    System.out.println("VALID TICKET FOR REFUND. DO REFUND NOW ");
+                }
+                else {
+                    System.out.println("NOT VALID TICKET FOR REFUND ");
+
+                }
                 // need db function to get showtime from its id. then get the time and date and whatever other info..
             }
         });
@@ -86,7 +109,20 @@ public class RURefundPanel extends JPanel {
         } else {
             // Loop through saved payments and create a button for each
             for (Ticket ticket : tickets) {
-                JLabel cardNumLabel = new JLabel(ticket.toString());  // Display payment details
+
+                int showtimeID = ticket.getShowtimeID();
+                Showtime showtimeTemp = ticketC.getShowtimeFromID(showtimeID);
+                Movie movieTemp = showtimeTemp.getMovie();
+                Location theatreTemp = showtimeTemp.getLocation();
+                int seatID = ticket.getSeatID();
+                Seat seatTemp = ticketC.getSeatFromID(seatID);
+
+                JLabel cardNumLabel = new JLabel("<html>Movie: " + movieTemp.getTitle() + "<br>" +
+                        "Showtime: " + showtimeTemp.getDate() + " @ " + showtimeTemp.getTime() + "<br>" +
+                        "Seat: " + seatTemp.toString() + "<br>" +
+                        "Cost: $12.50 <br>" +
+                        ticket.toString() + "</html>");
+
                 cardNumLabel.setForeground(Red);
                 JButton selectTicketButton = new JButton("Select");
                 selectTicketButton.setForeground(Red);
@@ -118,6 +154,41 @@ public class RURefundPanel extends JPanel {
 
         ticketsPanel.revalidate();  // Ensure layout updates after adding components
         ticketsPanel.repaint();     // Ensure repaint of the panel
+    }
+
+    private boolean validateRefund(Showtime showtime) {
+        boolean valid = false;
+        String showtimeDateStr = showtime.getDate();
+        String showtimeTimeStr = showtime.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalTime showtimeTime = LocalTime.parse(showtimeTimeStr);
+
+        ZoneId calgaryZone = ZoneId.of("America/Edmonton");
+        ZonedDateTime calgaryZonedDateTime = ZonedDateTime.now(calgaryZone);
+
+        // Extract the time part from ZonedDateTime (without the date)
+        LocalTime calgaryTime = calgaryZonedDateTime.toLocalTime();
+
+        // Parse the date strings into LocalDate objects
+        LocalDate showtimeDate = LocalDate.parse(showtimeDateStr, formatter);
+        LocalDate currentDate = LocalDate.now();
+
+        System.out.println("SHOWTIME DATE: " + showtimeDate);
+        System.out.println("CURRENT DATE: " + currentDate);
+        System.out.println("SHOWTIME TIME: " + showtimeTime);
+        System.out.println("CURRENT TIME: " + calgaryTime);
+
+        // these following two will be useful for OU refund when i need to check 72hours....
+        long daysBetween = ChronoUnit.DAYS.between(showtimeDate, currentDate);
+        long hoursDifference = java.time.Duration.between(calgaryTime, showtimeTime).toHours();
+
+        if (currentDate.isBefore(showtimeDate) || showtimeDate.isEqual(currentDate)) {
+            if(calgaryTime.isBefore(showtimeTime)) {
+                valid = true;
+            }
+        }
+
+        return valid;
     }
 
     public void updateButtonColor(JButton button, boolean unclicked) {

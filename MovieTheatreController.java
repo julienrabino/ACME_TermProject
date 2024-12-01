@@ -61,12 +61,13 @@ public class MovieTheatreController {
 
             while (results.next()) {
                 int seatID = results.getInt("seatID");
+                int showtimeid = results.getInt("ShowtimeID");
                 char seatRow = results.getString("seatRow").charAt(0);  // Assuming seatRow is a single character
                 int seatColumn = results.getInt("seatColumn");
                 boolean isAvailable = results.getBoolean("Available");
                 boolean isRUReserved = results.getBoolean("RUReserved");
 
-                Seat seat = new Seat(seatID, seatRow, seatColumn, isRUReserved, isAvailable);
+                Seat seat = new Seat(seatID, seatRow, seatColumn, showtimeid, isRUReserved, isAvailable);
                 seats.add(seat);
             }
             statement.close();
