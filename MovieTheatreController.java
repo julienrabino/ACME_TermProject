@@ -118,9 +118,14 @@ public class MovieTheatreController {
         ArrayList<Movie> movies = new ArrayList<>();
 
         try {
-            Statement myStmt = jdbc.dbConnect.createStatement();
-            results = myStmt.executeQuery("SELECT M.MovieID, M.Title, M.Genre " +
-                    "FROM MOVIE AS M WHERE LOCATE(LOWER('" + search + "'), LOWER(M.Title)) > 0;");
+
+            String query = "SELECT M.MovieID, M.Title, M.Genre, M.ReleaseDate " +
+                    "FROM MOVIE AS M WHERE LOCATE(LOWER(?), LOWER(M.Title)) > 0;";
+
+            PreparedStatement myStmt = jdbc.dbConnect.prepareStatement(query);
+            myStmt.setString(1, search.toLowerCase());  
+
+            results = myStmt.executeQuery();
 
             while (results.next()) {
                 int movieID = results.getInt("MovieID");
@@ -139,6 +144,7 @@ public class MovieTheatreController {
 
         return movies;
     }
+
 
     public ArrayList<Showtime> fetchShowtimes(Location location, Movie movie) {
         ArrayList<Showtime> showtimes = new ArrayList<>();
