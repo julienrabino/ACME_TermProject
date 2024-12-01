@@ -115,7 +115,7 @@ public class PaymentRUPanel extends JPanel {
         } else {
             // Loop through saved payments and create a button for each
             for (Payment payment : payments) {
-                JLabel cardNumLabel = new JLabel(payment.toString());  // Display payment details
+                JLabel cardNumLabel = new JLabel("Card: " + payment.toString());  // Display payment details
                 cardNumLabel.setForeground(Red);
                 JButton selectPaymentButton = new JButton("Select");
                 selectPaymentButton.setForeground(Red);

@@ -86,7 +86,7 @@ public class RURefundPanel extends JPanel {
         } else {
             // Loop through saved payments and create a button for each
             for (Ticket ticket : tickets) {
-                JLabel cardNumLabel = new JLabel("Card ending in: " + ticket.toString());  // Display payment details
+                JLabel cardNumLabel = new JLabel(ticket.toString());  // Display payment details
                 cardNumLabel.setForeground(Red);
                 JButton selectTicketButton = new JButton("Select");
                 selectTicketButton.setForeground(Red);
