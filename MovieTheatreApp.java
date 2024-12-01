@@ -17,6 +17,7 @@ public class MovieTheatreApp extends JFrame {
     private GuestPanel guestPanel;
     private ConfirmPanel confirmPanel;
     private RURefundPanel RURefundPanel;
+    private PayAnnualFeePanel payAnnualFeePanel;
 
     private AdminPanel adminPanel;
     private PaymentRUPanel paymentRUPanel;
@@ -139,6 +140,8 @@ public class MovieTheatreApp extends JFrame {
         paymentRUPanel = new PaymentRUPanel(this, userDBM, ticketC);
         registeredPanel = new RegisteredPanel(this);
         RURefundPanel = new RURefundPanel(this, userDBM, ticketC);
+        payAnnualFeePanel = new PayAnnualFeePanel(this, userDBM, billingS);
+        
 
 
         cards.add(loginPanel, "Login");
@@ -152,6 +155,8 @@ public class MovieTheatreApp extends JFrame {
         cards.add(paymentRUPanel, "PaymentRU");
         cards.add(registeredPanel, "Registered");
         cards.add(RURefundPanel, "RURefund");
+        cards.add(payAnnualFeePanel, "PayAnnualFee");
+
 
 
         this.add(cards);
@@ -210,9 +215,13 @@ public class MovieTheatreApp extends JFrame {
         cardLayout.show(cards,"RURefund");
     }
 
+    public void switchToPayAnnualFee(){
+        cardLayout.show(cards, "PayAnnualFee");
+    }
+
     public static void main(String[] args) {
 
-        db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "123");
+        db = new myJDBC("jdbc:mysql://localhost:3306/MOVIE_THEATRE", "root", "Conrich23@");
         db = new myJDBC();
         db.initializeConnection();
 

@@ -16,6 +16,7 @@ public class SignupPanel extends JPanel {
     private LocalDate expiryDate;
     private LocalDate joinDate;
     private boolean savedPayment;
+    private boolean feePaid = false;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
@@ -69,9 +70,10 @@ public class SignupPanel extends JPanel {
         emailInput.setPreferredSize(new Dimension(width, height));
         addressInput.setPreferredSize(new Dimension(width, height));
 
-
+        //submit button
         JButton submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
+        submitButton.setEnabled(false);
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int safe = 1;
@@ -108,6 +110,63 @@ public class SignupPanel extends JPanel {
 
             }
         });
+
+        // pay annual fee button
+        JButton paymentButton = new JButton("Pay Annual Fee");
+        paymentButton.setForeground(Red);
+        paymentButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                feePaid = true;
+                app.switchToPayAnnualFee(); 
+                submitButton.setEnabled(true);
+            }
+        });
+
+        // JButton submitButton = new JButton("Submit");
+        // submitButton.setForeground(Red);
+        // if (feePaid){
+        //     submitButton.setEnabled(true);
+        // }
+        // else{
+        //     submitButton.setEnabled(false);
+        // }
+        // //submitButton.setEnabled(false);
+        // submitButton.addActionListener(new ActionListener() {
+        //     public void actionPerformed(ActionEvent e) {
+        //         int safe = 1;
+        //         username = usrInput.getText();
+        //         password = new String(pwInput.getPassword());
+        //         passwordConfirm = new String(pwConfirmInput.getPassword());
+        //         Fname = new String(fnameInput.getText());
+        //         Lname = new String(lnameInput.getText());
+        //         email = new String(emailInput.getText());
+        //         address = new String(addressInput.getText());
+        //         joinDate = LocalDate.now();
+        //         expiryDate = joinDate.plusYears(1);
+        //         savedPayment = false; // MAYBE MAKE A BUTTON SO ITS OPTIONAL TO ADD YOUR PAYMENT INFO !
+
+        //         RU = new RegisteredUser(Fname, Lname,username, password, email, address, expiryDate, joinDate, savedPayment);
+
+        //         if (validateSignup(userDBM)) {
+        //             userDBM.insertRU(RU);
+        //             // add to database
+        //             app.setRU(RU);
+        //             app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
+        //             JOptionPane.showMessageDialog(app, "Sign up successful! Please login with your credentials.");
+        //             app.switchToInitial();
+        //             fnameInput.setText("");
+        //             lnameInput.setText("");
+        //             emailInput.setText("");
+        //             addressInput.setText("");
+        //             usrInput.setText("");
+        //             pwInput.setText("");
+        //             pwConfirmInput.setText("");
+        //         }
+
+
+
+        //     }
+        // });
 
         setLayout(new BorderLayout());
 
@@ -153,6 +212,7 @@ public class SignupPanel extends JPanel {
 
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        submitPanel.add(paymentButton);
         submitPanel.add(submitButton);
         submitPanel.setBackground(Orange);
 
