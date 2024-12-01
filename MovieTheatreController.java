@@ -12,45 +12,10 @@ public class MovieTheatreController {
     }
 
 
-    public void displayMovies(Location location) {
-        ArrayList<Movie> allMovies = fetchMovies(location.getLocationID());
-        if (allMovies.isEmpty()) {
-            System.out.println("No movies available at this location.");
-            return;
-        }
-
-        System.out.println("Movies at location: " + location.getName());
-        for (Movie movie : allMovies) {
-            System.out.println("Movie ID: " + movie.getMovieID());
-            System.out.println("Title: " + movie.getTitle());
-            System.out.println("Genre: " + movie.getGenre());
-        }
-    }
 
 
-    public void displayShowtimes(Location location) {
-    }
-
-    public void addShowtime(int id, Movie movie, String time, Location location, int numRUSeats, int numOUSeats) {
-    }
-
-    public void removeShowtime(Showtime showtime) {
-    }
 
 
-    public int produceMovieID() {
-        return 0;
-    }
-
-    public void addMovie(int id, String title, String genre) {
-    }
-
-    public void removeMovie(Movie movie) {
-    }
-
-    public int produceShowtimeID() {
-        return 0;
-    }
 
     public ArrayList<Location> getMovieLocations(Movie movie) {
         int movieID = movie.getMovieID();

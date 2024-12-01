@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
 public class PaymentPanel extends JPanel {
+    private  BillingSystem billingS;
     private TicketController ticketC;
     private MovieTheatreApp app;
     private Color Red = new Color(139, 0, 0);
@@ -30,9 +31,10 @@ public class PaymentPanel extends JPanel {
     private JButton submitButton;
 
 
-    public PaymentPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC) {
+    public PaymentPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC, BillingSystem billingSystem) {
         this.ticketC = ticketC;
         this.app = app;
+        this.billingS = billingSystem;
         this.setLayout(new BorderLayout());
         this.setBackground(Yellow);
 
@@ -79,7 +81,7 @@ public class PaymentPanel extends JPanel {
                 }
 
 
-                BillingSystem billingS = ticketC.getBillingSystem();
+
                 Payment payment = new Payment(ruid, fnameField.getText(), lnameField.getText(), cardNumField.getText(), expiryDateField.getText(), securityCodeField.getText());
                 if (billingS.validatePayment(payment)) {
                     System.out.println("Payment details have valid patterns.");

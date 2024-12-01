@@ -111,8 +111,5 @@ public class RegisteredUser extends User{
         this.password = pw;
     }
 
-    // more functions
-    public void savePaymentMethod(){
-        //send paymentMethod to database
-    }
+
 }

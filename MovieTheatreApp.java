@@ -26,6 +26,7 @@ public class MovieTheatreApp extends JFrame {
 
     private MovieTheatreController movieTC;
     private TicketController ticketC;
+    private BillingSystem billingS;
 
     private int currentUser; // 0 for guest, 1 for RU, 2 for admin?
     // so we can check whos currently using our application and what to do from there yk... also if its RU store their info !
@@ -114,6 +115,7 @@ public class MovieTheatreApp extends JFrame {
         movieTC = new MovieTheatreController(db);
         userDBM = new UserDatabaseManager(db);
         ticketC = new TicketController(db);
+        billingS = new BillingSystem(db);
         // set up the main container with CardLayout
         cards = new JPanel(cardLayout);
 
@@ -125,7 +127,7 @@ public class MovieTheatreApp extends JFrame {
         guestPanel = new GuestPanel(this, movieTC);
         adminPanel = new AdminPanel(this, userDBM);
         confirmPanel = new ConfirmPanel(this, userDBM, movieTC);
-        paymentPanel = new PaymentPanel(this, userDBM, ticketC);
+        paymentPanel = new PaymentPanel(this, userDBM, ticketC, billingS);
         paymentRUPanel = new PaymentRUPanel(this, userDBM, ticketC);
         registeredPanel = new RegisteredPanel(this);
 

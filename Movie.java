@@ -22,19 +22,7 @@ public class Movie {
     }
 
 
-    public void removeShowtime(Showtime showtime){
-        Showtime toRemove = null;
-        for (Showtime current: this.showtimes){
-            if (current.getShowtimeID() == showtime.getShowtimeID()){
-                toRemove = current;
-                break;
-            }
-        }
 
-        if (toRemove != null){
-            this.showtimes.remove(toRemove);
-        }
-    }
     //setters
     public void setGenre(String genre) {
         this.genre = genre;

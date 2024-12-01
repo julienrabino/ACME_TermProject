@@ -69,11 +69,6 @@ public class SignupPanel extends JPanel {
         emailInput.setPreferredSize(new Dimension(width, height));
         addressInput.setPreferredSize(new Dimension(width, height));
 
-//        JPanel clientPanel = new JPanel();
-//        clientPanel.setLayout(new FlowLayout());
-//
-//        JPanel submitPanel = new JPanel();
-//        submitPanel.setLayout(new FlowLayout());
 
         JButton submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
@@ -98,7 +93,7 @@ public class SignupPanel extends JPanel {
                     // add to database
                     app.setRU(RU);
                     app.setCurrentUser(1); // indicate whoevers using our app rn is a RU
-                    JOptionPane.showMessageDialog(app, "Please login with your credentials.");
+                    JOptionPane.showMessageDialog(app, "Sign up successful! Please login with your credentials.");
                     app.switchToInitial();
                     fnameInput.setText("");
                     lnameInput.setText("");
@@ -108,10 +103,8 @@ public class SignupPanel extends JPanel {
                     pwInput.setText("");
                     pwConfirmInput.setText("");
                 }
-                // DO A CHECK TO MAKE SURE THE USERNAME IS NOT ALREADY IN DB
-                // AFTER CHECK MAKE THE RU AND SET THEIR INFO
 
-                // ^^ can probably use UserDatabaseManager
+
 
             }
         });

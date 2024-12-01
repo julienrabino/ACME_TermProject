@@ -36,16 +36,16 @@ public class Location {
     public String getAddress() {
         return address;
     }
-    public String getLocationName() {
-        return locationName;
-    }
     public int getLocationID() {
         return locationID;
     }
     public ArrayList<Movie> getMovies() {
         return movies;
     }
-    
+    public String getName() {
+        return this.locationName;
+    }
+
     //more functions
     public boolean addMovie(Movie movie) {
         Movie toAdd = null;
@@ -72,23 +72,8 @@ public class Location {
     }
 
 
-    public void removeMovie(Movie movie){
-        // this for now, but need to implement
-        if (movies.contains(movie)){
-            movies.remove(movie);
-        } else {
-            //print that no movie exist in list that matches given movie
-        }
-    }
-    
-    public boolean hasMovie(Movie movie){
-        // check arraylist if it has this movie
-        //return int depending on true or not !
-        return false; // this for now, but need to implement
-    }
 
 
-    public String getName() {
-        return this.locationName;
-    }
+
+
 }

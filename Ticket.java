@@ -130,22 +130,7 @@ public class Ticket {
     }
 
     // more functions
-    public void cancelTicket(){
-        this.ticketStatus = false;
-        Showtime showtime = this.showtime;
-       // showtime.updateSeats(this.isAnRUSeat, 1,false);
 
-    }
-    public void sendTicketReceipt(Ticket ticket){
-        Showtime showtime = this.showtime;
-        Movie movie = showtime.getMovie();
-        System.out.println("The following ticket receipt was sent to: "+ ticket.getEmail());
-        System.out.println("Movie: "+ movie.getTitle());
-        System.out.println("Genre: "+ movie.getGenre());
-        System.out.println("Time: "+ showtime.getDate() + " @ " + showtime.getTime());
-        System.out.println("Ticket ID: "+ this.ticketID);
-        System.out.println("Ticket price: "+ this.ticketPrice);
-        System.out.println("Payment Method: "+ this.paymentMethod); // maybe return last 4 digits of card number?
-    }
+
 
 }
