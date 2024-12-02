@@ -74,6 +74,7 @@ public class SignupPanel extends JPanel {
         submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
         System.out.println(app.isAnnualFeePaid());
+        submitButton.setEnabled(false);
 
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
