@@ -32,6 +32,8 @@ public class PaymentPanel extends JPanel {
 
     private JButton submitButton;
 
+    private JButton creditButton;
+
 
     public PaymentPanel(MovieTheatreApp app, UserDatabaseManager userDBM, TicketController ticketC, BillingSystem billingSystem) {
         this.ticketC = ticketC;
@@ -57,7 +59,7 @@ public class PaymentPanel extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel headerPanel = new JPanel();
-        JLabel title = new JLabel("Please Fill Out All Fields: ");
+        JLabel title = new JLabel("Please Fill Out All Card Information Fields, or optionally use store credit: ");
         title.setHorizontalAlignment(SwingConstants.CENTER);  // Center horizontally
         title.setVerticalAlignment(SwingConstants.CENTER);    // Center vertically
         title.setForeground(Red);
@@ -73,6 +75,15 @@ public class PaymentPanel extends JPanel {
         clientPanel.setBackground(Yellow);
         submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
+
+        creditButton = new JButton("Use Store Credit");
+        creditButton.setForeground(Red);
+
+        creditButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                app.switchToStoreCreditPanel();
+            }
+        });
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 boolean Reg = false;
@@ -150,6 +161,7 @@ public class PaymentPanel extends JPanel {
         JPanel submitPanel = new JPanel();
         submitPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         submitPanel.add(submitButton);
+        submitPanel.add(creditButton);
         submitPanel.setBackground(Orange);
 
         this.add(submitPanel, BorderLayout.PAGE_END);
