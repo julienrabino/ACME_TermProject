@@ -70,6 +70,7 @@ public class InitialPanel extends JPanel {
         });
         registerButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                app.setFromSignUp(true);
                 app.switchToRegister();
             }
         });

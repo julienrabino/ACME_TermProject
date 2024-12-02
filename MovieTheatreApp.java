@@ -43,7 +43,16 @@ public class MovieTheatreApp extends JFrame {
 
     private Payment selectedPayment;
     private boolean annualFeePaid; //to ensure user pays fee when signing up
+    private boolean fromSignUp;
 
+
+    public boolean isFromSignUp(){
+        return fromSignUp;
+    }
+
+    public void setFromSignUp(boolean signup){
+        fromSignUp = signup;
+    }
     public boolean isAnnualFeePaid(){
         return annualFeePaid;
     }
@@ -83,7 +92,7 @@ public class MovieTheatreApp extends JFrame {
         this.selectedPayment = payment;
     }
 
-
+    
     public void setTheatre (Location loc) {
         this.selectedLocation = loc; // i think this is a shallow copy maybe but idk
     }

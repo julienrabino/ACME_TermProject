@@ -76,6 +76,7 @@ public class GuestPanel extends JPanel {
         renewButton.setForeground(Red);
         renewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
+                app.setFromSignUp(false);
                 app.switchToPayAnnualFee();
             }
         });

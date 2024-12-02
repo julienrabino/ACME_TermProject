@@ -124,6 +124,7 @@ public class SignupPanel extends JPanel {
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 //feePaid = true;
+                
                 app.switchToPayAnnualFee(); 
                 //submitButton.setEnabled(true);
             }
