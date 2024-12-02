@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class PayAnnualFeePanel extends JPanel{
     private BillingSystem billingS;
     private MovieTheatreApp app;
-    //private UserDatabaseManager userDBM;
+    private UserDatabaseManager userDBM;
     private Color Red = new Color(139, 0, 0);
     private Color Yellow = new Color(255, 248, 191);
     private Color Orange = new Color(244, 138, 104);
@@ -36,6 +36,7 @@ public class PayAnnualFeePanel extends JPanel{
 
     public PayAnnualFeePanel(MovieTheatreApp app, UserDatabaseManager userDBM, BillingSystem billingSystem){
         this.app = app;
+        this.userDBM = userDBM;
         this.billingS = billingSystem;
         this.setLayout(new BorderLayout());
         this.setBackground(Yellow);
@@ -107,6 +108,7 @@ public class PayAnnualFeePanel extends JPanel{
         backButton.setForeground(Red);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
+                app.setAnnualFeePaid(false);
                 app.switchToRegister();
             }
         });

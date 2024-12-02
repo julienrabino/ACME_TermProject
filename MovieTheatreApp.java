@@ -82,7 +82,7 @@ public class MovieTheatreApp extends JFrame {
         this.selectedPayment = payment;
     }
 
-
+    
     public void setTheatre (Location loc) {
         this.selectedLocation = loc; // i think this is a shallow copy maybe but idk
     }
