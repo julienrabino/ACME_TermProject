@@ -46,6 +46,10 @@ public class MovieTheatreApp extends JFrame {
     private boolean fromSignUp;
 
 
+    public SignupPanel getSignupPanel() {
+        return signupPanel;
+    }
+
     public boolean isFromSignUp(){
         return fromSignUp;
     }
@@ -165,7 +169,7 @@ public class MovieTheatreApp extends JFrame {
         payAnnualFeePanel = new PayAnnualFeePanel(this, userDBM, billingS);
         
         OURefundPanel = new OURefundPanel(this, userDBM);
-        storeCreditPanel = new StoreCreditPanel(this, userDBM);
+        //storeCreditPanel = new StoreCreditPanel(this, userDBM);
 
 
         cards.add(loginPanel, "Login");

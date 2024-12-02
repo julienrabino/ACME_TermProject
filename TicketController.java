@@ -334,7 +334,7 @@ public class TicketController {
     }
 
     public ArrayList<StoreCredit> getCreditsFromEmail(String Email) {
-
+        return null;
     }
 
 
