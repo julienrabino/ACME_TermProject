@@ -33,7 +33,7 @@ public class SignupPanel extends JPanel {
     private JTextField lnameInput;
     private JTextField emailInput;
     private JTextField addressInput;
-
+    private JButton submitButton;
     private MovieTheatreApp app;
 
     public SignupPanel(MovieTheatreApp app, UserDatabaseManager userDBM) {
@@ -71,16 +71,11 @@ public class SignupPanel extends JPanel {
         addressInput.setPreferredSize(new Dimension(width, height));
 
         //submit button
-        JButton submitButton = new JButton("Submit");
+        submitButton = new JButton("Submit");
         submitButton.setForeground(Red);
-        //submitButton.setEnabled(false);
         System.out.println(app.isAnnualFeePaid());
-        if (app.isAnnualFeePaid()){
-            submitButton.setEnabled(true);
-        }
-        else{
-            submitButton.setEnabled(false);
-        }
+        submitButton.setEnabled(false);
+
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int safe = 1;
@@ -124,8 +119,7 @@ public class SignupPanel extends JPanel {
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 //feePaid = true;
-                
-                app.switchToPayAnnualFee(); 
+                app.switchToPayAnnualFee();
                 //submitButton.setEnabled(true);
             }
         });
@@ -233,7 +227,7 @@ public class SignupPanel extends JPanel {
         panel.add(component, gbc);
     }
     public void refresh(){ //dynamically updates feePaid variable
-        
+
     }
 
     private boolean validateSignup(UserDatabaseManager userDBM) {
@@ -258,6 +252,12 @@ public class SignupPanel extends JPanel {
         }
         // check if username already exists
         return valid;
+    }
+
+    public void updateSubmit(){
+        if (app.isAnnualFeePaid()) {
+            submitButton.setEnabled(true);
+        }
     }
 
 }

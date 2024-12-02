@@ -98,6 +98,8 @@ public class PayAnnualFeePanel extends JPanel{
                         System.out.println(datePurchased);
                         System.out.println(timePurchased);
                         app.setAnnualFeePaid(true);
+                        SignupPanel signupPanel = app.getSignupPanel();
+                        signupPanel.updateSubmit();
                         JOptionPane.showMessageDialog(app, "Annual Fee Paid Successfully!");
 
                         if (app.isFromSignUp()){
