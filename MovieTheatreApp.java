@@ -165,7 +165,7 @@ public class MovieTheatreApp extends JFrame {
         payAnnualFeePanel = new PayAnnualFeePanel(this, userDBM, billingS);
         
         OURefundPanel = new OURefundPanel(this, userDBM);
-        storeCreditPanel = new StoreCreditPanel(this, userDBM);
+        storeCreditPanel = new StoreCreditPanel(this, userDBM, ticketC);
 
 
         cards.add(loginPanel, "Login");

@@ -152,10 +152,14 @@ CREATE TABLE STORE_CREDIT (
 	CreditID			INT AUTO_INCREMENT,
     RUID				int,
     email				varchar(50)	not null,
-    ExpiryDate			DATETIME	not null,
+    amount				double not null,
+    ExpiryDate			DATE	not null,
 	primary key (CreditID),
     foreign key (RUID) references REG_USER(ID)
 );
+INSERT INTO STORE_CREDIT (RUID, email, amount, ExpiryDate)
+VALUES 
+(2, 'lucy.lee@yahoo.com', 26, '2025-12-31');
 
 DROP TABLE IF EXISTS SEAT;
 CREATE TABLE SEAT (

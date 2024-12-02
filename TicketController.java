@@ -333,8 +333,35 @@ public class TicketController {
         }
     }
 
-    public ArrayList<StoreCredit> getCreditsFromEmail(String Email) {
+    public ArrayList<StoreCredit> getCreditsFromEmail(String email) {
+        ResultSet results;
+        ArrayList<StoreCredit> credits = new ArrayList<>();
 
+        try {
+
+            String query = "SELECT * FROM STORE_CREDIT AS SC WHERE SC.email= ?;";
+
+            PreparedStatement myStmt = jdbc.dbConnect.prepareStatement(query);
+            myStmt.setString(1, email);
+
+            results = myStmt.executeQuery();
+
+            while (results.next()) {
+                int ID = results.getInt("CreditID");
+                int RUID = results.getInt("RUID");
+                double amount = results.getDouble("amount");
+                String expiryDate = results.getString("ExpiryDate");
+
+                StoreCredit credit = new StoreCredit(ID,  RUID,  email, amount,  expiryDate);
+                credits.add(credit);
+            }
+
+            myStmt.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return credits;
     }
 
 

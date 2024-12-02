@@ -81,6 +81,8 @@ public class PaymentPanel extends JPanel {
 
         creditButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                StoreCreditPanel store = app.getStoreCreditPanel();
+                store.autofill();
                 app.switchToStoreCreditPanel();
             }
         });

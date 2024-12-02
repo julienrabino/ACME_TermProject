@@ -3,10 +3,12 @@ public class StoreCredit {
     private int RUID;
     private String email;
     private String expiryDate;
+    private double amount;
 
 
-    public StoreCredit(int creditID, int RUID, String email, String expiryDate) {
+    public StoreCredit(int creditID, int RUID, String email, double amount, String expiryDate) {
         this.creditID = creditID;
+        this.amount = amount;
         this.RUID = RUID;
         this.email = email;
         this.expiryDate = expiryDate;
@@ -28,6 +30,13 @@ public class StoreCredit {
     public void setRUID(int RUID) {
         this.RUID = RUID;
     }
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 
     public String getEmail() {
         return email;
@@ -47,11 +56,11 @@ public class StoreCredit {
 
     @Override
     public String toString() {
-        return "StoreCredit{" +
-                "creditID=" + creditID +
-                ", RUID=" + RUID +
-                ", email='" + email + '\'' +
-                ", expiryDate='" + expiryDate + '\'' +
-                '}';
+        return "<html>" +
+                "Email: " + email + "<br>" +
+                "Expiry Date: " + expiryDate + "<br>" +
+                "Amount: " + amount +
+                "</html>";
     }
+
 }
