@@ -170,6 +170,45 @@ public class TicketController {
         return false; // Return false if there was an error
     }
 
+    public boolean addCredit(StoreCredit credit) {
+        // Takes ticket and saves it on DB
+        // If successful, return TRUE
+        String query = null;
+        PreparedStatement statement;
+
+        try {
+            if(credit.getRUID() != -1) {
+                query = "INSERT INTO STORE_CREDIT (RUID, email, amount, ExpiryDate) "
+                        + "VALUES (?, ?, ?, ?)";
+                statement = jdbc.dbConnect.prepareStatement(query);
+
+                statement.setInt(1, credit.getRUID()); // ShowtimeID
+                statement.setString(2, credit.getEmail()); // SeatID
+                statement.setDouble(3, credit.getAmount()); // Cost
+                statement.setString(4, credit.getExpiryDate()); // Email
+            }
+            else {
+                query = "INSERT INTO STORE_CREDIT (email, amount, ExpiryDate) "
+                        + "VALUES (?, ?, ?)";
+                statement = jdbc.dbConnect.prepareStatement(query);
+
+                statement.setString(1, credit.getEmail()); // SeatID
+                statement.setDouble(2, credit.getAmount()); // Cost
+                statement.setString(3, credit.getExpiryDate()); // Email
+            }
+
+
+            // Execute the query
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Return true if insertion was successful
+
+        } catch (SQLException e) {
+            System.out.println("Error adding credit to DB: " + e.getMessage());
+        }
+
+        return false; // Return false if there was an error
+    }
+
     public Showtime getShowtimeFromID(int id) {
         String query = null;
         Showtime showtime = null;

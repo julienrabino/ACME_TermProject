@@ -159,7 +159,8 @@ CREATE TABLE STORE_CREDIT (
 );
 INSERT INTO STORE_CREDIT (RUID, email, amount, ExpiryDate)
 VALUES 
-(2, 'lucy.lee@yahoo.com', 26, '2025-12-31');
+(2, 'lucy.lee@yahoo.com', 26, '2025-12-31'),
+(2, 'lucy.lee@yahoo.com', 16, '2025-12-31');
 
 DROP TABLE IF EXISTS SEAT;
 CREATE TABLE SEAT (

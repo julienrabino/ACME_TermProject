@@ -121,6 +121,10 @@ public class MovieTheatreApp extends JFrame {
     public RURefundPanel getRURefundPanel(){
         return RURefundPanel;
     }
+
+    public SignupPanel getSignupPanel(){
+        return signupPanel;
+    }
     public UserDatabaseManager getUserDBM(){
         return userDBM;
     }

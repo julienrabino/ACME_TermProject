@@ -62,12 +62,13 @@ public class StoreCreditPanel extends JPanel {
                             + (selectedCredit.getAmount() - 12.50);
                     JOptionPane.showMessageDialog(app, message);
                     ticketC.changeCredit(selectedCredit, (selectedCredit.getAmount() - 12.5));
+                    displayCredits();
+                    ticketC.changeSeatAvailability(app.getSelectedSeat(), false);
                     // NEED TO UPDATE STORE CREDIT IN DB
 
                 }
                 else {
                     JOptionPane.showMessageDialog(app, "Invalid payment. Ticket costs $12.50 in store credit");
-
                 }
                 // check if enough credit to but the ticket 12.50
                 // display JOPtion panel that it successfully purchased
@@ -174,7 +175,7 @@ public class StoreCreditPanel extends JPanel {
         creditPanel.setLayout(new GridLayout(credits.size() + 1, 1, 5, 5)); // Stack components vertically
 
         if (credits == null || credits.isEmpty()) {
-            useButton.setEnabled(false);
+            //useButton.setEnabled(false);
             JLabel noCreditsLabel = new JLabel("No available store credit.");
             noCreditsLabel.setForeground(Red);
             noCreditsLabel.setHorizontalAlignment(SwingConstants.CENTER);

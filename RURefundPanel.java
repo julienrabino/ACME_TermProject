@@ -73,7 +73,19 @@ public class RURefundPanel extends JPanel {
 
                 if (validateRefund(showtime)) {
                     // UMMM MAYBE ADD WHAT CARD NUMBER IT REFUNDED TO IDK
-                    JOptionPane.showMessageDialog(app, "$12.50 sucessfully refunded to " + email);
+                    if(app.getCurrentUser() == 1) {
+                        JOptionPane.showMessageDialog(app, "$12.50 sucessfully refunded to " + email);
+                    }
+                    else if (app.getCurrentUser() == 0) {
+                        double credit = 12.5 * .85;
+                        JOptionPane.showMessageDialog(app, "Sucessfully refunded! Store credit of $" + credit + " sent to " + email + ". A 15% admin fee was deducted. Store credit valid up tp one year.");
+                        LocalDate currentDate = LocalDate.now();
+                        LocalDate expiryDate = currentDate.plusYears(1);
+
+                        String formattedDate = expiryDate.toString();  // toString() gives YYYY-MM-DD
+                        StoreCredit cred = new StoreCredit( -1,  email, credit, formattedDate);
+                        ticketC.addCredit(cred); // ADD STORE CREDITTTT
+                    }
 
                     ticketC.changeRefunded(selectedTicket, true);
                     displayPurchasedTickets(email);
@@ -118,7 +130,7 @@ public class RURefundPanel extends JPanel {
         this.tickets = ticketC.getTicketsFromEmail(email);
         ticketsPanel.setLayout(new GridLayout(tickets.size(), 1, 5, 5)); // Stack components vertically
 
-
+        boolean yesTickets = false;
         if (tickets == null || tickets.isEmpty()) {
             submitButton.setEnabled(false);
             JLabel noTickets = new JLabel("No purchased tickets.");
@@ -131,6 +143,7 @@ public class RURefundPanel extends JPanel {
             for (Ticket ticket : tickets) {
                 System.out.println("IN RU REFUND< TICKET FOR LOOP, TICKET ID IS " + ticket.getTicketID());
                 if (!ticket.getRefunded()) { // ONLY SHOW NON REFUNDED ONES HOPEFULLY
+                    yesTickets = true;
                     System.out.println("TICKET NOT REFUNDED");
                     int showtimeID = ticket.getShowtimeID();
                     Showtime showtimeTemp = ticketC.getShowtimeFromID(showtimeID);
@@ -174,14 +187,14 @@ public class RURefundPanel extends JPanel {
                     // Add the label and the select button for each saved payment
                     ticketsPanel.add(buttonPanel);
                 }
-                else {
-                    submitButton.setEnabled(false);
-                    JLabel noTickets = new JLabel("No purchased tickets.");
-                    noTickets.setForeground(Red);
-                    noTickets.setHorizontalAlignment(SwingConstants.CENTER);
-                    noTickets.setVerticalAlignment(SwingConstants.CENTER);
-                    ticketsPanel.add(noTickets);
-                }
+//                else {
+////                    submitButton.setEnabled(false);
+////                    JLabel noTickets = new JLabel("No purchased tickets.");
+////                    noTickets.setForeground(Red);
+////                    noTickets.setHorizontalAlignment(SwingConstants.CENTER);
+////                    noTickets.setVerticalAlignment(SwingConstants.CENTER);
+////                    ticketsPanel.add(noTickets);
+//                }
             }
         }
 

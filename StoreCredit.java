@@ -13,6 +13,12 @@ public class StoreCredit {
         this.email = email;
         this.expiryDate = expiryDate;
     }
+    public StoreCredit( int RUID, String email, double amount, String expiryDate) {
+        this.amount = amount;
+        this.RUID = RUID;
+        this.email = email;
+        this.expiryDate = expiryDate;
+    }
 
 
     public int getCreditID() {
