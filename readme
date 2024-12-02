@@ -1,0 +1,21 @@
+ENSF480 Final Project - Movie Theatre Application
+
+Overview
+This project is a Java-based application designed for managing a movie theatre system. It has the following functionalities:
+- user registration
+- display movie showtimes
+- ticket bookings
+- refunds
+- annual fee payments
+It is composed of many files that involve database interaction and a Java GUI.
+
+To Compile & Run (On CLI)
+1. Import the included sql file into MySQL:
+   CREATE DATABASE movie_theatre;
+   SOURCE path/to/sql/file.sql
+2. Change the database connection credentials in myJDBC.java to your username, password, and URL.
+3. Exit MySQL. Navigate to project directory.
+4. Compile all .java files:
+   javac *.java
+5. Run:
+   java MovieTheatreApp
