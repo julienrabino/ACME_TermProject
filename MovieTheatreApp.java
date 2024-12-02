@@ -42,7 +42,16 @@ public class MovieTheatreApp extends JFrame {
 
     private Payment selectedPayment;
     private boolean annualFeePaid; //to ensure user pays fee when signing up
+    private boolean fromSignUp;
 
+
+    public boolean isFromSignUp(){
+        return fromSignUp;
+    }
+
+    public void setFromSignUp(boolean signup){
+        fromSignUp = signup;
+    }
     public boolean isAnnualFeePaid(){
         return annualFeePaid;
     }
