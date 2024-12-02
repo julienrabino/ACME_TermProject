@@ -98,7 +98,12 @@ public class PayAnnualFeePanel extends JPanel{
                         System.out.println(timePurchased);
                         app.setAnnualFeePaid(true);
                         JOptionPane.showMessageDialog(app, "Annual Fee Paid Successfully!");
-                        app.switchToRegister();
+
+                        if (app.isFromSignUp()){
+                             app.switchToRegister();
+                        } else{
+                            app.switchToGuest();
+                        }
                     }
                 }
             }
@@ -107,7 +112,11 @@ public class PayAnnualFeePanel extends JPanel{
         backButton.setForeground(Red);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                app.switchToRegister();
+                if (app.isFromSignUp()){
+                    app.switchToRegister();
+                } else{
+                    app.switchToGuest();
+                }
             }
         });
 
