@@ -59,7 +59,7 @@ public class StoreCredit {
         return "<html>" +
                 "Email: " + email + "<br>" +
                 "Expiry Date: " + expiryDate + "<br>" +
-                "Amount: " + amount +
+                "Amount: $" + amount +
                 "</html>";
     }
 

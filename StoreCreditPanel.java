@@ -57,10 +57,11 @@ public class StoreCreditPanel extends JPanel {
         submitButton.setEnabled(false);
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(validateCredit(selectedCredit)) {
+                if(validateCredit(selectedCredit) && selectedCredit != null) { // idk man:(((
                     String message = "Sucessfully purchased ticket with selected store credit. Remaining amount for selected store credit: "
                             + (selectedCredit.getAmount() - 12.50);
                     JOptionPane.showMessageDialog(app, message);
+                    ticketC.changeCredit(selectedCredit, (selectedCredit.getAmount() - 12.5));
                     // NEED TO UPDATE STORE CREDIT IN DB
 
                 }

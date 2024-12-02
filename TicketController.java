@@ -364,6 +364,39 @@ public class TicketController {
         return credits;
     }
 
+    public void changeCredit(StoreCredit credit, double remainder) {
+        int creditID = credit.getCreditID();
+        String query = null;
+        PreparedStatement statement = null;
+
+        try {
+            // Update query that uses the 'available' parameter
+            query = "UPDATE STORE_CREDIT SET Amount = ? WHERE CreditID = ?;";
+
+            // Prepare the statement
+            statement = jdbc.dbConnect.prepareStatement(query);
+
+            // Set the parameters
+            statement.setDouble(1, remainder);
+            statement.setInt(2, creditID);
+
+            // Execute the update query
+            int rowsAffected = statement.executeUpdate();  // Use executeUpdate for non-SELECT queries
+
+            if (rowsAffected > 0) {
+                System.out.println("Credit availability updated successfully.");
+            } else {
+                System.out.println("No rows affected.");
+            }
+
+            // Close the statement
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
